@@ -139,6 +139,23 @@
 #define GUI_CTRL_FONT_64          gui_font_param[cur_lcd].default_extern_ctrl64
 #define GUI_CTRL_FONT_72          gui_font_param[cur_lcd].default_extern_ctrl72
 #define GUI_CTRL_FONT_100          gui_font_param[cur_lcd].default_extern_ctrl100
+
+/* 是否支持ICON LOGO字体，使能时需要添加相应的字体数据文件 */
+#define  GUI_ICON_LOGO_EN         1
+
+/* LOGO使用的字体 */
+#define  GUI_LOGO_FONT               "LOGO_50_4BPP.xft"
+#define  GUI_ICON_FONT_200          "logo_icon_200_200_4BPP.xft"
+/* ICON使用的字体 */
+#define   GUI_ICON_FONT_100         "APP_ICON_100_100_4BPP.xft"
+#define   GUI_ICON_FONT_252         "app_icon_252_252_4BPP.xft"
+/* 控制ICON使用的字体 */
+#define   GUI_CONTROL_FONT_48      "CONTROL_ICON_48_48_4BPP.xft"
+#define   GUI_CONTROL_FONT_64      "CONTROL_ICON_64_64_4BPP.xft"
+#define   GUI_CONTROL_FONT_72      "CONTROL_ICON_72_72_4BPP.xft"
+#define   GUI_CONTROL_FONT_100     "CONTROL_ICON_100_100_4BPP.xft"
+#define   GUI_CONTROL_FONT_32      "CONTROL_ICON_32_32_4BPP.xft"
+
 /*===========日志输出设备配置===gui_log_port.c===============================================*/
 
 /* 是否开启调试输出、数组输出、进入函数的输出功能 */
@@ -154,6 +171,9 @@
 
 /* 是否支持文件系统接口,需要移植fatfs文件系统 */
 #define GUI_FS_EN         1
+
+/* 是否支持文件系统接口,需要移植fatfs文件系统 */
+#define GUI_RES_FS_EN        1
 
 /* 资源所在的基地址 */
 #define GUI_RES_BASE             (16*1024*1024)
@@ -174,6 +194,9 @@
 /* 截图 */
 #define GUI_PIC_CAPTURE_SCREEN_EN  ( 1 && GUI_PIC_FS_EN)
 
+
+//设置变量定义到“EXRAM”节区的宏
+#define __EXRAM  __attribute__ ((section ("EXRAM")))
 /*===========是否启用各种APP===============================================*/
 
 /* 启动界面 */

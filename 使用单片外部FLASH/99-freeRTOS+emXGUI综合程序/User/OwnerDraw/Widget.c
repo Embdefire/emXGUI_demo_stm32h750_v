@@ -32,7 +32,7 @@ void home_owner_draw(DRAWITEM_HDR *ds)
 	}
   FillCircle(hdc, rc.x+rc.w, rc.y, rc.w);
    /* 使用控制图标字体 */
-	SetFont(hdc, ctrlFont64);
+	SetFont(hdc, controlFont_64);
 	GetWindowText(hwnd, wbuf, 128); //获得按钮控件的文字
   rc.y = -10;
   rc.x = 16;

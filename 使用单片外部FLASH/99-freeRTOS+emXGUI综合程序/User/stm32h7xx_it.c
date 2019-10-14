@@ -171,7 +171,7 @@ void SysTick_Handler(void)
 
 volatile uint32_t CPU_RunTime = 0UL;
 extern TIM_HandleTypeDef TIM_Base;
-extern volatile uint8_t timeout;
+//extern volatile uint8_t timeout;
 void BASIC_TIM_IRQHandler(void)
 {
     HAL_TIM_IRQHandler(&TIM_Base);
@@ -181,26 +181,26 @@ void BASIC_TIM_IRQHandler(void)
   * @param  htim : TIM句柄
   * @retval 无
   */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-    if(htim->Instance == TIM6)
-      xPortGetFreeHeapSize(); 
-    //CPU_RunTime++;
-    if(htim->Instance == TIM3)
-    {
-      timeout = 1;
-//      LED1_TOGGLE;
-    }
-}
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+//{
+//    if(htim->Instance == TIM6)
+//      xPortGetFreeHeapSize(); 
+//    //CPU_RunTime++;
+//    if(htim->Instance == TIM3)
+//    {
+//      //timeout = 1;
+////      LED1_TOGGLE;
+//    }
+//}
 
-void DMA1_Stream2_IRQHandler(void)
-{
-//  uint32_t ulReturn;
-//  /* 进入临界段，临界段可以嵌套 */
-//  ulReturn = taskENTER_CRITICAL_FROM_ISR(); 
-  I2Sx_TX_DMA_STREAM_IRQFUN();
-//  taskEXIT_CRITICAL_FROM_ISR( ulReturn );  
-}
+//void DMA1_Stream2_IRQHandler(void)
+//{
+////  uint32_t ulReturn;
+////  /* 进入临界段，临界段可以嵌套 */
+////  ulReturn = taskENTER_CRITICAL_FROM_ISR(); 
+//  I2Sx_TX_DMA_STREAM_IRQFUN();
+////  taskEXIT_CRITICAL_FROM_ISR( ulReturn );  
+//}
 
 
 

@@ -1,1 +1,1 @@
-# V版本，emXGUI在STM32H750上的综合演示例程，V版本
+# emXGUI在STM32H750上的综合演示例程

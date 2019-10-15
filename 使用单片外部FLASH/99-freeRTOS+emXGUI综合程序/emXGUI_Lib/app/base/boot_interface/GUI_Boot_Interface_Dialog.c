@@ -316,8 +316,8 @@ static	LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 extern void	GUI_RES_Writer_Dialog(void);
 extern void	GUI_DEMO_SlideWindow(void *P);
 void	GUI_Board_App_Desktop(void *p);
-extern void PhoneCallMonitorTask(void *p);
-extern TaskHandle_t* CallCallMonitorHandle;    // 来电监测任务控制块
+//extern void PhoneCallMonitorTask(void *p);
+//extern TaskHandle_t* CallCallMonitorHandle;    // 来电监测任务控制块
 
 void	GUI_Boot_Interface_Dialog(void *param)
 {
@@ -364,8 +364,8 @@ void	GUI_Boot_Interface_Dialog(void *param)
   
      if(res_not_found_flag)
      {
-        GUI_INFO("外部SPI FLASH缺少资源，即将开始烧录资源内容...");
-
+        //GUI_INFO("外部SPI FLASH缺少资源，即将开始烧录资源内容...");
+				GUI_INFO("该版本暂不支持DEMO烧录,请从软件中烧录资源内容...");
         /* 若找不到资源，进入资源烧录应用 */      
         GUI_Thread_Create((void (*) (void *))GUI_RES_Writer_Dialog,  /* 任务入口函数 */
                               "GUI_FLASH_WRITER",/* 任务名字 */
@@ -383,7 +383,7 @@ void	GUI_Boot_Interface_Dialog(void *param)
      
     
         GUI_Thread_Create(GUI_Board_App_Desktop,     /* 任务入口函数 */
-                              "GUI_FLASH_WRITER",    /* 任务名字 */
+                              "GUI_Board_App_Desktop",    /* 任务名字 */
                               12*1024,               /* 任务栈大小 */
                               NULL,                  /* 任务入口函数参数 */
                               8,                     /* 任务的优先级 */
@@ -396,12 +396,12 @@ void	GUI_Boot_Interface_Dialog(void *param)
                               7,                     /* 任务的优先级 */
                               10);                   /* 任务时间片，部分任务不支持 */
        
-       xTaskCreate(PhoneCallMonitorTask,       /* 任务入口函数 */
-                              "Phone_Call_Monitor",  /* 任务名字 */
-                              4*1024/4,                /* 任务栈大小 */
-                              NULL,                  /* 任务入口函数参数 */
-                              6,                     /* 任务的优先级 */
-                              CallCallMonitorHandle);                   /* 任务时间片，部分任务不支持 */
+//       xTaskCreate(PhoneCallMonitorTask,       /* 任务入口函数 */
+//                              "Phone_Call_Monitor",  /* 任务名字 */
+//                              4*1024/4,                /* 任务栈大小 */
+//                              NULL,                  /* 任务入口函数参数 */
+//                              6,                     /* 任务的优先级 */
+//                              CallCallMonitorHandle);                   /* 任务时间片，部分任务不支持 */
        
      }
 //  } 

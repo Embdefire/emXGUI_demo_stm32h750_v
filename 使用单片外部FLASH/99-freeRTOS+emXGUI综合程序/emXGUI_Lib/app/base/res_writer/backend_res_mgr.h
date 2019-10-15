@@ -13,14 +13,12 @@ extern "C"{
 #endif    
   
 
-  
+#include "gui_resource_port.h"
   
 #include "ff.h"
   
 #include "gui_drv_cfg.h"
-#if GUI_RES_DEV_EN
- #include "./flash/bsp_qspi_flash.h"
-#endif
+  
 //SD卡及flash的根目录
 #define SD_ROOT       "0:"
 #define FLASH_ROOT    "1:"
@@ -43,13 +41,13 @@ extern "C"{
 #define IGNORE_NAME_FULL      (RESOURCE_DIR "/" IGNORE_NAME)
 
 /*=========================================================================================*/
-/* 目录信息类型 */
-typedef struct 
-{
-	char 	name[40];  /* 资源的名字 */
-	u32  	size;      /* 资源的大小 */ 
-	u32 	offset;    /* 资源相对于基地址的偏移 */
-}CatalogTypeDef;
+///* 目录信息类型 */
+//typedef struct 
+//{
+//	char 	name[40];  /* 资源的名字 */
+//	u32  	size;      /* 资源的大小 */ 
+//	u32 	offset;    /* 资源相对于基地址的偏移 */
+//}CatalogTypeDef;
 
 /*=========================================================================================*/
 

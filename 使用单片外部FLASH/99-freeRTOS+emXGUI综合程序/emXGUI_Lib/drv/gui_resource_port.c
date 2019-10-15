@@ -43,9 +43,8 @@ BOOL RES_DevInit(void)
   }
 #elif defined(STM32H743xx)
 	
-//  if(QSPI_FLASH_Init() == 0)
-	if(1)
-  {
+ // if(QSPI_FLASH_Init() == 0)
+  if(1){
 //    QSPI_FLASH_WriteStatusReg(1,0X00);
 //    QSPI_FLASH_WriteStatusReg(2,0X00);
 //    QSPI_FLASH_WriteStatusReg(3,0X60);
@@ -54,8 +53,7 @@ BOOL RES_DevInit(void)
 //    GUI_DEBUG("\r\nFlash Status Reg3 is 0x%02X", QSPI_FLASH_ReadStatusReg(3));    
     //RES_DevTest();
     return TRUE;
-	}
-  
+  }
 #elif defined(CPU_MIMXRT1052DVL6B)
     if(1)
     {
@@ -120,19 +118,40 @@ BOOL RES_DevWrite(u8 *buf,u32 addr,u32 size)
   */
 BOOL RES_DevRead(u8 *buf,u32 addr,u32 size)
 {
-	GUI_MutexLock(mutex_lock,5000);
+//	GUI_MutexLock(mutex_lock,5000);
+//	
+//#if defined(STM32F429_439xx)
+//	SPI_FLASH_BufferRead(buf,addr,size);
+//#elif defined(STM32H743xx)
+//  BSP_QSPI_Read(buf,addr,size);
+//#elif defined(CPU_MIMXRT1052DVL6B)
+//  
+//   
+//  
+//  memcpy(buf, (void *)(QSPIFLASH_ADDR+addr), size);
+//  
+//#endif      
+//	GUI_MutexUnlock(mutex_lock);
+//	return TRUE;
 	
-#if defined(STM32F429_439xx)
-	SPI_FLASH_BufferRead(buf,addr,size);
-#elif defined(STM32H743xx)
-  BSP_QSPI_Read(buf,addr,size);
-#elif defined(CPU_MIMXRT1052DVL6B)
+	GUI_MutexLock(mutex_lock,5000);
+  __IO uint8_t *qspi_addr = (__IO uint8_t *)(APPLICATION_ADDRESS+addr);
+//#if defined(STM32F429_439xx)
+//	SPI_FLASH_BufferRead(buf,addr,size);
+//#elif defined(STM32H743xx)
+//  BSP_QSPI_FastRead(buf,addr,size);
+//#endif 
+  //memcpy(buf, (u8*)addr,size);
+#if 1  
+  for(int i = 0; i < size; i ++)
+  {
+    buf[i] = *qspi_addr;
+    qspi_addr++;
+  }
+#else 
+  memcpy(buf, (u8*)qspi_addr,size);
+#endif  
   
-   
-  
-  memcpy(buf, (void *)(QSPIFLASH_ADDR+addr), size);
-  
-#endif      
 	GUI_MutexUnlock(mutex_lock);
 	return TRUE;
 }

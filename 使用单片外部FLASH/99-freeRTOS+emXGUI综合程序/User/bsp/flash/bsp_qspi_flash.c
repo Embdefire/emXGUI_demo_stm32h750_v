@@ -104,8 +104,8 @@ uint8_t QSPI_FLASH_Init(void)
 	QSPIHandle.Init.FlashID = QSPI_FLASH_ID_1;
 //  QSPIHandle.Init.DualFlash = QSPI_DUALFLASH_DISABLE;
 	HAL_QSPI_Init(&QSPIHandle);
-  HAL_NVIC_SetPriority(QUADSPI_IRQn,0x0,0);  //配置SDMMC1中断
-  HAL_NVIC_EnableIRQ(QUADSPI_IRQn);   
+//  HAL_NVIC_SetPriority(QUADSPI_IRQn,0x0,0);  //配置SDMMC1中断
+//  HAL_NVIC_EnableIRQ(QUADSPI_IRQn);   
 	/*初始化QSPI接口*/
 	BSP_QSPI_Init();
   

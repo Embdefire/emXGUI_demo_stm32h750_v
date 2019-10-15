@@ -83,16 +83,16 @@ static	LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
   
   const WCHAR no_res_info[] = L"Some resources not found in the FLASH.\r\n\
 Follow the instructions below:\r\n\r\n\
-1.Insert an SD card with [srcdata] resource.\r\n\
-3.Power up again the board.\r\n\
-2.Click the button below to load the resources.";
+1.Use an SD card with [srcdata] resource.\r\n\
+2.Use computer to copy resource from SD card to the board.\r\n\
+3.Insert SD card to board and Restart your board.";
   
   const WCHAR normal_res_info[] = L"Please [Exit] if you don't know what to do!!!\r\n\
 This app is use to reload resources\r\n\
 If you really want to reload resources:\r\n\
-1.Insert an SD card with [srcdata] resource.\r\n\
-3.Power up again the board.\r\n\
-2.Click the button below to load the resources.";
+1.Use an SD card with [srcdata] resource.\r\n\
+2.Use computer to copy resource from SD card to the board.\r\n\
+3.Insert SD card to board and Restart your board.";
   
   /* 默认显示信息 */
   const WCHAR *pStr = normal_res_info;
@@ -119,7 +119,7 @@ If you really want to reload resources:\r\n\
           rc0.w = rc.w;
           rc0.h = rc.h/5;
           
-          wnd = CreateWindow(TEXTBOX,L"GUI FLASH Writer" ,WS_VISIBLE,
+          wnd = CreateWindow(TEXTBOX,L"GUI FLASH INFO" ,WS_VISIBLE,
                                 rc0.x, rc0.y, rc0.w, rc0.h, hwnd, ID_TITLE, NULL, NULL); 
 
           SendMessage(wnd,TBM_SET_TEXTFLAG,0,DT_SINGLELINE|DT_CENTER|DT_VCENTER|DT_BKGND);          
@@ -158,13 +158,13 @@ If you really want to reload resources:\r\n\
           //文字格式水平，垂直居中
 					cfg.TextFlag = DT_VCENTER|DT_CENTER;  
 
-					wnd_res_writer_progbar = CreateWindow(PROGRESSBAR,L"",
-                                  PBS_TEXT|PBS_ALIGN_LEFT,
-                                  rc0.x, rc0.y, rc0.w, rc0.h,hwnd,ID_PROGBAR,NULL,NULL);
+//					wnd_res_writer_progbar = CreateWindow(PROGRESSBAR,L"",
+//                                  PBS_TEXT|PBS_ALIGN_LEFT,
+//                                  rc0.x, rc0.y, rc0.w, rc0.h,hwnd,ID_PROGBAR,NULL,NULL);
 
-          SendMessage(wnd_res_writer_progbar,PBM_GET_CFG,TRUE,(LPARAM)&cfg);
-          SendMessage(wnd_res_writer_progbar,PBM_SET_CFG,TRUE,(LPARAM)&cfg);
-          SendMessage(wnd_res_writer_progbar,PBM_SET_VALUE,TRUE,0);
+//          SendMessage(wnd_res_writer_progbar,PBM_GET_CFG,TRUE,(LPARAM)&cfg);
+//          SendMessage(wnd_res_writer_progbar,PBM_SET_CFG,TRUE,(LPARAM)&cfg);
+//          SendMessage(wnd_res_writer_progbar,PBM_SET_VALUE,TRUE,0);
 
           /* 烧录按钮 */
           rc0.x = 5;
@@ -172,8 +172,8 @@ If you really want to reload resources:\r\n\
           rc0.h = 45;
           rc0.y = rc.h - rc0.h - 10;
 
-          CreateWindow(BUTTON, L"Click me to load resources",BS_FLAT | WS_VISIBLE,
-                        rc0.x, rc0.y, rc0.w, rc0.h, hwnd, ID_BURN, NULL, NULL); 
+//          CreateWindow(BUTTON, L"Click me to load resources",BS_FLAT | WS_VISIBLE,
+//                        rc0.x, rc0.y, rc0.w, rc0.h, hwnd, ID_BURN, NULL, NULL); 
 
           /* 复位按钮 */
           rc0.x = rc.w/2 +5;
@@ -181,8 +181,8 @@ If you really want to reload resources:\r\n\
           rc0.h = 45;
           rc0.y = rc.h - rc0.h - 10;
           
-          CreateWindow(BUTTON, L"Click me to reset system",BS_FLAT ,
-                        rc0.x, rc0.y, rc0.w, rc0.h, hwnd, ID_RESET, NULL, NULL); 
+//          CreateWindow(BUTTON, L"Click me to reset system",BS_FLAT ,
+//                        rc0.x, rc0.y, rc0.w, rc0.h, hwnd, ID_RESET, NULL, NULL); 
           break;
 	}
     

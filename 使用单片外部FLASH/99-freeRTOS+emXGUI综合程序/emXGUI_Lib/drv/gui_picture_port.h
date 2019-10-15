@@ -1,11 +1,7 @@
 #ifndef __GUI_PICTURE_PORT_H
 #define	__GUI_PICTURE_PORT_H
 
-#if defined(STM32F429_439xx)
-#include "stm32f4xx.h"
-#elif defined(STM32H743xx)
 #include "stm32h7xx.h"
-#endif
 #include "emXGUI.h"
 
 void _ShowBMPEx(const char * sFilename, uint16_t usPOSX, uint16_t usPOSY) ;

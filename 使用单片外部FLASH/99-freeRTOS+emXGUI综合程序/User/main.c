@@ -131,7 +131,7 @@ static void BSP_Init(void)
 	*            PLL_M                = 5
 	*            PLL_N                = 160
 	*            PLL_P                = 2
-	*            PLL_Q                = 4
+	*             PLL_Q                = 4
 	*            PLL_R                = 2
 	*            VDD(V)               = 3.3
 	*            Flash Latency(WS)    = 4

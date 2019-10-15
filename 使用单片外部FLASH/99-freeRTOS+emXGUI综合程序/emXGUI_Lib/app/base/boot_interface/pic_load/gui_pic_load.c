@@ -158,56 +158,56 @@ BOOL PIC_Load_To_SDRAM(void)
 {
   BOOL res = TRUE;
   
-/****************************** 时钟 App 图片 ********************************/
-  hdc_clock_bk = Load_jpg_to_hdc(GUI_CLOCK_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
-  
-  for (uint8_t xC=0; xC<hdc_clock_end; xC++)
-  {
-    /* 创建 HDC */
-    hdc_clock_png[clock_png_info[xC].id] = Load_png_to_hdc(
-                                            clock_png_info[xC].pic_name,
-                                            clock_png_info[xC].w,  
-                                            clock_png_info[xC].h);
-  }
-  
-/****************************** 时钟 App 图片 END ********************************/
-  
-/****************************** 汽车仪表 App 图片 ********************************/
-  hdc_am_bk = Load_jpg_to_hdc(GUI_AUTOMETER_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
-  
-  for (uint8_t xC=0; xC<hdc_am_end; xC++)
-  {
-    /* 创建 HDC */
-    hdc_am_png[am_png_info[xC].id] = Load_png_to_hdc(
-                                            am_png_info[xC].pic_name,
-                                            am_png_info[xC].w,  
-                                            am_png_info[xC].h);
-  }
-  
-/****************************** 汽车仪表 App 图片 END ********************************/
-  
-  
-/********************************************************************************************
-*                                电压表 App 图片                                            *
-********************************************************************************************/
-  hdc_adc_bk = Load_jpg_to_hdc(GUI_ADC_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
-  
-  for (uint8_t xC=0; xC<hdc_adc_end; xC++)
-  {
-    /* 创建 HDC */
-    hdc_adc_png[adc_png_info[xC].id] = Load_png_to_hdc(
-                                            adc_png_info[xC].pic_name,
-                                            adc_png_info[xC].w,  
-                                            adc_png_info[xC].h);
-  }
-  
-/********************************************************************************************
-*                              电压表 App 图片 END                                           *
-********************************************************************************************/
+///****************************** 时钟 App 图片 ********************************/
+//  hdc_clock_bk = Load_jpg_to_hdc(GUI_CLOCK_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
+//  
+//  for (uint8_t xC=0; xC<hdc_clock_end; xC++)
+//  {
+//    /* 创建 HDC */
+//    hdc_clock_png[clock_png_info[xC].id] = Load_png_to_hdc(
+//                                            clock_png_info[xC].pic_name,
+//                                            clock_png_info[xC].w,  
+//                                            clock_png_info[xC].h);
+//  }
+//  
+///****************************** 时钟 App 图片 END ********************************/
+//  
+///****************************** 汽车仪表 App 图片 ********************************/
+//  hdc_am_bk = Load_jpg_to_hdc(GUI_AUTOMETER_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
+//  
+//  for (uint8_t xC=0; xC<hdc_am_end; xC++)
+//  {
+//    /* 创建 HDC */
+//    hdc_am_png[am_png_info[xC].id] = Load_png_to_hdc(
+//                                            am_png_info[xC].pic_name,
+//                                            am_png_info[xC].w,  
+//                                            am_png_info[xC].h);
+//  }
+//  
+///****************************** 汽车仪表 App 图片 END ********************************/
+//  
+//  
+///********************************************************************************************
+//*                                电压表 App 图片                                            *
+//********************************************************************************************/
+//  hdc_adc_bk = Load_jpg_to_hdc(GUI_ADC_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
+//  
+//  for (uint8_t xC=0; xC<hdc_adc_end; xC++)
+//  {
+//    /* 创建 HDC */
+//    hdc_adc_png[adc_png_info[xC].id] = Load_png_to_hdc(
+//                                            adc_png_info[xC].pic_name,
+//                                            adc_png_info[xC].w,  
+//                                            adc_png_info[xC].h);
+//  }
+//  
+///********************************************************************************************
+//*                              电压表 App 图片 END                                           *
+//********************************************************************************************/
 
-/********************************************************************************************
-*                                     主页面图标                                             *
-********************************************************************************************/
+///********************************************************************************************
+//*                                     主页面图标                                             *
+//********************************************************************************************/
   hdc_home_bk = Load_jpg_to_hdc(GUI_HOME_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
   
   // uint32_t pic_size;

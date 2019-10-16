@@ -41,5 +41,31 @@ extern HWND Boot_progbar;
 
 extern int thread_ctrl;
 
+/*************************** 兼容H7系列老版本字库 ************************/
+#if defined(STM32H743xx)
+
+	#if(GUI_ICON_LOGO_EN)
+	///* logo字体 */
+	//#define  logoFont
+	//#define  logoFont100
+	//#define  logoFont_200
+	///* 图标字体 */
+	//#define  iconFont_100
+	//#define  iconFont_200
+	//#define  iconFont_252
+	/* 控制图标字体 */
+	#define ctrlFont32  controlFont_32
+	#define ctrlFont48  controlFont_48
+	#define ctrlFont64  controlFont_64
+	#define ctrlFont72  controlFont_72
+	#define ctrlFont100 controlFont_100
+	#endif
+
+	#define ICON_Typedef icon_S
+
+#define logoFont252 iconFont_252
+
+#endif
+/**************************************************************************/
 
 #endif	/*__GUI_APPDEF_H__*/

@@ -47,7 +47,8 @@ static void dummy(HWND hwnd)
 
 extern void	GUI_DEMO_Graphics_Accelerator(void);
 extern void	GUI_DEMO_ShowWave(void);
-
+extern void GUI_Auto_Meter_DIALOG(void);
+extern int	Calculator_WinMain(void);
 
 #if 0
 static void App_GUI_DEMO_Hello(HWND hwnd)
@@ -96,11 +97,11 @@ static struct __obj_list menu_list_1[] = {
 		//  	L"Hello",		NULL,	  L"B", RGB_WHITE,				dummy,
 		//		L"Button",		NULL,	  L"C", RGB_WHITE,				App_GUI_Climate_Cabinet,
 
-				L"“«±Ì≈Ã",		NULL,	  L"H",RGB_WHITE, 				dummy,
+				L"“«±Ì≈Ã",		NULL,	  L"H",RGB_WHITE, 				(void (*)(HWND))GUI_Auto_Meter_DIALOG,
 
-				L"º∆À„∆˜",	NULL, 	L"Z", RGB_WHITE,				dummy,
-				L"Radiobox",	NULL,   L"E", RGB_WHITE,				dummy,
-				L"Textbox",	NULL,	  L"F", RGB_WHITE,				dummy,
+				L"º∆À„∆˜",	NULL, 	L"Z", RGB_WHITE,				(void (*)(HWND))Calculator_WinMain,
+			//	L"Radiobox",	NULL,   L"E", RGB_WHITE,				dummy,
+			//	L"Textbox",	NULL,	  L"F", RGB_WHITE,				dummy,
 
 				//    L"Speed",		NULL,	  L"G",RGB_WHITE, 				dummy,
 				//    L"Hello",		NULL,	  L"H", RGB_WHITE,				dummy,
@@ -365,7 +366,7 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
     rc.y += 20;
    
-    DrawText(hdc, L"emXGUI@Embedfire STM32F429 ", -1, &rc, DT_CENTER);
+    DrawText(hdc, L"emXGUI@Embedfire STM32H750 ", -1, &rc, DT_CENTER);
 
 		EndPaint(hwnd, &ps);
 		////

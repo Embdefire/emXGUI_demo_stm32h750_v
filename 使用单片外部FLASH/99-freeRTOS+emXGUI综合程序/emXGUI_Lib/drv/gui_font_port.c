@@ -47,13 +47,14 @@ extern const char ASCII_32_4BPP[];
 
 /* 默认字体 */
 HFONT defaultFont =NULL;
-HFONT logoFont100 =NULL;
+
 /* 默认英文字体 */
 HFONT defaultFontEn = NULL;
 
 #if(GUI_ICON_LOGO_EN)  
 /* logo字体 */
 HFONT logoFont =NULL;
+HFONT logoFont100 =NULL;
 HFONT logoFont_200 =NULL;
 /* 图标字体 */
 HFONT iconFont_100 =NULL;

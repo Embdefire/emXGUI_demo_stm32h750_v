@@ -6,6 +6,7 @@
 #include "./mp3_player/Backend_mp3Player.h"
 #include "GUI_AppDef.h"
 #include "emXGUI_JPEG.h"
+#include "./sai/bsp_sai.h"
 /******************∞¥≈•øÿº˛ID÷µ***********************/
 #define ID_BUTTON_Power      0x1000   //“Ù¡ø 
 #define ID_BUTTON_List       0x1001   //“Ù¿÷List
@@ -1097,7 +1098,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                      {
 
                         vTaskResume(h_music);
-                        I2S_Play_Start();
+                        SAI_Play_Start();
                         SetWindowText(sub11_wnd, L"U");
                         ResetTimer(hwnd, 1, 200, TMR_START,NULL);
                         
@@ -1105,7 +1106,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                      else if(music_icon[6].state != FALSE)
                      {
                         vTaskSuspend(h_music);
-                        I2S_Play_Stop();                    
+                        SAI_Play_Stop();                    
                         SetWindowText(sub11_wnd, L"T");
                         ResetTimer(hwnd, 1, 200, NULL,NULL);                       
 
@@ -1162,7 +1163,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                      {
                         
                         vTaskSuspend(h_music);
-                        I2S_Play_Stop();                    
+                        SAI_Play_Stop();                    
                         SetWindowText(mini_start, L"I");
                         
                         SetWindowText(sub11_wnd, L"I");
@@ -1172,7 +1173,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                      {
                         
                         vTaskResume(h_music);
-                        I2S_Play_Start();
+                        SAI_Play_Start();
                         SetWindowText(mini_start, L"H");
                         SetWindowText(sub11_wnd, L"H");
                         
@@ -1420,7 +1421,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
         power = 20;
         a = 0;
         
-        I2S_Stop();		/* Õ£÷πI2S¬º“Ù∫Õ∑≈“Ù */
+        SAI_Play_Stop();		/* Õ£÷πI2S¬º“Ù∫Õ∑≈“Ù */
         wm8978_Reset();	/* ∏¥ŒªWM8978µΩ∏¥Œª◊¥Ã¨ */ 
         a = PostQuitMessage(hwnd);	        
         return TRUE;	

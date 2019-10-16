@@ -2,7 +2,7 @@
 #define __RECORD_H__
 
 #include <inttypes.h>
-#include "Backend_mp3Player.h"
+#include "./mp3_player/Backend_mp3Player.h"
 
 /* RECBUFFER_SIZE决定两个缓存区大小，实际每个缓存区占用RAM空间字节数为：RECBUFFER_SIZE*2
  * 对于选择I2S_AudioFreq_16k采样率使用RECBUFFER_SIZE为1024*4，就可保证录音及放音效果流畅，

@@ -43,7 +43,7 @@ extern HFONT controlFont_100;
 extern HFONT GB2312_32_Font;
 extern HFONT iconFont_200;
 extern HFONT logoFont_200;
-  
+
 /* 用于标记是否有资源文件无法找到 */
 extern BOOL res_not_found_flag;
 

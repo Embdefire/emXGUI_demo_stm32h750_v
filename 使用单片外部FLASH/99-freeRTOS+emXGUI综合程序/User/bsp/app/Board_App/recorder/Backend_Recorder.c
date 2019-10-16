@@ -14,13 +14,13 @@
 *
 ******************************************************************************
 */
-#include "Bsp/usart/bsp_debug_usart.h"
-#include "bsp/key/bsp_key.h" 
+#include "Bsp/usart/bsp_usart.h"
+//#include "bsp/key/bsp_key.h" 
 #include "Bsp/wm8978/bsp_wm8978.h"
 #include "ff.h" 
 #include "Backend_Recorder.h"
 #include "./mp3_player/Backend_mp3Player.h"
-
+#include "./sai/bsp_sai.h"
 
 /* 音频格式切换列表(可以自定义) */
 #define FMT_COUNT	6		/* 音频格式数组元素个数 */
@@ -32,20 +32,20 @@ WavHead rec_wav;            /* WAV设备  */
 uint8_t Isread=0;           /* DMA传输完成标志 */
 uint8_t bufflag=0;          /* 数据缓存区选择标志 */
 uint32_t wavsize=0;         /* wav音频数据大小 */
-uint16_t record_buffer0[RECBUFFER_SIZE] __EXRAM;  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 */
-uint16_t record_buffer1[RECBUFFER_SIZE] __EXRAM;  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
+__align(4) uint16_t record_buffer0[RECBUFFER_SIZE];  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 */
+__align(4) uint16_t record_buffer1[RECBUFFER_SIZE];  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
 
-FIL record_file __EXRAM;			/* file objects */
+FIL record_file;			/* file objects */
 extern FRESULT result; 
 extern UINT bw;            					/* File R/W count */
 
 extern uint32_t g_FmtList[FMT_COUNT][3];
 
-extern const uint16_t recplaybuf[4];//2个16位数据,用于录音时I2S Master发送.循环发送0.
-
+//extern const uint16_t recplaybuf[4];//2个16位数据,用于录音时I2S Master发送.循环发送0.
+uint16_t recplaybuf[4]={0X0000,0X0000};
 /* 仅允许本文件内调用的函数声明 */
-void Recorder_I2S_DMA_RX_Callback(void);
-
+void MusicPlayer_SAI_DMA_RX_Callback(void);
+void MusicPlayer_SAI_DMA_TX_Callback(void);
 ///**
 //  * @brief   WAV格式音频播放主程序
 //	* @note   
@@ -221,6 +221,7 @@ void Recorder_I2S_DMA_RX_Callback(void);
   */
 void StartRecord(const char *filename)
 {
+#if 0
 	uint8_t ucRefresh;	/* 通过串口打印相关信息标志 */
 	DIR dir;
 	
@@ -270,7 +271,8 @@ void StartRecord(const char *filename)
 	ucRefresh = 1;
 	bufflag=0;
 	Isread=0;
-  
+#endif
+
 	printf("当前录音文件 -> %s\n",filename);
 	result=f_open(&record_file,filename,FA_CREATE_ALWAYS|FA_WRITE);
 	if(result!=FR_OK)
@@ -286,9 +288,11 @@ void StartRecord(const char *filename)
 	result=f_write(&record_file,(const void *)&rec_wav,sizeof(rec_wav),&bw);
 	
 	GUI_msleep(10);		/* 延迟一段时间，等待I2S中断结束 */
-	I2S_Stop();			/* 停止I2S录音和放音 */
+	//I2S_Stop();			/* 停止I2S录音和放音 */
+	SAI_Rec_Stop();
+	SAI_Play_Stop();
 	wm8978_Reset();		/* 复位WM8978到复位状态 */
-
+  wm8978_CtrlGPIO1(0);
 	Recorder.ucStatus = STA_RECORDING;		/* 录音状态 */
 		
 	/* 调节放音音量，左右相同音量 */
@@ -310,8 +314,9 @@ void StartRecord(const char *filename)
 	}
 		
 	/* 配置WM8978音频接口为飞利浦标准I2S接口，16bit */
-	wm8978_CfgAudioIF(I2S_Standard_Phillips, 16);
-
+	//wm8978_CfgAudioIF(I2S_Standard_Phillips, 16);
+	wm8978_CfgAudioIF(SAI_I2S_STANDARD, 16);
+#if 0
 	I2Sx_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
 	I2Sxext_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
 	
@@ -323,6 +328,15 @@ void StartRecord(const char *filename)
   	
 	I2S_Play_Start();
 	I2Sxext_Recorde_Start();
+#endif
+	 SAIA_TX_DMA_Init((uint32_t)&recplaybuf[0],(uint32_t)&recplaybuf[1],1);
+   __HAL_DMA_DISABLE_IT(&h_txdma,DMA_IT_TC);
+   SAIB_RX_DMA_Init((uint32_t)record_buffer0,(uint32_t)record_buffer1,RECBUFFER_SIZE);
+//  
+
+// 
+  SAI_Rec_Start();
+  SAI_Play_Start();
 }
 
 ///**
@@ -367,6 +381,7 @@ void StartRecord(const char *filename)
 /* DMA接收完成中断回调函数 */
 /* 录音数据已经填充满了一个缓冲区，需要切换缓冲区，
    同时可以把已满的缓冲区内容写入到文件中 */
+#if 0
 void Recorder_I2S_DMA_RX_Callback(void)
 {
 	if(Recorder.ucStatus == STA_RECORDING)
@@ -383,5 +398,36 @@ void Recorder_I2S_DMA_RX_Callback(void)
 	}
 }
 
+void MusicPlayer_SAI_DMA_TX_Callback(void)
+{
+	if(Recorder.ucStatus == STA_PLAYING)
+	{
+		if(DMA_Instance->CR&(1<<19)) //当前使用Memory1数据
+		{
+			bufflag=0;                       //可以将数据读取到缓冲区0
+		}
+		else                               //当前使用Memory0数据
+		{
+			bufflag=1;                       //可以将数据读取到缓冲区1
+		}
+		Isread=1;                          // DMA传输完成标志
+	}
+}
+#endif
+void MusicPlayer_SAI_DMA_RX_Callback(void)
+{
+	if(Recorder.ucStatus == STA_RECORDING)
+	{
+		if(DMA1_Stream3->CR&(1<<19)) //当前使用Memory1数据
+		{
+			bufflag=0;                       //可以将数据读取到缓冲区0
+		}
+		else                               //当前使用Memory0数据
+		{
+			bufflag=1;                       //可以将数据读取到缓冲区1
+		}
+		Isread=1;                          // DMA传输完成标志
+	}
+}
 
 /***************************** (END OF FILE) *********************************/

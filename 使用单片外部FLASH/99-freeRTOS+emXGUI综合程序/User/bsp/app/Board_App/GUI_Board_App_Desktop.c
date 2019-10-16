@@ -129,7 +129,7 @@ static const struct __obj_list menu_list_1[] = {
     //L"Textbox",		app_1, 		NULL,	 	RGB_WHITE,			dummy,
 
       L"GUI应用",		NULL, 	L"J", 	RGB_WHITE,			GUI_App_Desktop,//GUI_App_Desktop,
-      L"MP3播放器",		NULL,	  L"I", RGB_WHITE,				dummy,
+      L"MP3播放器",		NULL,	  L"I", RGB_WHITE,			dummy,//(void(*)(void *))GUI_MUSICPLAYER_DIALOG,
       L"视频播放器",		NULL,	  L"D", RGB_WHITE,				dummy,
 
       L"RGB彩灯",		NULL,	  L"L", RGB_WHITE,				dummy,
@@ -170,7 +170,7 @@ static const struct __obj_list menu_list_1[] = {
 //        L"Hello",		NULL,	  L"H", RGB_WHITE,				dummy,
 //        L"Button",	  NULL,	  L"I", 	RGB_WHITE,			dummy,
 //        L"Checkbox",	NULL,	  L"J", RGB_WHITE,				dummy,
-        L"FlashWriter",	  NULL,	  L"b", 	RGB_WHITE,			dummy,
+//        L"FlashWriter",	  NULL,	  L"b", 	RGB_WHITE,			dummy,
 
         NULL,	NULL,	NULL,NULL, NULL,//结束标志!
 

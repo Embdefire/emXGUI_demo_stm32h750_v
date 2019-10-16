@@ -58,5 +58,6 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc);
 void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd);
 extern int time2exit;
 extern GUI_SEM *exit_sem;
+void MusicPlayer_SAI_DMA_TX_Callback(void);
 #endif  /* __MP3PLAYER_H__   */
 

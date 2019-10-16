@@ -260,35 +260,38 @@ static void draw_scrollbar(HWND hwnd, HDC hdc, COLOR_RGB32 back_c, COLOR_RGB32 P
 }
 static void exit_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
-	HDC hdc;
-	RECT rc;
-	WCHAR wbuf[128];
+  HDC hdc;
+  RECT rc, rc_tmp;
+  HWND hwnd;
 
-	hdc = ds->hDC;   //button的绘图上下文句柄.
-	rc = ds->rc;     //button的绘制矩形区.
-   
-//   
-//   SetBrushColor(hdc, MapRGB(hdc, 0,0,0));
-//   FillRect(hdc, &rc); //用矩形填充背景
-	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-   
-   FillCircle(hdc, rc.x+rc.w, rc.y, rc.w);
-	
+	hdc = ds->hDC;   
+	rc = ds->rc; 
+  hwnd = ds->hwnd;
 
-   if (ds->State & BST_PUSHED)
+//  SetBrushColor(hdc,MapRGB(hdc,0,100,200));
+//	FillRect(hdc, &rc);
+
+  if (ds->State & BST_PUSHED)
 	{ //按钮是按下状态
-//    GUI_DEBUG("ds->ID=%d,BST_PUSHED",ds->ID);
-//		SetBrushColor(hdc,MapRGB(hdc,150,200,250)); //设置填充色(BrushColor用于所有Fill类型的绘图函数)
-//		SetPenColor(hdc,MapRGB(hdc,250,0,0));        //设置绘制色(PenColor用于所有Draw类型的绘图函数)
-		SetTextColor(hdc, MapRGB(hdc, 105, 105, 105));      //设置文字色
+		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));      //设置画笔色
 	}
 	else
 	{ //按钮是弹起状态
-//		SetBrushColor(hdc,MapRGB(hdc,255,255,255));
-//		SetPenColor(hdc,MapRGB(hdc,0,250,0));
-		SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
+
+		SetPenColor(hdc, MapRGB(hdc, 1, 191, 255));
 	}
 
+  SetPenSize(hdc, 2);
+
+  InflateRect(&rc, 0, -5);
+  
+  for(int i=0; i<4; i++)
+  {
+    HLine(hdc, rc.x, rc.y, rc.w);
+    rc.y += 9;
+  }
+
+#if 0
 	  /* 使用控制图标字体 */
 	SetFont(hdc, controlFont_64);
 	//  SetTextColor(hdc,MapRGB(hdc,255,255,255));
@@ -301,13 +304,13 @@ static void exit_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
   /* 恢复默认字体 */
 	SetFont(hdc, defaultFont);
-
+#endif
 }
 static void RB_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
 	HDC hdc;
 	RECT rc;
-
+  EnableAntiAlias(hdc,TRUE);//使能抗锯齿
 	hdc = ds->hDC;   //button的绘图上下文句柄.
 	rc = ds->rc;     //button的绘制矩形区.
 
@@ -336,9 +339,7 @@ static void RB_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
       FillCircle(hdc, rc.x+rc.w/2, rc.y+rc.w/2, rc.w/2);
       
 	}
-
-
-
+  EnableAntiAlias(hdc,FALSE);//失能抗锯齿
 }
 /*
  * @brief  自定义滑动条绘制函数
@@ -354,7 +355,9 @@ static void scrollbar_owner_draw(DRAWITEM_HDR *ds)
 	RECT rc;
 	RECT rc_cli;
 	//	int i;
-
+  EnableAntiAlias(hdc,TRUE);//使能抗锯齿
+	EnableAntiAlias(hdc_mem,TRUE);
+	EnableAntiAlias(hdc_mem1,TRUE);
 	hwnd = ds->hwnd;
 	hdc = ds->hDC;
 	GetClientRect(hwnd, &rc_cli);
@@ -384,9 +387,13 @@ static void scrollbar_owner_draw(DRAWITEM_HDR *ds)
 	{
 		BitBlt(hdc, rc.x, 0, rc.w, rc_cli.h, hdc_mem, rc.x, 0, SRCCOPY);
 	}
+	EnableAntiAlias(hdc,FALSE);//失能抗锯齿
+	EnableAntiAlias(hdc_mem,FALSE);
+	EnableAntiAlias(hdc_mem1,FALSE);
 	//释放内存MemoryDC
 	DeleteDC(hdc_mem1);
 	DeleteDC(hdc_mem);
+	
 }
 
 static	void btn_draw(HDC hdc,struct __x_obj_item * obj)
@@ -1164,7 +1171,7 @@ static	LRESULT	WinProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
         rc.y =0;  
              
         /* 关闭按钮 */  
-        wnd=CreateWindow(BUTTON,L"O",	BS_FLAT|WS_OWNERDRAW|WS_TRANSPARENT|WS_VISIBLE,rc.x,rc.y,rc.w,rc.h,hwnd,ID_EXIT,NULL,NULL); //创建一个按钮.
+        wnd=CreateWindow(BUTTON,L"O",	BS_FLAT|WS_OWNERDRAW|WS_TRANSPARENT|WS_VISIBLE,740,12,36,36,hwnd,ID_EXIT,NULL,NULL); //创建一个按钮.
         //SetWindowFont(wnd,controlFont_72); //设置控件窗口字体.
 
 				MakeMatrixRect(m_rc,&rc_button,2,20,1,7);
@@ -1183,6 +1190,7 @@ static	LRESULT	WinProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 
 				OffsetRect(&rc,0,rc.h);
         {
+					  
             SCROLLINFO sif;
             sif.cbSize		=sizeof(sif);
             sif.fMask		=SIF_ALL;

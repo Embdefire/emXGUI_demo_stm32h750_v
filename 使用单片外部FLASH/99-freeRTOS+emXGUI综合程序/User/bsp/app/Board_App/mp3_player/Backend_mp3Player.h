@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include "emXGUI.h"
 
+#define SAI_AUDIOFREQ_DEFAULT   SAI_AUDIO_FREQUENCY_8K
 
 #define RECBUFFER_SIZE  1024*8
 #define FMT_COUNT	6		/* 音频格式数组元素个数 */
@@ -59,5 +60,6 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd);
 extern int time2exit;
 extern GUI_SEM *exit_sem;
 void MusicPlayer_SAI_DMA_TX_Callback(void);
+void MusicPlayer_SAI_DMA_RX_Callback(void);
 #endif  /* __MP3PLAYER_H__   */
 

@@ -133,7 +133,7 @@ static const struct __obj_list menu_list_1[] = {
       L"MP3²¥·ÅÆ÷",		NULL,	  L"I", RGB_WHITE,			(void(*)(void *))GUI_MUSICPLAYER_DIALOG,//dummy,
       L"ÊÓÆµ²¥·ÅÆ÷",		NULL,	  L"D", RGB_WHITE,				dummy,
 
-      L"RGB²ÊµÆ",		NULL,	  L"L", RGB_WHITE,				dummy,
+      L"RGB²ÊµÆ",		NULL,	  L"L", RGB_WHITE,				GUI_LED_DIALOG,//dummy,
       L"ÉãÏñÍ·",		NULL,	  L"M",RGB_WHITE, 				dummy,
 
       L"Í¼Æ¬ä¯ÀÀÆ÷",	NULL, 	L"G", RGB_WHITE,				dummy,
@@ -152,7 +152,7 @@ static const struct __obj_list menu_list_1[] = {
 
 
         L"Ê±ÖÓ",		NULL,	  L"H", RGB_WHITE,				dummy,
-        L"Â¼Òô»ú",	  NULL,	  L"Y", 	RGB_WHITE,			(void(*)(void *))GUI_RECORDER_DIALOG,
+        L"Â¼Òô»ú",	  NULL,	  L"Y", 	RGB_WHITE,			dummy,//(void(*)(void *))GUI_RECORDER_DIALOG,
 //        L"Checkbox",	NULL,	  L"J", RGB_WHITE,				dummy,
 //            L"Checkbox",	NULL, 	L"D", RGB_WHITE,				dummy,
 //        L"Radiobox",	NULL,   L"E", RGB_WHITE,				dummy,

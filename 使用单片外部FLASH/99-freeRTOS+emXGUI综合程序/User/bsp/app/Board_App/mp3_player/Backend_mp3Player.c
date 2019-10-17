@@ -28,7 +28,6 @@
 #include "./mp3_player/GUI_MUSICPLAYER_DIALOG.h"
 #include "./recorder/GUI_RECORDER_DIALOG.h"
 #include "./sai/bsp_sai.h" 
-#include "./mp3Player/mp3Player.h"
 
 #define Delay_ms GUI_msleep
 /* 推荐使用以下格式mp3文件：
@@ -121,22 +120,27 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 {
 	uint8_t *read_ptr=inputbuf;
 	uint32_t frames=0;//歌曲的帧数（26ms一帧）
-   static uint8_t timecount = 0;
-   DWORD pos;//记录文字变量
+	
 	int err=0, i=0, outputSamps=0;	
-   uint32_t time_sum = 0; //计算当前已播放到的时间位置
 	int	read_offset = 0;				/* 读偏移指针 */
 	int	bytes_left = 0;					/* 剩余字节数 */	
+	
+	uint32_t time_sum = 0; //计算当前已播放到的时间位置
 	uint16_t frame_size;//MP3帧的大小
 	uint32_t ID3V2_size;//MP3的ID3V2的大小
-   static uint8_t lyriccount=0;//歌词index记录
-   WCHAR wbuf[128];//保存文本数组
+  static uint8_t lyriccount=0;//歌词index记录
+  WCHAR wbuf[128];//保存文本数组
+  static uint8_t timecount = 0;
+  DWORD pos;//记录文字变量
+	
 	//mp3player.ucFreq=SAI_AUDIOFREQ_DEFAULT;
-	mp3player.ucFreq=SAI_AUDIO_FREQUENCY_8K;
-	mp3player.ucStatus=STA_IDLE;
-	mp3player.ucVolume = vol;//设置 WM8978的音量值
-   int ooo = 0;
+	mp3player.ucFreq    = SAI_AUDIOFREQ_DEFAULT;
+	mp3player.ucStatus  = STA_IDLE;
+	mp3player.ucVolume  = vol;//设置 WM8978的音量值
+	
+  int ooo = 0;
   NUM++;
+	
 	result=f_open(&file,mp3file,FA_READ);
 	if(result!=FR_OK)
 	{
@@ -189,7 +193,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 	Isread=0;
 	
 	mp3player.ucStatus = STA_PLAYING;		/* 放音状态 */
-   result=f_read(&file,inputbuf,	INPUTBUF_SIZE,&bw);
+  result=f_read(&file,inputbuf,	INPUTBUF_SIZE,&bw);
 	if(result!=FR_OK)
 	{
 		printf("读取%s失败 -> %d\r\n",mp3file,result);
@@ -197,7 +201,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 		return;
 	}
 
-   //获取ID3V2的大小，并偏移至该位置
+   //获取ID3V2的大小，并偏移至该位置,拖到任意位置播放功能
 	ID3V2_size = mp3_GetID3V2_Size(inputbuf);
 	f_lseek(&file,ID3V2_size);	
 	result=f_read(&file,inputbuf,INPUTBUF_SIZE,&bw);
@@ -206,20 +210,21 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 		printf("读取%s失败 -> %d\r\n",mp3file,result);
 		MP3FreeDecoder(Mp3Decoder);
 		return;
-	}   
+	}
 	x_mbstowcs_cp936(wbuf, music_lcdlist[play_index], FILE_NAME_LEN);
-   SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB5), wbuf);    
+  SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB5), wbuf);   
+	
 	read_ptr=inputbuf;
 	bytes_left=bw;
    
    if(vol != 0)
    {
-      wm8978_OutMute(0);
+      wm8978_OutMute(1);
    }
    //当音量icon被按下时，设置为静音模式
    else
    {                
-      wm8978_OutMute(1);//静音
+      wm8978_OutMute(0);//静音
    }
             
    
@@ -253,11 +258,16 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 			read_ptr = inputbuf+i;										//指向数据对齐位置
 			
 			result = f_read(&file, inputbuf+bytes_left+i, INPUTBUF_SIZE-bytes_left-i, &bw);//补充数据
+			if(result!=FR_OK)
+			{
+				printf("读取%s失败 -> %d\r\n",mp3file,result);
+				break;
+			}
 			bytes_left += bw;										//有效数据流大小
 		}
 		//开始解码 参数：mp3解码结构体、输入流指针、输入流大小、输出流指针、数据格式
 		err = MP3Decode(Mp3Decoder, &read_ptr, &bytes_left, outbuffer[bufflag], 0);	
-      time_sum +=26;//每帧26ms      
+    time_sum +=26;//每帧26ms      
 		frames++;	
 		//错误处理
 		if (err != ERR_MP3_NONE)									
@@ -343,8 +353,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 //					I2Sx_Mode_Config(I2S_Standard_Phillips,I2S_DataFormat_16b,mp3player.ucFreq);
 //					I2Sx_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
 					SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
-          //SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
-					SAIA_TX_DMA_Init((uint32_t)(&outbuffer[0]),(uint32_t)&outbuffer[1],outputSamps);
+          SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
 				}
 				//I2S_Play_Start();
 				SAI_Play_Start();
@@ -369,7 +378,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
          //I2S_Stop();   
 			   SAI_Play_Stop();
          MP3FreeDecoder(Mp3Decoder);
-         f_close(&file);	
+         //f_close(&file);	
 			break;
 		}	
 
@@ -501,6 +510,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
    lyriccount=0;
 	//I2S_Stop();   
 	 SAI_Play_Stop();
+	 mp3player.ucStatus=STA_IDLE;
 	 MP3FreeDecoder(Mp3Decoder);
 	 f_close(&file);	
   if(time2exit == 1)
@@ -645,7 +655,7 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 //      I2S_Play_Start();
 			SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
       //SAIA_TX_DMA_Init(buffer0,buffer1,RECBUFFER_SIZE); 
-			SAIA_TX_DMA_Init((uint32_t)buffer0,(uint32_t)buffer1,RECBUFFER_SIZE);
+			SAIA_TX_DMA_Init((uint16_t *)buffer0,(uint16_t *)buffer1,RECBUFFER_SIZE);
       SAI_Play_Start();
    }
    /* 进入主程序循环体 */

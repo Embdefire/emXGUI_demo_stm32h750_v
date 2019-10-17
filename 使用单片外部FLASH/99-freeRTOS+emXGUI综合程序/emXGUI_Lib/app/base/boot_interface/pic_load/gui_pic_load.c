@@ -190,17 +190,17 @@ BOOL PIC_Load_To_SDRAM(void)
 ///********************************************************************************************
 //*                                电压表 App 图片                                            *
 //********************************************************************************************/
-//  hdc_adc_bk = Load_jpg_to_hdc(GUI_ADC_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
-//  
-//  for (uint8_t xC=0; xC<hdc_adc_end; xC++)
-//  {
-//    /* 创建 HDC */
-//    hdc_adc_png[adc_png_info[xC].id] = Load_png_to_hdc(
-//                                            adc_png_info[xC].pic_name,
-//                                            adc_png_info[xC].w,  
-//                                            adc_png_info[xC].h);
-//  }
-//  
+  hdc_adc_bk = Load_jpg_to_hdc(GUI_ADC_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
+  
+  for (uint8_t xC=0; xC<hdc_adc_end; xC++)
+  {
+    /* 创建 HDC */
+    hdc_adc_png[adc_png_info[xC].id] = Load_png_to_hdc(
+                                            adc_png_info[xC].pic_name,
+                                            adc_png_info[xC].w,  
+                                            adc_png_info[xC].h);
+  }
+  
 ///********************************************************************************************
 //*                              电压表 App 图片 END                                           *
 //********************************************************************************************/

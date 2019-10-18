@@ -34,3 +34,4 @@ char QR_decoder(void);
 void get_image(uint32_t src_addr,uint16_t img_width,uint16_t img_height);
 
 #endif /* __QR_DECODER_USER_H */
+

@@ -15,12 +15,10 @@
 *
 *************************************************************************/
 #include "./camera/ov5640_AF.h"
-
-#define Delay(ms)  GUI_msleep(ms)
-
+#include "./delay/core_delay.h"   
 static void OV5640_FOCUS_AD5820_Check_MCU(void);
 
-const static u8 OV5640_AF_FW[] =    
+static uint8_t OV5640_AF_FW[] =    
 {
     0x02, 0x0d, 0xf3, 0x02, 0x0a, 0x5f, 0xc2, 0x01, 0x22, 0x22, 0x00, 0x02, 0x0f, 0x31, 0x30, 0x01,
     0x03, 0x02, 0x03, 0x09, 0x30, 0x02, 0x03, 0x02, 0x03, 0x09, 0x90, 0x51, 0xa5, 0xe0, 0x78, 0xbb, 
@@ -269,12 +267,11 @@ const static u8 OV5640_AF_FW[] =
     0xd0, 0x82, 0xd0, 0x83, 0xd0, 0xe0, 0x32, 0xe4, 0x93, 0xfe, 0x74, 0x01, 0x93, 0xf5, 0x82, 0x8e, 
     0x83, 0x22, 0x8f, 0x82, 0x8e, 0x83, 0x75, 0xf0, 0x04, 0xed, 0x02, 0x07, 0x5b,  
 };
-
 void OV5640_FOCUS_AD5820_Init(void)
 {
-    u8  state=0x8F;
-    u32 iteration = 100;
-    u16 totalCnt = 0; 
+    uint8_t  state=0x8F;
+    uint32_t iteration = 100;
+    uint16_t totalCnt = 0; 
 
     CAMERA_DEBUG("OV5640_FOCUS_AD5820_Init\n");     
 
@@ -300,12 +297,12 @@ void OV5640_FOCUS_AD5820_Init(void)
     OV5640_WriteReg(0x0000, 0x00);
     OV5640_WriteReg(0x0000, 0x00);
     
-//    Delay(100);
+//    HAL_Delay(100);
     do {
-        state = (u8)OV5640_ReadReg(0x3029);
+        state = (uint8_t)OV5640_ReadReg(0x3029);
         CAMERA_DEBUG("when init af, state=0x%x\n",state);	
 	 
-        Delay(10);
+        HAL_Delay(10);
         if (iteration-- == 0)
         {
             CAMERA_DEBUG("[OV5640]STA_FOCUS state check ERROR!!, state=0x%x\n",state);	
@@ -321,8 +318,8 @@ void OV5640_FOCUS_AD5820_Init(void)
 //set constant focus
 void OV5640_FOCUS_AD5820_Constant_Focus(void)
 {
-    u8 state = 0x8F;
-    u32 iteration = 300;
+    uint8_t state = 0x8F;
+    uint32_t iteration = 300;
 
 //    //send idle command to firmware
 //    OV5640_WriteReg(0x3023,0x01);
@@ -330,14 +327,14 @@ void OV5640_FOCUS_AD5820_Constant_Focus(void)
 
 //    iteration = 300;
 //    do {
-//    	 state = (u8)OV5640_ReadReg(0x3023);
+//    	 state = (uint8_t)OV5640_ReadReg(0x3023);
 //        if (iteration-- == 0)
 //        {
 ////            RETAILMSG(1, (TEXT("[OV5640]AD5820_Single_Focus time out !!0x%x \r\n")), state);
 //            CAMERA_DEBUG("[OV5640]AD5820_Single_Focus time out !! %x\n",state);
 //            return ;
 //        }   
-//        Delay(10);
+//        HAL_Delay(10);
 //    } while(state!=0x00); 
 
     //send constant focus mode command to firmware
@@ -346,68 +343,68 @@ void OV5640_FOCUS_AD5820_Constant_Focus(void)
 
     iteration = 5000;
     do {
-    	 state = (u8)OV5640_ReadReg(0x3023);
+    	 state = (uint8_t)OV5640_ReadReg(0x3023);
         if (iteration-- == 0)
         {
 //            RETAILMSG(1, (TEXT("[OV5640]AD5820_Single_Focus time out II\r\n")));
             CAMERA_DEBUG("[OV5640]AD5820_Single_Focus time out !! %x\n",state);
             return ;
         }
-        Delay(10);
+        HAL_Delay(10);
     } while(state!=0x00);//0x0 : focused 0x01: is focusing
     return;
 }
-//static void OV5640_FOCUS_AD5820_Single_Focus()
-//{
-//     
+static void OV5640_FOCUS_AD5820_Single_Focus()
+{
+     
 
-//    u8 state = 0x8F;
-//    u8 state_ack = 0x8F;	
-//    u8 state_cmd = 0x8F;		
-//    u32 iteration = 300;
-//    CAMERA_DEBUG("OV5640_FOCUS_AD5820_Single_Focus\n");
-////1.update zone
-//    //OV5640_FOCUS_AD5820_Update_Zone();
+    uint8_t state = 0x8F;
+    uint8_t state_ack = 0x8F;	
+    uint8_t state_cmd = 0x8F;		
+    uint32_t iteration = 300;
+    CAMERA_DEBUG("OV5640_FOCUS_AD5820_Single_Focus\n");
+//1.update zone
+    //OV5640_FOCUS_AD5820_Update_Zone();
 
-////2.change focus window
-//    //OV5640_FOCUS_AD5820_Set_AF_Window_to_IC();
+//2.change focus window
+    //OV5640_FOCUS_AD5820_Set_AF_Window_to_IC();
 
-////3.update zone
-//    //OV5640_FOCUS_AD5820_Update_Zone();
+//3.update zone
+    //OV5640_FOCUS_AD5820_Update_Zone();
 
-////4.send single focus mode command to firmware
-//    OV5640_WriteReg(0x3023,0x01);
-//    OV5640_WriteReg(0x3022,0x03);
+//4.send single focus mode command to firmware
+    OV5640_WriteReg(0x3023,0x01);
+    OV5640_WriteReg(0x3022,0x03);
 
-//    CAMERA_DEBUG("after single focus  \n");
+    CAMERA_DEBUG("after single focus  \n");
 
-////5.after sigle focus cmd, check the STA_FOCUS until S_FOCUSED 0x10
-//    iteration = 1000;  
-//    do{
-//        state = (u8)OV5640_ReadReg(0x3023);
-//        CAMERA_DEBUG("test,Single state = 0x%x,state_ack=0x%x,state_cmd=0x%x\n",state,state_ack,state_cmd);
-//        
-//        if(state == 0x00)
-//        {
-////            state = (u8)OV5640_ReadReg(0x3029);
-////            if(state == 0x10)
-// //           {   
-//                CAMERA_DEBUG("single focused!\n");
-//                break;
-// //           }
-//        }			
-//        Delay(10);
-//        iteration --;
+//5.after sigle focus cmd, check the STA_FOCUS until S_FOCUSED 0x10
+    iteration = 1000;  
+    do{
+        state = (uint8_t)OV5640_ReadReg(0x3023);
+        CAMERA_DEBUG("test,Single state = 0x%x,state_ack=0x%x,state_cmd=0x%x\n",state,state_ack,state_cmd);
+        
+        if(state == 0x00)
+        {
+//            state = (uint8_t)OV5640_ReadReg(0x3029);
+//            if(state == 0x10)
+ //           {   
+                CAMERA_DEBUG("single focused!\n");
+                break;
+ //           }
+        }			
+        HAL_Delay(10);
+        iteration --;
 
-//    }while(iteration);
-//    return;
+    }while(iteration);
+    return;
 
-//}
+}
 
 //static void OV5640_FOCUS_AD5820_Pause_Focus()
 //{
-//    u8 state = 0x8F;
-//    u32 iteration = 300;
+//    uint8_t state = 0x8F;
+//    uint32_t iteration = 300;
 
 //    //send idle command to firmware
 //    OV5640_WriteReg(0x3023,0x01);
@@ -415,14 +412,14 @@ void OV5640_FOCUS_AD5820_Constant_Focus(void)
 
 //    iteration = 100;  
 //    do{
-//        state = (u8)OV5640_ReadReg(0x3023);
+//        state = (uint8_t)OV5640_ReadReg(0x3023);
 //        
 //        if(state == 0x00)
 //        {
 //            CAMERA_DEBUG("idle!\n");
 //            break;
 //        }			
-//        Delay(10);
+//        HAL_Delay(10);
 //        iteration --;
 
 //    }while(iteration);
@@ -431,8 +428,8 @@ void OV5640_FOCUS_AD5820_Constant_Focus(void)
 
 //static void OV5640_FOCUS_AD5820_Cancel_Focus()
 //{
-//    u8 state = 0x8F;
-//    u32 iteration = 300;
+//    uint8_t state = 0x8F;
+//    uint32_t iteration = 300;
 //    CAMERA_DEBUG("OV5640_FOCUS_AD5820_Cancel_Focus\n");
 //    //send idle command to firmware
 //    OV5640_WriteReg(0x3023,0x01);
@@ -440,24 +437,47 @@ void OV5640_FOCUS_AD5820_Constant_Focus(void)
 //	
 //    iteration = 100;  
 //    do{
-//        state = (u8)OV5640_ReadReg(0x3023);
+//        state = (uint8_t)OV5640_ReadReg(0x3023);
 
 //        if(state == 0x00)
 //    {
 //            CAMERA_DEBUG("idle!\n");
 //            break;
 //    }
-//        Delay(10);
+//        HAL_Delay(10);
 //        iteration --;
 //		
 //    }while(iteration);
 //			
 //}
+uint8_t OV5640_FOCUS_AD5820_Pause_Focus(void)
+{
+    uint8_t state = 0x8F;
+    uint32_t iteration = 300;
 
+    //send idle command to firmware
+    OV5640_WriteReg(0x3023,0x01);
+    OV5640_WriteReg(0x3022,0x06);
+
+    iteration = 100;  
+    do{
+        state = (uint8_t)OV5640_ReadReg(0x3023);
+        
+        if(state == 0x00)
+        {
+            CAMERA_DEBUG("Pause Focus!\n");
+            return 0;
+        }			
+        HAL_Delay(10);
+        iteration --;
+
+    }while(iteration);
+		return 1;
+}
 static void OV5640_FOCUS_AD5820_Check_MCU(void)
 {
     int i = 0;    
-    u8 check[13] = {0x00};
+    uint8_t check[13] = {0x00};
 	//mcu on
     check[0] = OV5640_ReadReg(0x3000);
     check[1] = OV5640_ReadReg(0x3004);
@@ -482,30 +502,7 @@ static void OV5640_FOCUS_AD5820_Check_MCU(void)
     CAMERA_DEBUG("check[%d]=0x%x\n", i, check[i]);
 	
 }
-uint8_t OV5640_FOCUS_AD5820_Pause_Focus(void)
-{
-    u8 state = 0x8F;
-    u32 iteration = 300;
 
-    //send idle command to firmware
-    OV5640_WriteReg(0x3023,0x01);
-    OV5640_WriteReg(0x3022,0x06);
-
-    iteration = 100;  
-    do{
-        state = (u8)OV5640_ReadReg(0x3023);
-        
-        if(state == 0x00)
-        {
-            CAMERA_DEBUG("Pause Focus!\n");
-            return 0;
-        }			
-        Delay(10);
-        iteration --;
-
-    }while(iteration);
-		return 1;
-}
 void OV5640_AUTO_FOCUS(void)
 {
    OV5640_FOCUS_AD5820_Init();

@@ -185,6 +185,16 @@
           <WinNumber>1</WinNumber>
           <ItemText>SAI_DMA_TX_Callback</ItemText>
         </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>outbuffer</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buffer0</ItemText>
+        </Ww>
       </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
@@ -2960,7 +2970,7 @@
   </Group>
 
   <Group>
-    <GroupName>APP_MP3</GroupName>
+    <GroupName>tutorial/MP3</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -3004,7 +3014,7 @@
   </Group>
 
   <Group>
-    <GroupName>APP_MP3_BSP</GroupName>
+    <GroupName>tutorial/MP3_BSP</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -3276,7 +3286,7 @@
   </Group>
 
   <Group>
-    <GroupName>APP_RECORDER</GroupName>
+    <GroupName>tutorial/RECORDER</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -3308,8 +3318,8 @@
   </Group>
 
   <Group>
-    <GroupName>APP_RGB_LED</GroupName>
-    <tvExp>1</tvExp>
+    <GroupName>tutorial/RGB_LED</GroupName>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3340,21 +3350,13 @@
   </Group>
 
   <Group>
-    <GroupName>tutorial/rgb_led</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-  </Group>
-
-  <Group>
     <GroupName>tutorial/pic_viwer</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>25</GroupNumber>
+      <GroupNumber>24</GroupNumber>
       <FileNumber>223</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -3382,7 +3384,7 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>27</GroupNumber>
+      <GroupNumber>26</GroupNumber>
       <FileNumber>224</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -3402,37 +3404,49 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>28</GroupNumber>
+      <GroupNumber>27</GroupNumber>
       <FileNumber>225</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\emXGUI_Lib\app\tutorial\camera\GUI_CAMERA_DIALOG.c</PathWithFileName>
-      <FilenameWithoutPath>GUI_CAMERA_DIALOG.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>28</GroupNumber>
-      <FileNumber>226</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\bsp\camera\bsp_ov5640.c</PathWithFileName>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\bsp_ov5640.c</PathWithFileName>
       <FilenameWithoutPath>bsp_ov5640.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>28</GroupNumber>
+      <GroupNumber>27</GroupNumber>
+      <FileNumber>226</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\GUI_Camera_Dialog.c</PathWithFileName>
+      <FilenameWithoutPath>GUI_Camera_Dialog.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>27</GroupNumber>
       <FileNumber>227</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\bsp\camera\ov5640_AF.c</PathWithFileName>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\GUI_Camera_QRCode_Dialog.c</PathWithFileName>
+      <FilenameWithoutPath>GUI_Camera_QRCode_Dialog.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>27</GroupNumber>
+      <FileNumber>228</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\ov5640_AF.c</PathWithFileName>
       <FilenameWithoutPath>ov5640_AF.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -3446,8 +3460,8 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>29</GroupNumber>
-      <FileNumber>228</FileNumber>
+      <GroupNumber>28</GroupNumber>
+      <FileNumber>229</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>

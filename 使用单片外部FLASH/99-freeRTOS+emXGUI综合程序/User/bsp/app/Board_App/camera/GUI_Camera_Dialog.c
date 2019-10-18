@@ -4,7 +4,7 @@
 #include "./camera/bsp_ov5640.h"
 #include "x_libc.h"
 #include "./camera/ov5640_AF.h"
-
+#include "GUI_CAMERA_DIALOG.h"
 
 static HDC hdc_bk = NULL;//背景图层，绘制透明控件
 extern BOOL g_dma2d_en;//DMA2D使能标志位，摄像头DMEO必须禁止
@@ -23,7 +23,11 @@ uint16_t *cam_buff1;
 GUI_SEM *cam_sem = NULL;//更新图像同步信号量（二值型）
 GUI_SEM *set_sem = NULL;//等待对焦同步信号量（二值型）
 int focus_status = 1;//自动对焦，默认开启
+extern int cur_index;//当前内存块
 //定义控件ID
+
+
+
 enum eID
 {
 	eID_OK =0x1000,
@@ -73,6 +77,13 @@ enum eID
   ID_FPS,
 };
 
+
+Cam_DIALOG_Typedef CamDialog = 
+{
+  .cur_Resolution = eID_RB3,
+  .cur_LightMode =eID_RB4,
+  .cur_SpecialEffects =eID_RB16,
+};
 /*
  * @brief  清空背景函数
  * @param  hdc:    绘图上下文
@@ -1803,8 +1814,8 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
               focus_status = 1;
             }
             //使能DCMI采集数据
-            DCMI_Cmd(ENABLE); 
-            DCMI_CaptureCmd(ENABLE); 
+//            DCMI_Cmd(ENABLE); 
+//            DCMI_CaptureCmd(ENABLE); 
 
             state = 1;
             break;
@@ -1880,9 +1891,9 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       thread=0;//结束进程循环
       OV5640_Reset();//复位摄像头
       OV5640_Capture_Control(DISABLE);//关闭摄像头采集图像
-      DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,DISABLE); //关闭DMA中断
-      DCMI_Cmd(DISABLE); //DCMI失能
-      DCMI_CaptureCmd(DISABLE); 
+//      DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,DISABLE); //关闭DMA中断
+//      DCMI_Cmd(DISABLE); //DCMI失能
+//      DCMI_CaptureCmd(DISABLE); 
       
       if (!OV5640_State)
       {
@@ -1898,7 +1909,7 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       cur_SpecialEffects = eID_RB16;
       Camera_ReConfig();
       cur_index = 0;
-      LCD_LayerCamInit((uint32_t)LCD_FRAME_BUFFER,800, 480);
+//      LCD_LayerCamInit((uint32_t)LCD_FRAME_BUFFER,800, 480);
       GUI_msleep(40);
       return PostQuitMessage(hwnd);	
     }    
@@ -1977,16 +1988,13 @@ void	GUI_Camera_DIALOG(void)
 {	
 	WNDCLASS	wcex;
 	MSG msg;
-
-   g_dma2d_en = TRUE;
+	
+  g_dma2d_en = TRUE;
 	wcex.Tag = WNDCLASS_TAG;  
-  
   
   cam_buff0 = (uint16_t *)GUI_VMEM_Alloc(LCD_XSIZE*LCD_YSIZE*2);
   cam_buff1 = (uint16_t *)GUI_VMEM_Alloc(LCD_XSIZE*LCD_YSIZE*2);
 
-  
-  
 	wcex.Style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = WinProc; //设置主窗口消息处理的回调函数.
 	wcex.cbClsExtra = 0;

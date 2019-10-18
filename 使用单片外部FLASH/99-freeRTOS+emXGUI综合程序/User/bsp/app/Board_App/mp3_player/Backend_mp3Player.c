@@ -27,9 +27,9 @@
 #include "x_libc.h"
 #include "./mp3_player/GUI_MUSICPLAYER_DIALOG.h"
 #include "./recorder/GUI_RECORDER_DIALOG.h"
-#include "./sai/bsp_sai.h" 
+#include "./sai/bsp_sai.h"
 
-#define Delay_ms GUI_msleep
+//#define Delay_ms GUI_msleep
 /* 推荐使用以下格式mp3文件：
  * 采样率：44100Hz
  * 声  道：2
@@ -186,7 +186,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 #else
 	SAI_Play_Stop();
 	SAI_GPIO_Config();
-  
+  SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;
 #endif
 
 	bufflag=0;
@@ -203,7 +203,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 
    //获取ID3V2的大小，并偏移至该位置,拖到任意位置播放功能
 	ID3V2_size = mp3_GetID3V2_Size(inputbuf);
-	f_lseek(&file,ID3V2_size);	
+//	f_lseek(&file,ID3V2_size);	
 	result=f_read(&file,inputbuf,INPUTBUF_SIZE,&bw);
 	if(result!=FR_OK)
 	{
@@ -211,20 +211,20 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 		MP3FreeDecoder(Mp3Decoder);
 		return;
 	}
-	x_mbstowcs_cp936(wbuf, music_lcdlist[play_index], FILE_NAME_LEN);
-  SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB5), wbuf);   
-	
+//	x_mbstowcs_cp936(wbuf, music_lcdlist[play_index], FILE_NAME_LEN);
+//  SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB5), wbuf);   
+//	
 	read_ptr=inputbuf;
 	bytes_left=bw;
    
    if(vol != 0)
    {
-      wm8978_OutMute(1);
+      wm8978_OutMute(0);
    }
    //当音量icon被按下时，设置为静音模式
    else
    {                
-      wm8978_OutMute(0);//静音
+      wm8978_OutMute(1);//静音
    }
             
    
@@ -347,14 +347,15 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 				printf("\r\n");
 				//I2S_AudioFreq_Default = 2，正常的帧，每次都要改速率
 				//if(mp3player.ucFreq >= I2S_AudioFreq_Default)	
-				if(mp3player.ucFreq >= SAI_AUDIO_FREQUENCY_8K)
+				if(mp3player.ucFreq >= SAI_AUDIOFREQ_DEFAULT)
 				{
 					//根据采样率修改I2S速率
 //					I2Sx_Mode_Config(I2S_Standard_Phillips,I2S_DataFormat_16b,mp3player.ucFreq);
 //					I2Sx_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
 					SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
-          SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
+//          SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
 					//SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;
+					SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
 				}
 				//I2S_Play_Start();
 				SAI_Play_Start();
@@ -377,7 +378,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
          //清除歌词记数
          lyriccount=0;
          //I2S_Stop();   
-			   SAI_Play_Stop();
+			   //SAI_Play_Stop();
          MP3FreeDecoder(Mp3Decoder);
          //f_close(&file);	
 			break;
@@ -524,26 +525,6 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
     GUI_SemPost(exit_sem);
   }
 }
-
-/* DMA发送完成中断回调函数 */
-/* 缓冲区内容已经播放完成，需要切换缓冲区，进行新缓冲区内容播放 
-   同时读取WAV文件数据填充到已播缓冲区  */
-void MusicPlayer_SAI_DMA_TX_Callback(void)
-{
-	if(DMA_Instance->CR&(1<<19)) //当前使用Memory1数据
-	{
-		bufflag=0;                       //可以将数据读取到缓冲区0
-	}
-	else                               //当前使用Memory0数据
-	{
-		bufflag=1;                       //可以将数据读取到缓冲区1
-	}
-	Isread=1;                          // DMA传输完成标志
-}
-
-
-
-
 
 /**
   * @brief  配置WM8978和STM32的I2S开始放音。
@@ -824,4 +805,21 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 		
 	
 }
+
+/* DMA发送完成中断回调函数 */
+/* 缓冲区内容已经播放完成，需要切换缓冲区，进行新缓冲区内容播放 
+   同时读取WAV文件数据填充到已播缓冲区  */
+void MusicPlayer_SAI_DMA_TX_Callback(void)
+{
+	if(DMA_Instance->CR&(1<<19)) //当前使用Memory1数据
+	{
+		bufflag=0;                       //可以将数据读取到缓冲区0
+	}
+	else                               //当前使用Memory0数据
+	{
+		bufflag=1;                       //可以将数据读取到缓冲区1
+	}
+	Isread=1;                          // DMA传输完成标志
+}
+
 /***************************** (END OF FILE) *********************************/

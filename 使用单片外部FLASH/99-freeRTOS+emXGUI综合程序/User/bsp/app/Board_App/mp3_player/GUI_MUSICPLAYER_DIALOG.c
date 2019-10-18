@@ -50,7 +50,7 @@ icon_S music_icon[12] = {
 };
 extern HWND music_list_hwnd;
 static char path[100] = "0:";   // 文件根目录
-static int  power = 20;                   // 音量值
+static int  power = 40;                   // 音量值
 s32 old_scrollbar_value;                 // 上一个音量值
 TaskHandle_t h_music;                    // 音乐播放进程
 int enter_flag = 0;                      // 切换标志位
@@ -1456,11 +1456,11 @@ void	GUI_MUSICPLAYER_DIALOG(void)
 
 	//创建主窗口
 	MusicPlayer_hwnd = CreateWindowEx(WS_EX_NOFOCUS|WS_EX_FRAMEBUFFER,
-		&wcex,
-		L"GUI_MUSICPLAYER_DIALOG",
-		WS_VISIBLE|WS_CLIPCHILDREN|WS_OVERLAPPED,
-		0, 0, GUI_XSIZE, GUI_YSIZE,
-		NULL, NULL, NULL, NULL);
+																									&wcex,
+																									L"GUI_MUSICPLAYER_DIALOG",
+																									WS_VISIBLE|WS_CLIPCHILDREN|WS_OVERLAPPED,
+																									0, 0, GUI_XSIZE, GUI_YSIZE,
+																									NULL, NULL, NULL, NULL);
 
 	//显示主窗口
 	ShowWindow(MusicPlayer_hwnd, SW_SHOW);

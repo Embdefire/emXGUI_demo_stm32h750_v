@@ -33,15 +33,21 @@
 #define __DCMI_OV5640_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx.h"
-//#include "./systick/bsp_SysTick.h"
+#include "stm32h7xx.h"
 #include "./lcd/bsp_lcd.h"
-#include "stdio.h"
-#include <emXGUI.h>
+#include "stm32h7xx_hal.h"
+
+extern DCMI_HandleTypeDef DCMI_Handle;
+
+
 #define FRAME_RATE_30FPS	0 //30帧
 #define FRAME_RATE_15FPS	1 //15帧
 
 
+/*摄像头采集图像的大小，改变这两个值可以改变数据量，
+但不会加快采集速度，要加快采集速度需要改成SVGA模式*/
+#define img_width  800
+#define img_height 480
 
 
 /* Exported constants --------------------------------------------------------*/
@@ -84,9 +90,6 @@ typedef struct
 
 }OV5640_MODE_PARAM;
 
-
-extern OV5640_MODE_PARAM cam_mode;
-
 /* Image Sizes enumeration */
 typedef enum   
 {
@@ -99,106 +102,80 @@ typedef enum
 
 /*摄像头接口 */
 //IIC SCCB
-#define CAMERA_I2C                          I2C1
-#define CAMERA_I2C_CLK                      RCC_APB1Periph_I2C1
-
-#define CAMERA_I2C_SCL_PIN                  GPIO_Pin_6
-#define CAMERA_I2C_SCL_GPIO_PORT            GPIOB
-#define CAMERA_I2C_SCL_GPIO_CLK             RCC_AHB1Periph_GPIOB
-#define CAMERA_I2C_SCL_SOURCE               GPIO_PinSource6
-#define CAMERA_I2C_SCL_AF                   GPIO_AF_I2C1
-
-#define CAMERA_I2C_SDA_PIN                  GPIO_Pin_7
-#define CAMERA_I2C_SDA_GPIO_PORT            GPIOB
-#define CAMERA_I2C_SDA_GPIO_CLK             RCC_AHB1Periph_GPIOB
-#define CAMERA_I2C_SDA_SOURCE               GPIO_PinSource7
-#define CAMERA_I2C_SDA_AF                   GPIO_AF_I2C1
-
 //VSYNC
-#define DCMI_VSYNC_GPIO_PORT        	GPIOI
-#define DCMI_VSYNC_GPIO_CLK         	RCC_AHB1Periph_GPIOI
-#define DCMI_VSYNC_GPIO_PIN         	GPIO_Pin_5
-#define DCMI_VSYNC_PINSOURCE        	GPIO_PinSource5
-#define DCMI_VSYNC_AF			          GPIO_AF_DCMI
+#define DCMI_VSYNC_GPIO_PORT        	    GPIOB
+#define DCMI_VSYNC_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOB_CLK_ENABLE()
+#define DCMI_VSYNC_GPIO_PIN         	    GPIO_PIN_7
+#define DCMI_VSYNC_AF			                GPIO_AF13_DCMI
 // HSYNC
-#define DCMI_HSYNC_GPIO_PORT        	GPIOA
-#define DCMI_HSYNC_GPIO_CLK         	RCC_AHB1Periph_GPIOA
-#define DCMI_HSYNC_GPIO_PIN         	GPIO_Pin_4
-#define DCMI_HSYNC_PINSOURCE        	GPIO_PinSource4
-#define DCMI_HSYNC_AF			          GPIO_AF_DCMI
+#define DCMI_HSYNC_GPIO_PORT        	    GPIOA
+#define DCMI_HSYNC_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOA_CLK_ENABLE()
+#define DCMI_HSYNC_GPIO_PIN         	    GPIO_PIN_4
+#define DCMI_HSYNC_AF			                GPIO_AF13_DCMI
 //PIXCLK
-#define DCMI_PIXCLK_GPIO_PORT        	GPIOA
-#define DCMI_PIXCLK_GPIO_CLK         	RCC_AHB1Periph_GPIOA
-#define DCMI_PIXCLK_GPIO_PIN         	GPIO_Pin_6
-#define DCMI_PIXCLK_PINSOURCE        	GPIO_PinSource6
-#define DCMI_PIXCLK_AF			          GPIO_AF_DCMI
+#define DCMI_PIXCLK_GPIO_PORT        	    GPIOA
+#define DCMI_PIXCLK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOA_CLK_ENABLE()
+#define DCMI_PIXCLK_GPIO_PIN         	    GPIO_PIN_6
+#define DCMI_PIXCLK_AF			              GPIO_AF13_DCMI
 //PWDN
-#define DCMI_PWDN_GPIO_PORT        	GPIOG
-#define DCMI_PWDN_GPIO_CLK         	RCC_AHB1Periph_GPIOG
-#define DCMI_PWDN_GPIO_PIN         	GPIO_Pin_3
-//RST
-#define DCMI_RST_GPIO_PORT        	GPIOB
-#define DCMI_RST_GPIO_CLK         	RCC_AHB1Periph_GPIOB
-#define DCMI_RST_GPIO_PIN         	GPIO_Pin_5
+#define DCMI_PWDN_GPIO_PORT        	        GPIOB
+#define DCMI_PWDN_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOB_CLK_ENABLE()
+#define DCMI_PWDN_GPIO_PIN         	        GPIO_PIN_10
 
+//RST
+#define DCMI_RST_GPIO_PORT        	        GPIOF
+#define DCMI_RST_GPIO_CLK_ENABLE()          __HAL_RCC_GPIOF_CLK_ENABLE()
+#define DCMI_RST_GPIO_PIN         	        GPIO_PIN_10
 
 //数据信号线
-#define DCMI_D0_GPIO_PORT        	GPIOH
-#define DCMI_D0_GPIO_CLK         	RCC_AHB1Periph_GPIOH
-#define DCMI_D0_GPIO_PIN         	GPIO_Pin_9
-#define DCMI_D0_PINSOURCE        	GPIO_PinSource9
-#define DCMI_D0_AF			          GPIO_AF_DCMI
+#define DCMI_D0_GPIO_PORT        	        GPIOC
+#define DCMI_D0_GPIO_CLK_ENABLE()         	__HAL_RCC_GPIOC_CLK_ENABLE()
+#define DCMI_D0_GPIO_PIN         	        GPIO_PIN_6
+#define DCMI_D0_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D1_GPIO_PORT        	GPIOH
-#define DCMI_D1_GPIO_CLK         	RCC_AHB1Periph_GPIOH
-#define DCMI_D1_GPIO_PIN         	GPIO_Pin_10
-#define DCMI_D1_PINSOURCE        	GPIO_PinSource10
-#define DCMI_D1_AF			          GPIO_AF_DCMI
+#define DCMI_D1_GPIO_PORT        	        GPIOC
+#define DCMI_D1_GPIO_CLK_ENABLE()         	__HAL_RCC_GPIOC_CLK_ENABLE()
+#define DCMI_D1_GPIO_PIN         	        GPIO_PIN_7
+#define DCMI_D1_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D2_GPIO_PORT        	GPIOH
-#define DCMI_D2_GPIO_CLK         	RCC_AHB1Periph_GPIOH
-#define DCMI_D2_GPIO_PIN         	GPIO_Pin_11
-#define DCMI_D2_PINSOURCE        	GPIO_PinSource11
-#define DCMI_D2_AF			          GPIO_AF_DCMI
+#define DCMI_D2_GPIO_PORT        	        GPIOG
+#define DCMI_D2_GPIO_CLK_ENABLE()         	__HAL_RCC_GPIOG_CLK_ENABLE()
+#define DCMI_D2_GPIO_PIN         	        GPIO_PIN_10
+#define DCMI_D2_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D3_GPIO_PORT        	GPIOH
-#define DCMI_D3_GPIO_CLK         	RCC_AHB1Periph_GPIOH
-#define DCMI_D3_GPIO_PIN         	GPIO_Pin_12
-#define DCMI_D3_PINSOURCE        	GPIO_PinSource12
-#define DCMI_D3_AF			          GPIO_AF_DCMI
+#define DCMI_D3_GPIO_PORT        	        GPIOG
+#define DCMI_D3_GPIO_CLK_ENABLE()         	__HAL_RCC_GPIOG_CLK_ENABLE()
+#define DCMI_D3_GPIO_PIN         	        GPIO_PIN_11
+#define DCMI_D3_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D4_GPIO_PORT        	GPIOH
-#define DCMI_D4_GPIO_CLK         	RCC_AHB1Periph_GPIOH
-#define DCMI_D4_GPIO_PIN         	GPIO_Pin_14
-#define DCMI_D4_PINSOURCE        	GPIO_PinSource14
-#define DCMI_D4_AF			          GPIO_AF_DCMI
+#define DCMI_D4_GPIO_PORT        	        GPIOE
+#define DCMI_D4_GPIO_CLK_ENABLE()         	__HAL_RCC_GPIOE_CLK_ENABLE()
+#define DCMI_D4_GPIO_PIN         	        GPIO_PIN_4
+#define DCMI_D4_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D5_GPIO_PORT        	GPIOD
-#define DCMI_D5_GPIO_CLK         	RCC_AHB1Periph_GPIOD
-#define DCMI_D5_GPIO_PIN         	GPIO_Pin_3
-#define DCMI_D5_PINSOURCE        	GPIO_PinSource3
-#define DCMI_D5_AF			          GPIO_AF_DCMI
+#define DCMI_D5_GPIO_PORT        	        GPIOD
+#define DCMI_D5_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOD_CLK_ENABLE()
+#define DCMI_D5_GPIO_PIN         	        GPIO_PIN_3
+#define DCMI_D5_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D6_GPIO_PORT        	GPIOI
-#define DCMI_D6_GPIO_CLK         	RCC_AHB1Periph_GPIOI
-#define DCMI_D6_GPIO_PIN         	GPIO_Pin_6
-#define DCMI_D6_PINSOURCE        	GPIO_PinSource6
-#define DCMI_D6_AF			          GPIO_AF_DCMI
+#define DCMI_D6_GPIO_PORT        	        GPIOE
+#define DCMI_D6_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOE_CLK_ENABLE()
+#define DCMI_D6_GPIO_PIN         	        GPIO_PIN_5
+#define DCMI_D6_AF			                  GPIO_AF13_DCMI
 
-#define DCMI_D7_GPIO_PORT        	GPIOI
-#define DCMI_D7_GPIO_CLK         	RCC_AHB1Periph_GPIOI
-#define DCMI_D7_GPIO_PIN         	GPIO_Pin_7
-#define DCMI_D7_PINSOURCE        	GPIO_PinSource7
-#define DCMI_D7_AF			          GPIO_AF_DCMI
+#define DCMI_D7_GPIO_PORT        	        GPIOE
+#define DCMI_D7_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOE_CLK_ENABLE()
+#define DCMI_D7_GPIO_PIN         	        GPIO_PIN_6
+#define DCMI_D7_AF			                  GPIO_AF13_DCMI
+
 
 /*debug*/
 
-#define CAMERA_DEBUG_ON         1
+#define CAMERA_DEBUG_ON          0
 #define CAMERA_DEBUG_ARRAY_ON   1
 #define CAMERA_DEBUG_FUNC_ON    1
    
-#define WM_Test                 WM_USER+1 
- 
+   
 // Log define
 #define CAMERA_INFO(fmt,arg...)           printf("<<-CAMERA-INFO->> "fmt"\n",##arg)
 #define CAMERA_ERROR(fmt,arg...)          printf("<<-CAMERA-ERROR->> "fmt"\n",##arg)
@@ -237,16 +214,14 @@ typedef struct
   uint8_t PIDL;
 }OV5640_IDTypeDef;
 
-/* Exported constants --------------------------------------------------------*/
-
 /* Use this define to set the maximum delay timeout for the I2C DCMI_OV5640_SingleRandomWrite()
    and DCMI_OV5640_SingleRandomRead() operations. Exeeding this timeout delay, 
    the read/write functions will be aborted and return error code (0xFF).
    The period of the delay will depend on the system operating frequency. The following
    value has been set for system running at 168 MHz. */
 #define DCMI_TIMEOUT_MAX               10000
-
-#define OV5640_DEVICE_ADDRESS    0x78
+#define OV5640_DEVICE_WRITE_ADDRESS    0x78
+#define OV5640_DEVICE_READ_ADDRESS     0x79
 
 /* OV5640 Registers definition when DSP bank selected (0xFF = 0x00) */
 #define OV5640_DSP_R_BYPASS     0x05
@@ -341,6 +316,7 @@ typedef struct
 /* Exported functions ------------------------------------------------------- */
 
 void OV5640_HW_Init(void);
+void OV5640_I2C_Init(void);
 void OV5640_Reset(void);
 void OV5640_ReadID(OV5640_IDTypeDef *OV5640ID);
 void OV5640_Init(void);
@@ -354,72 +330,18 @@ void OV5640_BandWConfig(uint8_t BlackWhite);
 void OV5640_ColorEffectsConfig(uint8_t value1, uint8_t value2);
 uint8_t OV5640_WriteReg(uint16_t Addr, uint8_t Data);
 uint8_t OV5640_ReadReg(uint16_t Addr);
-uint8_t OV5640_WriteFW(const uint8_t *pBuffer ,uint16_t BufferSize);
-
-void OV5640_DMA_Buffer1_Config(void);
-void OV5640_DMA_Buffer2_Config(void);
-void OV5640_DMA_Buffer3_Config(void);
-void OV5640_Capture_Control(FunctionalState state);
-void OV5640_DMA_Config(uint32_t DMA_Memory0BaseAddr,uint16_t DMA_BufferSize);
+uint8_t OV5640_WriteFW(uint8_t *pBuffer ,uint16_t BufferSize);
 void OV5640_SpecialEffects(uint8_t mode);
 void OV5640_LightMode(uint8_t mode);
 void OV5640_USER_Config(void);
-void OV5640_OutSize_Set(uint8_t scaling,uint16_t x_off,uint16_t y_off,uint16_t width,uint16_t height);
+void OV5640_Capture_Control(FunctionalState state);
+extern OV5640_MODE_PARAM cam_mode;
+
+void OV5640_DMA_Config(uint32_t DMA_Memory0BaseAddr,uint32_t DMA_BufferSize);
 void OV5640_Color_Saturation(int8_t sat);
 void OV5640_ContrastConfig(int8_t cnst);
-
-
-
-
-
-void HAL_DCMI_Start_DMA(uint32_t pData, uint32_t Length);
-void DCMI_DMA_MultiBufferStart_IT(uint32_t SrcAddress, uint32_t DstAddress, uint32_t SecondMemAddress, uint32_t DataLength);
-typedef enum
-{
-  HAL_DMA_STATE_RESET             = 0x00,  /*!< DMA not yet initialized or disabled */
-  HAL_DMA_STATE_READY             = 0x01,  /*!< DMA initialized and ready for use   */
-  HAL_DMA_STATE_READY_MEM0        = 0x11,  /*!< DMA Mem0 process success            */
-  HAL_DMA_STATE_READY_MEM1        = 0x21,  /*!< DMA Mem1 process success            */
-  HAL_DMA_STATE_READY_HALF_MEM0   = 0x31,  /*!< DMA Mem0 Half process success       */
-  HAL_DMA_STATE_READY_HALF_MEM1   = 0x41,  /*!< DMA Mem1 Half process success       */
-  HAL_DMA_STATE_BUSY              = 0x02,  /*!< DMA process is ongoing              */
-  HAL_DMA_STATE_BUSY_MEM0         = 0x12,  /*!< DMA Mem0 process is ongoing         */
-  HAL_DMA_STATE_BUSY_MEM1         = 0x22,  /*!< DMA Mem1 process is ongoing         */
-  HAL_DMA_STATE_TIMEOUT           = 0x03,  /*!< DMA timeout state                   */
-  HAL_DMA_STATE_ERROR             = 0x04,  /*!< DMA error state                     */
-}HAL_DMA_StateTypeDef;
-/** @defgroup DCMI_Exported_Types DCMI Exported Types
-  * @{
-  */
-/** 
-  * @brief  HAL DCMI State structures definition
-  */ 
-typedef enum
-{
-  HAL_DCMI_STATE_RESET             = 0x00,  /*!< DCMI not yet initialized or disabled  */
-  HAL_DCMI_STATE_READY             = 0x01,  /*!< DCMI initialized and ready for use    */
-  HAL_DCMI_STATE_BUSY              = 0x02,  /*!< DCMI internal processing is ongoing   */
-  HAL_DCMI_STATE_TIMEOUT           = 0x03,  /*!< DCMI timeout state                    */
-  HAL_DCMI_STATE_ERROR             = 0x04   /*!< DCMI error state                      */
-}HAL_DCMI_StateTypeDef;
-
-/** 
-  * @brief  HAL DMA Memory definition  
-  */ 
-typedef enum
-{
-  MEMORY0      = 0x00,    /*!< Memory 0     */
-  MEMORY1      = 0x01,    /*!< Memory 1     */
-
-}HAL_DMA_MemoryTypeDef;
-void OV5640_Capture_Control(FunctionalState state);
-void DCMI_Stop(void);
-void DCMI_Start(void);
-
-extern uint16_t cam_buff00[800*480];
-extern uint16_t cam_buff01[800*480];
-extern uint16_t cam_buff02[800*480];
-extern int cur_index;
+void OV5640_OutSize_Set(uint8_t scaling,uint16_t x_off,uint16_t y_off,uint16_t width,uint16_t height);
+//void I2Cx_Error(I2C_HandleTypeDef *i2c_handler);
 #endif /* __DCMI_OV5640_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

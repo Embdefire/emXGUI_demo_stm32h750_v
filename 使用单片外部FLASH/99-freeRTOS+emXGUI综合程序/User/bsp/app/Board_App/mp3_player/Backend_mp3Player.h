@@ -5,6 +5,7 @@
 #include "emXGUI.h"
 
 #define SAI_AUDIOFREQ_DEFAULT   SAI_AUDIO_FREQUENCY_8K
+#define Delay_ms GUI_msleep
 
 #define RECBUFFER_SIZE  1024*8
 #define FMT_COUNT	6		/* 音频格式数组元素个数 */

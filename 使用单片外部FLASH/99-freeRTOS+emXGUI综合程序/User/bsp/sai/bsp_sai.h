@@ -39,7 +39,7 @@
 
 extern DMA_HandleTypeDef h_txdma;   //DMA发送句柄
 
-
+extern void (*SAI_DMA_TX_Callback)(void);		//I2S DMA TX回调函数指针  
 void I2Sx_TX_DMA_STREAM_IRQFUN(void);
 void SAI_GPIO_Config(void);
 void SAI_Play_Stop(void);

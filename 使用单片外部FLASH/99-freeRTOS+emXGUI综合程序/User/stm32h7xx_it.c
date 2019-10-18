@@ -37,7 +37,7 @@
 /* FreeRTOSÍ·ÎÄ¼þ */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "./sai/bsp_sai.h" 
+//#include "./sai/bsp_sai.h" 
 
 extern SD_HandleTypeDef uSdHandle;
 /* External variables --------------------------------------------------------*/

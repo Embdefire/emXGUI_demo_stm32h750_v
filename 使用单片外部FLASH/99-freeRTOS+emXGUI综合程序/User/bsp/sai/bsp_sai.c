@@ -19,7 +19,7 @@
 #include "./mp3_player/Backend_mp3Player.h"
 SAI_HandleTypeDef h_sai;
 DMA_HandleTypeDef h_txdma;   //DMA发送句柄
-//void (*SAI_DMA_TX_Callback)(void);
+void (*SAI_DMA_TX_Callback)(void);
 /**
   * @brief  SAI_MSP_Init
   * @param  无
@@ -117,7 +117,6 @@ void BSP_AUDIO_OUT_ClockConfig(uint32_t AudioFreq)
   */
 void SAIxA_Tx_Config(const uint16_t _usStandard, const uint16_t _usWordLen, const uint32_t _usAudioFreq)
 {
-	SAI_CLK_ENABLE();
   __HAL_SAI_DISABLE(&h_sai);
   BSP_AUDIO_OUT_ClockConfig(_usAudioFreq);
   
@@ -132,7 +131,7 @@ void SAIxA_Tx_Config(const uint16_t _usStandard, const uint16_t _usWordLen, cons
   h_sai.Init.MckOverSampling = SAI_MCK_OVERSAMPLING_DISABLE;
   h_sai.Init.AudioFrequency = _usAudioFreq;
   //printf("%d", _usAudioFreq);
-  SAI1_Block_A->CR1 &= 0;//初始化SAI寄存器
+  SAI1_Block_A->CR1 &= 0;
   HAL_SAI_InitProtocol(&h_sai, SAI_I2S_STANDARD, _usWordLen, 2);//2--left_channel and right_channel
   __HAL_SAI_ENABLE(&h_sai);
 }
@@ -140,7 +139,7 @@ void SAIxA_Tx_Config(const uint16_t _usStandard, const uint16_t _usWordLen, cons
 
 void SAIA_TX_DMA_Init(uint16_t* buffer0,uint16_t* buffer1,const uint32_t num)
 {
-  DMA_CLK_ENABLE();
+  
   
   h_txdma.Instance = DMA_Instance;
   h_txdma.Init.Request = DMA_REQUEST_SAI1_A;
@@ -187,8 +186,8 @@ void SAI_Play_Start(void)
 */
 void SAI_DMAConvCplt(DMA_HandleTypeDef *hdma)
 {
-  //SAI_DMA_TX_Callback();
- MusicPlayer_SAI_DMA_TX_Callback();
+  SAI_DMA_TX_Callback();
+    //MusicPlayer_SAI_DMA_TX_Callback();
 }
 /**
 	* @brief  SPIx_TX_DMA_STREAM中断服务函数

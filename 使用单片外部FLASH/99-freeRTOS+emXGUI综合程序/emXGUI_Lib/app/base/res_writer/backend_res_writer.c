@@ -413,7 +413,12 @@ void Burn_Catalog(void)
     GUI_msleep(20);
 
     /* 把dir信息烧录到FLASH中 */  
+#if defined(Fire_H7_InFlash)
+/* 映射模式,不支持demo烧录 */
+#else
     state = SPI_FLASH_BufferWrite((u8*)&dir,RESOURCE_BASE_ADDR + sizeof(dir)*i,sizeof(dir));
+#endif
+
 //    rx_buff = (uint8_t *)GUI_VMEM_Alloc(sizeof(dir));
 //    SPI_FLASH_BufferRead(rx_buff,RESOURCE_BASE_ADDR + sizeof(dir)*i,sizeof(dir));
 //    
@@ -497,7 +502,13 @@ FRESULT Burn_Content(void)
           LED_RED;
           return result;
         }      
-        SPI_FLASH_BufferWrite(tempbuf,write_addr,bw);  //拷贝数据到外部flash上    
+#if defined(Fire_H7_InFlash)
+/* 映射模式,不支持demo烧录 */
+#else
+           SPI_FLASH_BufferWrite(tempbuf,write_addr,bw);  //拷贝数据到外部flash上    
+#endif
+
+
         
 //        rx_buff = (uint8_t *)GUI_VMEM_Alloc(bw);
 //        SPI_FLASH_BufferRead(rx_buff,write_addr,bw);
@@ -606,8 +617,12 @@ FRESULT Check_Resource(void)
           BURN_ERROR("读取文件失败！");
           LED_RED;
           return result;
-        }      
+        }
+#if defined(Fire_H7_InFlash)	
+//映射模式,不支持demo烧录
+#else
         SPI_FLASH_BufferRead(flash_buf,read_addr,bw);  //从FLASH中读取数据
+#endif
         read_addr+=bw;		
         
         for(j=0;j<bw;j++)
@@ -687,11 +702,15 @@ FRESULT BurnFile(void)
 #if defined(STM32F429_439xx)  
   SPI_FLASH_BulkErase_GUI();
 #elif defined(STM32H743xx)  
+	#if defined(Fire_H7_InFlash)
+	//映射模式,不支持demo烧录
+	#else
   if(BSP_QSPI_Erase_Chip() != eRES_OK)
   {
     printf("Erase Error\n");
     while(1);
   }
+	#endif
 #endif  
   
   /* 第一次执行Make_Catalog函数时删除旧的烧录信息文件 */

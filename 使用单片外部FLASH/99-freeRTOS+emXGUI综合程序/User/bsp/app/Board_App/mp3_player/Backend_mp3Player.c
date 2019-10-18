@@ -186,7 +186,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 #else
 	SAI_Play_Stop();
 	SAI_GPIO_Config();
-  SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;
+  
 #endif
 
 	bufflag=0;
@@ -354,6 +354,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 //					I2Sx_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
 					SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
           SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
+					//SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;
 				}
 				//I2S_Play_Start();
 				SAI_Play_Start();
@@ -578,7 +579,7 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 //	I2S_Play_Stop();.
 	  SAI_Play_Stop();
 	  SAI_GPIO_Config();
-    SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;  
+    //SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;  
 
     bufflag=0;
 	  Isread=0;

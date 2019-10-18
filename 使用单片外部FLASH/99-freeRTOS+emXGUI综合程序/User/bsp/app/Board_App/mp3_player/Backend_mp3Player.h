@@ -61,5 +61,7 @@ extern int time2exit;
 extern GUI_SEM *exit_sem;
 void MusicPlayer_SAI_DMA_TX_Callback(void);
 void MusicPlayer_SAI_DMA_RX_Callback(void);
+
+//void (*SAI_DMA_TX_Callback)(void);
 #endif  /* __MP3PLAYER_H__   */
 

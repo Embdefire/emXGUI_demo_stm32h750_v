@@ -19,13 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "./camera/bsp_ov5640.h"
 #include "./i2c/i2c.h"
-#include "./delay/core_delay.h"
-#include "emXGUI_Arch.h"
 #include "GUI_CAMERA_DIALOG.h"
-
-__IO int updata = 0;
-extern uint16_t *cam_buff0;
-extern uint16_t *cam_buff1;
+#include "./delay/core_delay.h"  
 DCMI_HandleTypeDef DCMI_Handle;
 DMA_HandleTypeDef DMA_Handle_dcmi;
 void TransferComplete(DMA2D_HandleTypeDef *hdma2d)
@@ -905,8 +900,7 @@ void OV5640_Init(void)
   HAL_NVIC_SetPriority(DCMI_IRQn, 7, 0);
   HAL_NVIC_EnableIRQ(DCMI_IRQn); 	
   //dma_memory 以16位数据为单位， dma_bufsize以32位数据为单位(即像素个数/2)
-  OV5640_DMA_Config((uint32_t)cam_buff0,cam_mode.cam_out_height*cam_mode.cam_out_width/2);	
-
+  OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,cam_mode.cam_out_height*cam_mode.cam_out_width/2);	
 }
 
 
@@ -1533,13 +1527,13 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
     if(cur_index == 0)//0--配置第二块内存，使用第一块内存
     {
       cur_index = 1;
-      OV5640_DMA_Config((uint32_t)cam_buff1,
+      OV5640_DMA_Config((uint32_t)CamDialog.cam_buff1,
                         cam_mode.cam_out_height*cam_mode.cam_out_width/2);  
     }
     else//1--配置第一块内存，使用第二块内存
     {      
       cur_index = 0;
-      OV5640_DMA_Config((uint32_t)cam_buff0,
+      OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
                         cam_mode.cam_out_height*cam_mode.cam_out_width/2);       
     }
 

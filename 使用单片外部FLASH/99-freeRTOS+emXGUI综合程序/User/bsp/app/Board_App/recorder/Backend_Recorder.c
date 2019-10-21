@@ -39,12 +39,20 @@ FIL record_file;			/* file objects */
 extern FRESULT result; 
 extern UINT bw;            					/* File R/W count */
 
-extern uint32_t g_FmtList[FMT_COUNT][3];
+uint32_t g_FmtList[FMT_COUNT][3] =
+{
+	{SAI_I2S_STANDARD, SAI_PROTOCOL_DATASIZE_16BIT, SAI_AUDIO_FREQUENCY_44K},
+	{SAI_I2S_STANDARD, SAI_PROTOCOL_DATASIZE_16BIT, SAI_AUDIO_FREQUENCY_44K},
+	{SAI_I2S_STANDARD, SAI_PROTOCOL_DATASIZE_16BIT, SAI_AUDIO_FREQUENCY_44K},
+	{SAI_I2S_STANDARD, SAI_PROTOCOL_DATASIZE_16BIT, SAI_AUDIO_FREQUENCY_44K},
+	{SAI_I2S_STANDARD, SAI_PROTOCOL_DATASIZE_16BIT, SAI_AUDIO_FREQUENCY_44K},
+	{SAI_I2S_STANDARD, SAI_PROTOCOL_DATASIZE_16BIT, SAI_AUDIO_FREQUENCY_44K},
+};
 
 //extern const uint16_t recplaybuf[4];//2个16位数据,用于录音时I2S Master发送.循环发送0.
 uint16_t recplaybuf[4]={0X0000,0X0000};
 /* 仅允许本文件内调用的函数声明 */
-void MusicPlayer_SAI_DMA_RX_Callback(void);
+
 void MusicPlayer_SAI_DMA_TX_Callback(void);
 ///**
 //  * @brief   WAV格式音频播放主程序
@@ -221,7 +229,7 @@ void MusicPlayer_SAI_DMA_TX_Callback(void);
   */
 void StartRecord(const char *filename)
 {
-#if 0
+#if 1
 	uint8_t ucRefresh;	/* 通过串口打印相关信息标志 */
 	DIR dir;
 	
@@ -260,15 +268,12 @@ void StartRecord(const char *filename)
 	rec_wav.datasize=0;            /* 语音数据大小 目前未确定*/
 	
 	/*  初始化并配置I2S  */
-	I2S_Stop();
-	I2S_GPIO_Config();
-	I2Sx_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
-	I2Sxext_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
-	
-	I2S_DMA_RX_Callback=Recorder_I2S_DMA_RX_Callback;
-	I2Sxext_Recorde_Stop();
-	
-	ucRefresh = 1;
+  SAI_GPIO_Config();
+  //SAI_Play_Stop();
+  SAIxA_Tx_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
+	SAIxB_Rx_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
+  //SAI_DMA_TX_Callback=MusicPlayer_SAI_DMA_TX_Callback;
+  ucRefresh = 1;
 	bufflag=0;
 	Isread=0;
 #endif

@@ -58,6 +58,7 @@ extern void	GUI_RES_WRITER_DIALOG(void);
 extern void GUI_Boot_Interface_DIALOG(void);
 extern void	GUI_PicViewer_Dialog(void);
 extern void	GUI_RECORDER_DIALOG(void);
+extern void GUI_T_RH_Dialog(void);
 extern BOOL player_state;
 int thread_ctrl = 1;
 
@@ -133,11 +134,11 @@ static const struct __obj_list menu_list_1[] = {
       L"MP3²¥·ÅÆ÷",		NULL,	  L"I", RGB_WHITE,			(void(*)(void *))GUI_MUSICPLAYER_DIALOG,//dummy,
       L"ÊÓÆµ²¥·ÅÆ÷",		NULL,	  L"D", RGB_WHITE,				dummy,
 
-      L"RGB²ÊµÆ",		NULL,	  L"L", RGB_WHITE,				GUI_LED_DIALOG,//dummy,
-      L"ÉãÏñÍ·",		NULL,	  L"M",RGB_WHITE, 				GUI_Camera_DIALOG,
+      L"RGB²ÊµÆ",		NULL,	  L"L", RGB_WHITE,				(void(*)(void *))GUI_LED_DIALOG,//dummy,
+      L"ÉãÏñÍ·",		NULL,	  L"M",RGB_WHITE, 				(void(*)(void *))GUI_Camera_DIALOG,
 
-      L"Í¼Æ¬ä¯ÀÀÆ÷",	NULL, 	L"G", RGB_WHITE,				dummy,
-      L"ÎÂÊª¶È",	NULL,   L"O", RGB_WHITE,				dummy,
+      L"Í¼Æ¬ä¯ÀÀÆ÷",	NULL, 	L"G", RGB_WHITE,				(void(*)(void *))GUI_PicViewer_Dialog,
+      L"ÎÂÊª¶È",	NULL,   L"O", RGB_WHITE,				(void(*)(void *))GUI_T_RH_Dialog,//dummy,
       L"µçÑ¹±í",		NULL,	  L"W", RGB_WHITE,				dummy,  
       L"Ä£ÄâUÅÌ",	NULL,	  L"N", RGB_WHITE,				dummy, 
       L"ÍÓÂÝÒÇ",	  NULL,	  L"R", 	RGB_WHITE,			dummy,
@@ -152,7 +153,7 @@ static const struct __obj_list menu_list_1[] = {
 
 
         L"Ê±ÖÓ",		NULL,	  L"H", RGB_WHITE,				dummy,
-        L"Â¼Òô»ú",	  NULL,	  L"Y", 	RGB_WHITE,			dummy,//(void(*)(void *))GUI_RECORDER_DIALOG,
+        L"Â¼Òô»ú",	  NULL,	  L"Y", 	RGB_WHITE,			(void(*)(void *))GUI_RECORDER_DIALOG,//dummy,
 //        L"Checkbox",	NULL,	  L"J", RGB_WHITE,				dummy,
 //            L"Checkbox",	NULL, 	L"D", RGB_WHITE,				dummy,
 //        L"Radiobox",	NULL,   L"E", RGB_WHITE,				dummy,

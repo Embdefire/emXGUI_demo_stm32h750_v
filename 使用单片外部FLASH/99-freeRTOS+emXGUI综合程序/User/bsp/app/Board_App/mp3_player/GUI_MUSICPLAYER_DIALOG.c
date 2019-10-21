@@ -412,7 +412,6 @@ static void App_PlayMusic(HWND hwnd)
          }
          else
          {
-					 //mp3PlayerDemo1(music_name);
            mp3PlayerDemo(music_name, power, hdc);  
          }
 			 

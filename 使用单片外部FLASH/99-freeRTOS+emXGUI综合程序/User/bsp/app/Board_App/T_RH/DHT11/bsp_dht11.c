@@ -3,25 +3,20 @@
   * @file    bsp_dht11.c
   * @author  fire
   * @version V1.0
-  * @date    2015-xx-xx
+  * @date    2019-xx-xx
   * @brief   温湿度传感器应用函数接口
   ******************************************************************************
   * @attention
   *
-  * 实验平台:野火  STM32 F429 开发板  
+  * 实验平台:野火  STM32H750 开发板  
   * 论坛    :http://www.firebbs.cn
   * 淘宝    :https://fire-stm32.taobao.com
   *
   ******************************************************************************
   */
-#include "DHT11/bsp_dht11.h"
-#include "./dwt_delay/core_delay.h"  
-
-/* 可以在下面的宏定义中把后面的延时函数替换换SysTick的延时函数，就是想用那个就换成那个的 */
-
-#define DHT11_DELAY_US(us)  CPU_TS_Tmr_Delay_US(us)
-#define DHT11_DELAY_MS(ms)  CPU_TS_Tmr_Delay_MS(ms)
-
+	
+#include "./bsp_dht11.h"
+#include "./delay/core_delay.h" 
 /*
  * 函数名：DHT11_GPIO_Config
  * 描述  ：配置DHT11用到的I/O口
@@ -29,30 +24,27 @@
  * 输出  ：无
  */
 void DHT11_GPIO_Config(void)
-{		
+{
 	/*定义一个GPIO_InitTypeDef类型的结构体*/
-	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitTypeDef  GPIO_InitStruct;
 
-	/*开启DHT11_PORT的外设时钟*/
-	RCC_AHB1PeriphClockCmd(DHT11_CLK, ENABLE); 
+	/*开启DHT11相关的GPIO外设时钟*/
+	DHT11_GPIO_CLK_ENABLE();
+		/*选择要控制的GPIO引脚*/															   
+	GPIO_InitStruct.Pin = DHT11_PIN;	
 
-	/*选择要控制的DHT11_PORT引脚*/															   
-  	GPIO_InitStructure.GPIO_Pin = DHT11_PIN;	
+	/*设置引脚的输出类型为推挽输出*/
+	GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;  
 
-	/*设置引脚模式为通用推挽输出*/
-  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
-  
-  /*设置引脚的输出类型为推挽输出*/
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  
-  /*设置引脚为上拉模式*/
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-  
-	/*设置引脚速率为50MHz */   
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+	/*设置引脚为上拉模式*/
+	GPIO_InitStruct.Pull  = GPIO_PULLUP;
 
-	/*调用库函数，初始化DHT11_PORT*/
-  GPIO_Init(DHT11_PORT, &GPIO_InitStructure); 
+	/*设置引脚速率为高速 */   
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; 
+
+	/*调用库函数，使用上面配置的GPIO_InitStructure初始化GPIO*/
+	HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStruct);	
+	
 }
 
 /*
@@ -63,21 +55,22 @@ void DHT11_GPIO_Config(void)
  */
 static void DHT11_Mode_IPU(void)
 {
- 	  GPIO_InitTypeDef GPIO_InitStructure;
+ 	 	GPIO_InitTypeDef  GPIO_InitStruct;
 
-	  	/*选择要控制的DHT11_PORT引脚*/	
-	  GPIO_InitStructure.GPIO_Pin = DHT11_PIN;
+	   /*选择要控制的DHT11_PORT引脚*/	
+	  GPIO_InitStruct.Pin = DHT11_PIN;	
 
 	   /*设置引脚模式为浮空输入模式*/ 
-	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN ; 
+	  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;  
+    
+	   /* 设置引脚不上拉也不下拉 */
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
   
-	  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  	 /*设置引脚速率为高速 */    
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; 
   
-  	/*设置引脚速率为50MHz */   
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-  
-	  /*调用库函数，初始化DHT11_PORT*/
-	  GPIO_Init(DHT11_PORT, &GPIO_InitStructure);	 
+	   /*调用库函数，初始化DHT11_PORT*/
+	  HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStruct);	 
 }
 
 /*
@@ -88,25 +81,22 @@ static void DHT11_Mode_IPU(void)
  */
 static void DHT11_Mode_Out_PP(void)
 {
- 	GPIO_InitTypeDef GPIO_InitStructure;
+ 	
+ 	 	GPIO_InitTypeDef  GPIO_InitStruct;
 
-	/*选择要控制的DHT11_PORT引脚*/															   
-  GPIO_InitStructure.GPIO_Pin = DHT11_PIN;	
+	   /*选择要控制的DHT11_PORT引脚*/	
+	  GPIO_InitStruct.Pin = DHT11_PIN;	
 
-	/*设置引脚模式为通用推挽输出*/
-  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
+	  /*设置引脚的输出类型为推挽输出*/
+	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;  
   
-  /*设置引脚的输出类型为推挽输出*/
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	  GPIO_InitStruct.Pull = GPIO_PULLUP;
   
-  /*设置引脚为上拉模式*/
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  	 /*设置引脚速率为高速 */    
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; 
   
-	/*设置引脚速率为50MHz */   
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-
-	/*调用库函数，初始化DHT11_PORT*/
-  	GPIO_Init(DHT11_PORT, &GPIO_InitStructure);	 	 
+	   /*调用库函数，初始化DHT11_PORT*/
+	  HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStruct);	 
 }
 
 /* 
@@ -124,7 +114,7 @@ static uint8_t Read_Byte(void)
 		/*DHT11 以26~28us的高电平表示“0”，以70us高电平表示“1”，
 		 *通过检测 x us后的电平即可区别这两个状 ，x 即下面的延时 
 		 */
-		DHT11_DELAY_US(40); //延时x us 这个延时需要大于数据0持续的时间即可	   	  
+		CPU_TS_Tmr_Delay_US(40); //延时x us 这个延时需要大于数据0持续的时间即可	   	  
 
 		if(DHT11_DATA_IN()==Bit_SET)/* x us后仍为高电平表示数据“1” */
 		{
@@ -152,12 +142,12 @@ uint8_t Read_DHT11(DHT11_Data_TypeDef *DHT11_Data)
 	/*主机拉低*/
 	DHT11_DATA_OUT(DHT11_LOW);
 	/*延时18ms*/
-	DHT11_DELAY_US(20000);
+	CPU_TS_Tmr_Delay_US(20000);
 
 	/*总线拉高 主机延时30us*/
 	DHT11_DATA_OUT(DHT11_HIGH); 
 
-	DHT11_DELAY_US(30);   //延时30us
+	CPU_TS_Tmr_Delay_US(30);   //延时30us
 
 	/*主机设为输入 判断从机响应信号*/ 
 	DHT11_Mode_IPU();
@@ -171,7 +161,7 @@ uint8_t Read_DHT11(DHT11_Data_TypeDef *DHT11_Data)
     {
       count++;
       if(count>1000)  return 0;
-      DHT11_DELAY_US(10); 
+      CPU_TS_Tmr_Delay_US(10); 
     }    
     
     count=0;
@@ -180,7 +170,7 @@ uint8_t Read_DHT11(DHT11_Data_TypeDef *DHT11_Data)
     {
       count++;
       if(count>1000)  return 0;
-      DHT11_DELAY_US(10); 
+      CPU_TS_Tmr_Delay_US(10); 
     }  
 		/*开始接收数据*/   
 		DHT11_Data->humi_int= Read_Byte();
@@ -209,4 +199,3 @@ uint8_t Read_DHT11(DHT11_Data_TypeDef *DHT11_Data)
 		return 0;
 	}   
 }
-

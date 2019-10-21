@@ -3,8 +3,6 @@
 
 #include "emXGUI.h"
 
-#define WM_Test                 WM_USER+1
-
 typedef struct
 {
   HWND Cam_Hwnd;
@@ -24,7 +22,7 @@ typedef struct
   BOOL Update_Thread;
 }Cam_DIALOG_Typedef;
 
-#if 0
+
 typedef enum
 {
   eID_SET = 0x1000,
@@ -78,7 +76,6 @@ typedef enum
   eID_BT2,             //光线模式界面返回按键
   eID_BT3,             //特殊效果界面返回按键
 }VideoDlg_Master_ID;
-#endif
 
 extern void GUI_Camera_DIALOGTest(void *param);
 extern Cam_DIALOG_Typedef CamDialog;

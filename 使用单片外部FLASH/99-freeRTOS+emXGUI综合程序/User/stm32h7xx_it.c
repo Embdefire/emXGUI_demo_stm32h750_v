@@ -37,7 +37,7 @@
 /* FreeRTOSÍ·ÎÄ¼þ */
 #include "FreeRTOS.h"
 #include "task.h"
-//#include "./sai/bsp_sai.h" 
+#include "./sai/bsp_sai.h" 
 
 extern SD_HandleTypeDef uSdHandle;
 /* External variables --------------------------------------------------------*/
@@ -202,14 +202,13 @@ void BASIC_TIM_IRQHandler(void)
 //  I2Sx_TX_DMA_STREAM_IRQFUN();
 ////  taskEXIT_CRITICAL_FROM_ISR( ulReturn );  
 //}
+
 void DMA1_Stream2_IRQHandler(void)
 {
-  I2Sx_TX_DMA_STREAM_IRQFUN();
+  SAI_TX_DMA_STREAM_IRQFUN();
 }
-
 void DMA1_Stream3_IRQHandler(void)
 {
-  //SAI_RX_DMA_STREAM_IRQFUN();
+  SAI_RX_DMA_STREAM_IRQFUN();
 }
-
 

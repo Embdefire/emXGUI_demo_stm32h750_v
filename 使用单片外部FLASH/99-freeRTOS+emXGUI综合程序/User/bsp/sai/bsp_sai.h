@@ -36,16 +36,13 @@
 #define DMA_Instance                  DMA1_Stream2
 #define DMA_IRQn                      DMA1_Stream2_IRQn
 #define DMA_CLK_ENABLE()              __HAL_RCC_DMA1_CLK_ENABLE(); 
-
-extern DMA_HandleTypeDef h_txdma;   //DMA发送句柄
-
 extern void (*SAI_DMA_TX_Callback)(void);		//I2S DMA TX回调函数指针  
 void I2Sx_TX_DMA_STREAM_IRQFUN(void);
 void SAI_GPIO_Config(void);
 void SAI_Play_Stop(void);
 void SAI_Play_Start(void);
 void SAIxA_Tx_Config(const uint16_t _usStandard, const uint16_t _usWordLen, const uint32_t _usAudioFreq);
-void SAIA_TX_DMA_Init(uint16_t* buffer0,uint16_t *buffer1,const uint32_t num);
+void SAIA_TX_DMA_Init(uint32_t buffer0,uint32_t buffer1,const uint32_t num);
 #endif /* _BSP_SAI_H */
 
 

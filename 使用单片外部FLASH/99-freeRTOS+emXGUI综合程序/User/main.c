@@ -121,9 +121,16 @@ static void BSP_Init(void)
   UARTx_Config();
   /* 基本定时器初始化	*/
 	TIM_Basic_Init();  
+	/* wm8978 播放器初始化	*/
+	if (wm8978_Init()==0)
+  {
+    printf("检测不到WM8978芯片!!!\n");
+    while (1);	/* 停机 */
+  }
   /*hardfault 跟踪器初始化*/ 
   cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
   
+
 }
 
 

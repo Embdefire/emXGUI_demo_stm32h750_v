@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "Bsp/usart/bsp_usart.h"
-//#include "Bsp/systick/bsp_SysTick.h"
 #include "Bsp/wm8978/bsp_wm8978.h"
 #include "ff.h" 
 #include "./mp3_player/Backend_mp3Player.h"
@@ -203,7 +202,7 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 
    //获取ID3V2的大小，并偏移至该位置,拖到任意位置播放功能
 	ID3V2_size = mp3_GetID3V2_Size(inputbuf);
-//	f_lseek(&file,ID3V2_size);	
+	f_lseek(&file,ID3V2_size);	
 	result=f_read(&file,inputbuf,INPUTBUF_SIZE,&bw);
 	if(result!=FR_OK)
 	{
@@ -211,9 +210,9 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 		MP3FreeDecoder(Mp3Decoder);
 		return;
 	}
-//	x_mbstowcs_cp936(wbuf, music_lcdlist[play_index], FILE_NAME_LEN);
-//  SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB5), wbuf);   
-//	
+	x_mbstowcs_cp936(wbuf, music_lcdlist[play_index], FILE_NAME_LEN);
+  SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB5), wbuf);   
+	
 	read_ptr=inputbuf;
 	bytes_left=bw;
    
@@ -352,10 +351,8 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 					//根据采样率修改I2S速率
 //					I2Sx_Mode_Config(I2S_Standard_Phillips,I2S_DataFormat_16b,mp3player.ucFreq);
 //					I2Sx_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
-					SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
-//          SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
-					//SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;
-					SAIA_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
+          SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
+          SAIA_TX_DMA_Init((uint32_t)(&outbuffer[0]),(uint32_t)&outbuffer[1],outputSamps);
 				}
 				//I2S_Play_Start();
 				SAI_Play_Start();
@@ -635,9 +632,9 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 //      
 //      I2Sx_TX_DMA_Init(buffer0,buffer1,RECBUFFER_SIZE);		
 //      I2S_Play_Start();
-			SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
-      //SAIA_TX_DMA_Init(buffer0,buffer1,RECBUFFER_SIZE); 
-			SAIA_TX_DMA_Init((uint16_t *)buffer0,(uint16_t *)buffer1,RECBUFFER_SIZE);
+//			SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
+//      //SAIA_TX_DMA_Init(buffer0,buffer1,RECBUFFER_SIZE); 
+//			SAIA_TX_DMA_Init((uint16_t *)buffer0,(uint16_t *)buffer1,RECBUFFER_SIZE);
       SAI_Play_Start();
    }
    /* 进入主程序循环体 */

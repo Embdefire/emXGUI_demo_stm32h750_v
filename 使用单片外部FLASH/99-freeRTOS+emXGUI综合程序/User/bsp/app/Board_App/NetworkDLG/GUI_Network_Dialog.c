@@ -31,7 +31,8 @@ HWND Network_Main_Handle;
 uint8_t network_start_flag=0;
 
 extern struct netif gnetif;
-extern __IO uint8_t EthLinkStatus;
+//extern __IO uint8_t EthLinkStatus;
+__IO uint8_t EthLinkStatus = 0;
 __IO uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 10ms */
 DRV_NETWORK drv_network;
 uint16_t bsp_result=0;
@@ -44,6 +45,7 @@ uint16_t bsp_result=0;
   * @note   定时器溢出时间计算方法:Tout=((period+1)*(prescaler+1))/Ft us.
   *          Ft=定时器工作频率,为SystemCoreClock/2=90,单位:Mhz
   */
+#if 0
 static void TIM3_Config(uint16_t period,uint16_t prescaler)
 {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
@@ -67,6 +69,7 @@ static void TIM3_Config(uint16_t period,uint16_t prescaler)
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
+#endif
 
 #ifdef   AAAA// 在Backend_vidoplayer.c中实现
 /**
@@ -88,8 +91,11 @@ void Network_Dispose_Task(void *p)
   if(network_start_flag==0)
   {
     /* Configure ethernet (GPIOs, clocks, MAC, DMA) */
-    if(ETH_BSP_Config()==1)
-    {
+		
+//    if(ETH_BSP_Config()==1)
+//    {
+		if(1)
+		{
       network_start_flag=0;
       bsp_result |=1;
       /* 初始化出错 */
@@ -103,7 +109,8 @@ void Network_Dispose_Task(void *p)
     }
 
   }
-  
+
+#if 0
   if((drv_network.net_init==0)&&((bsp_result&1)==0))
   {     
     /* Initilaize the LwIP stack */
@@ -123,7 +130,7 @@ void Network_Dispose_Task(void *p)
     
     drv_network.net_init=1;
   }
-  
+ #endif
 //  PostCloseMessage(GetDlgItem(Network_Main_Handle, ID_Hint_Win));
   if(bsp_result&1)
   {		
@@ -131,7 +138,8 @@ void Network_Dispose_Task(void *p)
     if(network_start_flag==2)
     {
       /* Configure ethernet (GPIOs, clocks, MAC, DMA) */
-      if(ETH_BSP_Config()==1)
+      //if(ETH_BSP_Config()==1)
+			if(0)
       {
         bsp_result |= 1;
         sprintf(str," ");  
@@ -153,10 +161,11 @@ void Network_Dispose_Task(void *p)
   drv_network.net_type=0; 
   TIM3_Config(999,899);//10ms定时器 
   LocalTime=0;
-  TIM_SetCounter(TIM3,0);
+  //TIM_SetCounter(TIM3,0);
   EthLinkStatus=0;
-  while(1)
-  {
+  //while(1)
+  while(0)
+	{
     /* check if any packet received */
     if (ETH_CheckFrameReceived())
     { 
@@ -548,15 +557,15 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             {
               case 0:
                 /*create tcp server */ 
-                connectflag=tcp_echoserver_init(drv_network);
+               // connectflag=tcp_echoserver_init(drv_network);
                 break;
               case 1:
                 /*connect to tcp server */
-                connectflag=tcp_echoclient_connect(drv_network);
+               // connectflag=tcp_echoclient_connect(drv_network);
                 break;
               case 2:
                 /* Connect to tcp server */ 
-                connectflag=udp_echoclient_connect(drv_network);		
+             //   connectflag=udp_echoclient_connect(drv_network);		
                 break;            
             }
             if(connectflag==0)    // 连接成功
@@ -572,13 +581,13 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             switch(drv_network.net_type)
             {
               case 0:
-                tcp_echoserver_close();
+               // tcp_echoserver_close();
                 break;
               case 1:
-                tcp_echoclient_disconnect();
+               // tcp_echoclient_disconnect();
                 break;
               case 2:
-                udp_echoclient_disconnect();	
+               // udp_echoclient_disconnect();	
                 break;            
             }
             drv_network.net_connect=0;
@@ -599,13 +608,13 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             switch(drv_network.net_type)
             {
               case 0:
-                network_tcpserver_send((char *)comdata);
+                //network_tcpserver_send((char *)comdata);
                 break;
               case 1:
-                network_tcpclient_send((char *)comdata);
+               //network_tcpclient_send((char *)comdata);
                 break;
               case 2:
-                udp_echoclient_send((char *)comdata);
+                //udp_echoclient_send((char *)comdata);
                 break;            
             }
           }

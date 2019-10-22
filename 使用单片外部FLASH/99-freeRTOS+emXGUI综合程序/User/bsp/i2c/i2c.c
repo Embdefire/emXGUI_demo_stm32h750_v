@@ -59,7 +59,7 @@ void I2CMaster_Init(void)
 		
 		/* I2C 配置 */
 		I2C_Handle.Instance = SENSORS_I2C;
-		I2C_Handle.Init.Timing           = 0x40604E73;//100KHz
+		I2C_Handle.Init.Timing           = 0x60201E2B;//0x40604E73;//100KHz
 		I2C_Handle.Init.OwnAddress1      = 0;
 		I2C_Handle.Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
 		I2C_Handle.Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
@@ -94,7 +94,7 @@ static void I2Cx_Error(void)
 	*	@param data_ptr:指向要写入的数据
   * @retval 正常为0，不正常为非0
   */
-HAL_StatusTypeDef Sensors_I2C_WriteRegister(unsigned char slave_addr,
+int Sensors_I2C_WriteRegister(unsigned char slave_addr,
                                         unsigned char reg_addr,
                                         unsigned short len, 
                                         unsigned char *data_ptr)
@@ -129,7 +129,7 @@ HAL_StatusTypeDef Sensors_I2C_WriteRegister(unsigned char slave_addr,
 	*	@param data_ptr:指向要存储数据的指针
   * @retval 正常为0，不正常为非0
   */
-HAL_StatusTypeDef Sensors_I2C_ReadRegister(unsigned char slave_addr,
+int Sensors_I2C_ReadRegister(unsigned char slave_addr,
                                        unsigned char reg_addr,
                                        unsigned short len, 
                                        unsigned char *data_ptr)

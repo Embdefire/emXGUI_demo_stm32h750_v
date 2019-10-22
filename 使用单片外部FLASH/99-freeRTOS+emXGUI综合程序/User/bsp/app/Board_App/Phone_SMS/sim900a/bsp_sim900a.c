@@ -3,9 +3,10 @@
 #include <stdlib.h>
 #include "bsp_usart_gsm.h"
 #include "bsp_sim900a.h"
-#include "./usart/bsp_debug_usart.h"
+#include "./usart/bsp_usart.h"
 #include "def.h"
 #include "ff.h"
+#include "emXGUI_Arch.h"
 
 static uint8_t MaxMessAdd=50;
 uint8_t Sim900aReceiveAcc=0;    // 接收完成
@@ -355,6 +356,7 @@ void sim900a_utf82ucs2hex(char * ucs2hex,char * utf8,uint16_t utf8len)
 //发送短信（支持中英文,中文为GBK码）
 void sim900a_sms(char *num,char *smstext)
 {
+	#if 0
   char ucsbuff[160];
   SIM900A_CLEAN_RX();                 //清空了接收缓冲区数据
   if(IsASSIC(smstext)==SIM900A_TRUE)
@@ -393,6 +395,7 @@ void sim900a_sms(char *num,char *smstext)
   }
   SIM900A_DELAY(1); 
 	GSM_USART->DR=(u32)0x1A;		//发送十六进制数：0X1A,信息结束符号
+	#endif
 }
 
 //发送短信（支持中英文,输入时使用UTF8编码）
@@ -460,6 +463,7 @@ uint16_t sim900a_ReadSaveAdd(void)
 //保存短信并发送（支持中英文,中文为GBK码）
 uint16_t sim900a_save_sms(char *num,char *smstext)
 {
+	#if 0
   char ucsbuff[160];
   uint16_t Add;
   SIM900A_CLEAN_RX();                 //清空了接收缓冲区数据
@@ -513,6 +517,7 @@ uint16_t sim900a_save_sms(char *num,char *smstext)
   sim900a_tx_printf("AT+CMSS=%d\r", Add);  //发送短信
 
   return Add;
+	#endif
 }
 
 //查询是否接收到新短信
@@ -848,6 +853,7 @@ uint8_t sim900a_gprs_udp_link(char *localport,char * serverip,char * serverport)
 
 uint8_t sim900a_gprs_send(const char * str)
 {
+	#if 0
   char *redata;
 	SIM900A_CLEAN_RX();
 	sim900a_tx_printf("AT+CIPSEND\r");
@@ -874,7 +880,9 @@ uint8_t sim900a_gprs_link_close(void)              //IP链接断开
   {
     return SIM900A_FALSE;
   }
+	#endif
 	return SIM900A_TRUE;
+	
 }
 
 uint8_t sim900a_gprs_shut_close(void)               //关闭场景

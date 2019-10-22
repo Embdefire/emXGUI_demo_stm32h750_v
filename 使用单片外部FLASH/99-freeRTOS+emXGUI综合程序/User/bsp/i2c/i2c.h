@@ -7,6 +7,7 @@ Purpose :
 /****************************** Includes *****************************/
 #include "stm32h7xx.h"
 #include "stm32h7xx_hal.h"
+#include	"emXGUI_Arch.h"
 #include "./usart/bsp_usart.h"
 /****************************** Defines *******************************/
 
@@ -60,26 +61,26 @@ Purpose :
 																			 
 unsigned short Get_I2C_Retry(void);
 																			 
-//int Sensors_I2C_ReadRegister(unsigned char slave_addr,
-//                                       unsigned char reg_addr,
-//                                       unsigned short len, 
-//                                       unsigned char *data_ptr);
-//int Sensors_I2C_WriteRegister(unsigned char slave_addr,
-//                                        unsigned char reg_addr,
-//                                        unsigned short len, 
-//                                        unsigned char *data_ptr);
+int Sensors_I2C_ReadRegister(unsigned char slave_addr,
+                                       unsigned char reg_addr,
+                                       unsigned short len, 
+                                       unsigned char *data_ptr);
+int Sensors_I2C_WriteRegister(unsigned char slave_addr,
+                                        unsigned char reg_addr,
+                                        unsigned short len, 
+                                        unsigned char *data_ptr);
 
 void I2CMaster_Init(void);
 unsigned short Get_I2C_Retry(void);
 																			 
-HAL_StatusTypeDef Sensors_I2C_ReadRegister(unsigned char slave_addr,
-                                       unsigned char reg_addr,
-                                       unsigned short len, 
-                                       unsigned char *data_ptr);
-HAL_StatusTypeDef Sensors_I2C_WriteRegister(unsigned char slave_addr,
-                                        unsigned char reg_addr,
-                                        unsigned short len, 
-                                        unsigned char *data_ptr);
+//HAL_StatusTypeDef Sensors_I2C_ReadRegister(unsigned char slave_addr,
+//                                       unsigned char reg_addr,
+//                                       unsigned short len, 
+//                                       unsigned char *data_ptr);
+//HAL_StatusTypeDef Sensors_I2C_WriteRegister(unsigned char slave_addr,
+//                                        unsigned char reg_addr,
+//                                        unsigned short len, 
+//                                        unsigned char *data_ptr);
 
 uint8_t OV5640_WriteReg(uint16_t Addr, uint8_t Data);
 uint8_t OV5640_ReadReg(uint16_t Addr);

@@ -38,7 +38,7 @@ static void App_Load_Res(void )
     /* 创建线程运行自己 */
     GUI_Thread_Create((void(*)(void*))App_Load_Res,  /* 任务入口函数 */
                         "Load Res",/* 任务名字 */
-                        5*1024,  /* 任务栈大小 */
+                        40*1024,  /* 任务栈大小 */
                         NULL, /* 任务入口函数参数 */
                         1,    /* 任务的优先级 */
                         10); /* 任务时间片，部分任务不支持 */
@@ -150,7 +150,7 @@ static	LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       /* 本窗口垂直分为2份 */
 
       /* 根据图片数据创建PNG_DEC句柄 */
-      png_dec = PNG_Open((u8 *)bootlogo, bootlogo_size());
+      png_dec = PNG_Open((u8 *)bootlogo);
       /* 把图片转换成bitmap */
       PNG_GetBitmap(png_dec, &png_bm);
       
@@ -316,8 +316,8 @@ static	LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 extern void	GUI_RES_Writer_Dialog(void);
 extern void	GUI_DEMO_SlideWindow(void *P);
 void	GUI_Board_App_Desktop(void *p);
-//extern void PhoneCallMonitorTask(void *p);
-//extern TaskHandle_t* CallCallMonitorHandle;    // 来电监测任务控制块
+extern void PhoneCallMonitorTask(void *p);
+extern TaskHandle_t* CallCallMonitorHandle;    // 来电监测任务控制块
 
 void	GUI_Boot_Interface_Dialog(void *param)
 {
@@ -384,7 +384,7 @@ void	GUI_Boot_Interface_Dialog(void *param)
     
         GUI_Thread_Create(GUI_Board_App_Desktop,     /* 任务入口函数 */
                               "GUI_Board_App_Desktop",    /* 任务名字 */
-                              12*1024,               /* 任务栈大小 */
+                              40*1024,               /* 任务栈大小 */
                               NULL,                  /* 任务入口函数参数 */
                               8,                     /* 任务的优先级 */
                               10);                   /* 任务时间片，部分任务不支持 */
@@ -396,12 +396,12 @@ void	GUI_Boot_Interface_Dialog(void *param)
                               7,                     /* 任务的优先级 */
                               10);                   /* 任务时间片，部分任务不支持 */
        
-//       xTaskCreate(PhoneCallMonitorTask,       /* 任务入口函数 */
-//                              "Phone_Call_Monitor",  /* 任务名字 */
-//                              4*1024/4,                /* 任务栈大小 */
-//                              NULL,                  /* 任务入口函数参数 */
-//                              6,                     /* 任务的优先级 */
-//                              CallCallMonitorHandle);                   /* 任务时间片，部分任务不支持 */
+       xTaskCreate(PhoneCallMonitorTask,       /* 任务入口函数 */
+                              "Phone_Call_Monitor",  /* 任务名字 */
+                              4*1024/4,                /* 任务栈大小 */
+                              NULL,                  /* 任务入口函数参数 */
+                              6,                     /* 任务的优先级 */
+                              CallCallMonitorHandle);                   /* 任务时间片，部分任务不支持 */
        
      }
 //  } 

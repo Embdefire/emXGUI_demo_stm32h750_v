@@ -1767,7 +1767,7 @@ extern "C" void	GUI_DEMO_ShowWave(void)
 
 
 	ShowWindow(hwnd,SW_SHOW);
-	UpdateWindow(hwnd);
+	
 
 
 	ShowWindow(hwnd,SW_SHOW);
@@ -1777,6 +1777,7 @@ extern "C" void	GUI_DEMO_ShowWave(void)
 		DispatchMessage(&msg);
 	}
 	ShowCursor(TRUE);
-
-
+	InvalidateRect(GetDesktopWindow(), NULL, TRUE);
+  UpdateWindow(GetDesktopWindow());
+	
 }

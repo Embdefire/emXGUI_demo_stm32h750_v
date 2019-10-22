@@ -52,7 +52,7 @@ volatile uint32_t hal_timestamp = 0;
 #define NO_MOTION       (1)
 
 /* Starting sampling rate. */
-#define DEFAULT_MPU_HZ  (10)
+#define DEFAULT_MPU_HZ  (20)
 
 #define FLASH_SIZE      (512)
 #define FLASH_MEM_START ((void*)0x1800)
@@ -107,6 +107,28 @@ static struct platform_data_s gyro_pdata = {
                      0, 1, 0,
                      0, 0, 1}
 };
+#if defined MPU9150 || defined MPU9250
+static struct platform_data_s compass_pdata = {
+    .orientation = { 0, 1, 0,
+                     1, 0, 0,
+                     0, 0, -1}
+};
+#define COMPASS_ENABLED 1
+#elif defined AK8975_SECONDARY
+static struct platform_data_s compass_pdata = {
+    .orientation = {-1, 0, 0,
+                     0, 1, 0,
+                     0, 0,-1}
+};
+#define COMPASS_ENABLED 1
+#elif defined AK8963_SECONDARY
+static struct platform_data_s compass_pdata = {
+    .orientation = {-1, 0, 0,
+                     0,-1, 0,
+                     0, 0, 1}
+};
+#define COMPASS_ENABLED 1
+#endif
 
 extern struct inv_sensor_cal_t sensors;
 /* Private define ------------------------------------------------------------*/
@@ -121,7 +143,7 @@ extern struct inv_sensor_cal_t sensors;
  */
 static void read_from_mpl(void)
 {
-    long data[9];
+    long msg, data[9];
     int8_t accuracy;
     unsigned long timestamp;
     float float_data[3] = {0};
@@ -162,31 +184,36 @@ static void read_from_mpl(void)
     }
 		
 		
-		/*********发送数据到匿名四轴上位机**********/
+		/********************使用液晶屏显示数据**************************/
     if(1)
     {
-
-				unsigned long timestamp;
+				char cStr [ 70 ];
+				unsigned long timestamp,step_count,walk_time;
 
 			
 				/*获取欧拉角*/
 			  if (inv_get_sensor_type_euler(data, &accuracy,(inv_time_t*)&timestamp))
 						{
+							float Pitch,Roll,Yaw;
 							//inv_get_sensor_type_euler读出的数据是Q16格式，所以左移16位.
 							Pitch =data[0]*1.0/(1<<16) ;
 							Roll = data[1]*1.0/(1<<16);
 							Yaw = data[2]*1.0/(1<<16);
-
-            //  GUI_DEBUG("\r\nPitch = %f\r\nRoll = %f\r\nYaw = %f\r\n", Pitch, Roll, Yaw);
-
-              // static uint32_t tick;
-              // GUI_DEBUG("update：%d", GUI_GetTickCount() - tick);
-              // tick = GUI_GetTickCount();
-              InvalidateRect(Gyro_Main_Handle, NULL, FALSE);    // 无效化窗口，重绘刻度
+							printf("\r\nPitch = %f\r\nRoll = %f\r\nYaw = %f\r\n", Pitch, Roll, Yaw);
+							/*向匿名上位机发送姿态*/
+							//Data_Send_Status(Pitch,Roll,Yaw);
+							/*向匿名上位机发送原始数据*/
+							//Send_Data((int16_t *)&sensors.gyro.raw,(int16_t *)&sensors.accel.raw);						
 						}
 						
 					/*获取步数*/        
 				timestamp = get_tick_count();
+				if (timestamp > hal.next_pedo_ms) {
+
+						hal.next_pedo_ms = timestamp + PEDO_READ_MS;
+						dmp_get_pedometer_step_count(&step_count);
+						dmp_get_pedometer_walk_time(&walk_time);						
+				}
 			}
 
 		
@@ -230,15 +257,15 @@ static void read_from_mpl(void)
      * be notified. For this example, we use an LED to represent the current
      * motion state.
      */
-//    msg = inv_get_message_level_0(INV_MSG_MOTION_EVENT |
-//            INV_MSG_NO_MOTION_EVENT);
-//    if (msg) {
-//        if (msg & INV_MSG_MOTION_EVENT) {
-//            MPL_LOGI("Motion!\n");
-//        } else if (msg & INV_MSG_NO_MOTION_EVENT) {
-//            MPL_LOGI("No motion!\n");
-//        }
-//    }
+    msg = inv_get_message_level_0(INV_MSG_MOTION_EVENT |
+            INV_MSG_NO_MOTION_EVENT);
+    if (msg) {
+        if (msg & INV_MSG_MOTION_EVENT) {
+            MPL_LOGI("Motion!\n");
+        } else if (msg & INV_MSG_NO_MOTION_EVENT) {
+            MPL_LOGI("No motion!\n");
+        }
+    }
 }
 
 #ifdef COMPASS_ENABLED
@@ -257,7 +284,7 @@ void send_status_compass() {
 /* Handle sensor on/off combinations. */
 static void setup_gyro(void)
 {
-    unsigned char mask = 0, lp_accel_was_on = 0;
+     unsigned char mask = 0, lp_accel_was_on = 0;
     if (hal.sensors & ACCEL_ON)
         mask |= INV_XYZ_ACCEL;
     if (hal.sensors & GYRO_ON) {
@@ -411,7 +438,9 @@ static inline void run_self_test(void)
 static void handle_input(void)
 {
   
-    char c = USART_ReceiveData(DEBUG_USART);
+    char c ;
+	
+	  HAL_UART_Receive(&UartHandle, (uint8_t *)&c, 1, 1000);	//USART_ReceiveData(DEBUG_USART);
 
     switch (c) {
     /* These commands turn off individual sensors. */
@@ -672,16 +701,14 @@ void Gyro_Dispose_Task(void *p)
 	EXTI_MPU_Config();
 	
 		// Configure I2C
-	I2cMaster_Init(); 
+	I2CMaster_Init(); 
 
-	
-	//MPU_DEBUG("F4 MPU6050 test");
-	
   result = mpu_init(&int_param);
   if (result) {
-      GUI_ERROR("MPU6050 Init failure");
+		MPL_LOGE("Could not initialize gyro.\n");
   }
 
+	
     /* If you're not using an MPU9150 AND you're not using DMP features, this
      * function will place all slaves on the primary bus.
      * mpu_set_bypass(1);
@@ -689,7 +716,7 @@ void Gyro_Dispose_Task(void *p)
 
   result = inv_init_mpl();
   if (result) {
-      MPL_LOGE("Could not initialize MPL.\n");
+		MPL_LOGE("Could not initialize MPL.\n");
   }
 
     /* Compute 6-axis and 9-axis quaternions. */
@@ -872,14 +899,14 @@ void Gyro_Dispose_Task(void *p)
     
     unsigned long sensor_timestamp;
     int new_data = 0;
-    if (USART_GetFlagStatus(DEBUG_USART, USART_FLAG_RXNE)) {
+    if (__HAL_UART_GET_FLAG(&UartHandle, UART_FLAG_RXNE)) {
         /* A byte has been received via USART. See handle_input for a list of
          * valid commands.
          */
-        USART_ClearFlag(DEBUG_USART, USART_FLAG_RXNE);
+        //USART_ClearFlag(&UartHandle, USART_FLAG_RXNE);
         handle_input();
     }
-    timestamp = get_tick_count();
+   timestamp = get_tick_count();
 
 #ifdef COMPASS_ENABLED
         /* We're not using a data ready interrupt for the compass, so we'll
@@ -1358,7 +1385,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       if(res)
       {
         #if BMP
-          png_dec = PNG_Open(pic_buf, pic_size);
+          png_dec = PNG_Open(pic_buf);
           PNG_GetBitmap(png_dec, &png_bm);
           DrawBitmap(Roll_hdc, 0,0, &png_bm, NULL);
           PNG_Close(png_dec);
@@ -1377,7 +1404,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       if(res)
       {
         #if BMP
-          png_dec = PNG_Open(pic_buf, pic_size);
+          png_dec = PNG_Open(pic_buf);
           PNG_GetBitmap(png_dec, &png_bm);
           DrawBitmap(Pitch_hdc, 0,0, &png_bm, NULL);
           PNG_Close(png_dec);

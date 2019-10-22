@@ -27,7 +27,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "netconf.h"
-#include "LAN8742A.h"
+#include "LAN8720A.h"
 #include "lwip/pbuf.h"
 #include "lwip/udp.h"
 #include "lwip/tcp.h"

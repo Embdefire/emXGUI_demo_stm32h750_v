@@ -26,8 +26,8 @@
 
 #include "packet.h"
 #include "log.h"
-#include "stm32f4xx.h"
-#include "./usart/bsp_debug_usart.h"
+#include "stm32h7xx.h"
+#include "./usart/bsp_usart.h"
 
 #define BUF_SIZE        (256)
 #define PACKET_LENGTH   (23)
@@ -39,13 +39,10 @@
 
 int fputcc(int ch)
 {
-		/* 发送一个字节数据到USART1 */
-		USART_SendData(DEBUG_USART, (uint8_t) ch);
-		
-		/* 等待发送完毕 */
-		while (USART_GetFlagStatus(DEBUG_USART, USART_FLAG_TXE) == RESET);		
+	/* 发送一个字节数据到串口DEBUG_USART */
+	HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 1000);	
 	
-		return (ch);
+	return (ch);
 }
 /**
  *  @brief      Prints a variable argument log message.
@@ -117,7 +114,6 @@ int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
 
 void eMPL_send_quat(long *quat)
 {
-	#if 0	//关闭四元数的PYTHON上位机格式输出
     char out[PACKET_LENGTH];
     int i;
     if (!quat)
@@ -147,14 +143,10 @@ void eMPL_send_quat(long *quat)
     for (i=0; i<PACKET_LENGTH; i++) {
       fputcc(out[i]);
     }
-		#endif
 }
-
-
 
 void eMPL_send_data(unsigned char type, long *data)
 {
-	#if 0 //关闭python上位机的格式输出
     char out[PACKET_LENGTH];
     int i;
     if (!data)
@@ -224,7 +216,6 @@ void eMPL_send_data(unsigned char type, long *data)
     for (i=0; i<PACKET_LENGTH; i++) {
       fputcc(out[i]);
     }
-		#endif
 }
 
 /**

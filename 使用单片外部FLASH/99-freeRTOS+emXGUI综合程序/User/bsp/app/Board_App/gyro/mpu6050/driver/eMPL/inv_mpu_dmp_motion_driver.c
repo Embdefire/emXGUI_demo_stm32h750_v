@@ -33,8 +33,11 @@
  * delay_ms(unsigned long num_ms)
  * get_ms(unsigned long *count)
  */
-#if defined EMPL_TARGET_STM32F4
-#include "./i2c/i2c.h"  
+#if defined EMPL_TARGET_STM32F7
+#include "./i2c/i2c.h" 
+#include "main.h"
+#include "emXGUI_Arch.h"
+//#include "./systick/bsp_SysTick.h"
 //#include "main.h"
 //#include "board-st_discovery.h"
    

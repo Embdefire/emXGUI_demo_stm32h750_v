@@ -1,7 +1,7 @@
 #ifndef __GSM_USART_H
 #define	__GSM_USART_H
 
-#include "stm32f4xx.h"
+#include "stm32h7xx.h"
 
 #define GSM_USART                             USART3
 #define GSM_USART_CLK                         RCC_APB1Periph_USART3

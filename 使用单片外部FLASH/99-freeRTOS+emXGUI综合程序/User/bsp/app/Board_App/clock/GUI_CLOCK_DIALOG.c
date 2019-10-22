@@ -7,13 +7,16 @@
 #include "emXGUI_JPEG.h"
 #include "emxgui_png.h"
 #include "./clock/RTC/bsp_rtc.h"
-#include "stm32f4xx_rtc.h"
 #include <stdlib.h>
 #include "./pic_load/gui_pic_load.h"
 
 #define ICON_BTN_NUM     2     // 按钮数量
 #define ICON_TEXT_NUM   (5 + ICON_BTN_NUM)    // 文本数量
 
+RTC_TimeTypeDef rtc_time;
+extern RTC_HandleTypeDef Rtc_Handle;
+//RTC_HandleTypeDef *hrtc_Handle;//HAL库RTC
+RTC_DateTypeDef RTC_Date;
 struct
 {
 	uint8_t page;    // 当前设置页面
@@ -360,7 +363,6 @@ static void Dial_OwnerDraw(DRAWITEM_HDR *ds)  // 绘制表盘
 {
   HDC hdc;
 	RECT rc, rc_tmp;
-  RTC_TIME rtc_time;
   HWND hwnd;
   int clock_back;
   BITMAP clock_s, clock_m, clock_h;
@@ -374,13 +376,14 @@ static void Dial_OwnerDraw(DRAWITEM_HDR *ds)  // 绘制表盘
 
   BitBlt(hdc, rc.x, rc.y, rc.w, rc.h, hdc_clock_bk, rc_tmp.x, rc_tmp.y, SRCCOPY);
   
-  RTC_GetTime(RTC_Format_BIN, &rtc_time.RTC_Time);
+  HAL_RTC_GetTime(&Rtc_Handle,&rtc_time,RTC_FORMAT_BIN);
+	
 //  RTC_GetDate(RTC_Format_BIN, &rtc_time.RTC_Date);
 //  drv_clock.Time_flag=1;
 //  drv_clock.Date_flag=1;
-  Hour=rtc_time.RTC_Time.RTC_Hours;
-  Min=rtc_time.RTC_Time.RTC_Minutes;
-  Sec=rtc_time.RTC_Time.RTC_Seconds;
+  Hour=rtc_time.Hours;
+  Min=rtc_time.Minutes;
+  Sec=rtc_time.Seconds;
 //  drv_clock.Date_day=rtc_time.RTC_Date.RTC_Date;
 //  drv_clock.Date_month=rtc_time.RTC_Date.RTC_Month;
 //  drv_clock.Date_year=rtc_time.RTC_Date.RTC_Year;
@@ -780,47 +783,47 @@ static LRESULT setting_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
               }
               else if (Set_Start.page == 1)    // 修改表盘和时间
               {
-                RTC_TimeTypeDef RTC_Time;
+//                RTC_TimeTypeDef RTC_Time;
 
                 clock_dial = Set_Start.dial;    // 设置表盘
-                RTC_Time.RTC_Hours = GetListCurselVal(hwnd, ID_CLOCK_SetHour);        // 读取列表的时
-                RTC_Time.RTC_Minutes = GetListCurselVal(hwnd, ID_CLOCK_SetMinute);    // 读取列表的分
-                RTC_Time.RTC_Seconds = 0;
+                rtc_time.Hours = GetListCurselVal(hwnd, ID_CLOCK_SetHour);        // 读取列表的时
+                rtc_time.Minutes = GetListCurselVal(hwnd, ID_CLOCK_SetMinute);    // 读取列表的分
+                rtc_time.Seconds = 0;
 
-                RTC_SetTime(RTC_Format_BIN, &RTC_Time);    // 设置时间
+                HAL_RTC_SetTime(&Rtc_Handle,&rtc_time,RTC_FORMAT_BIN);    // 设置时间
               }
               else if (Set_Start.page == 2)    // 修改表盘、时间和日历
               {
-                RTC_DateTypeDef RTC_Date;
-                RTC_TimeTypeDef RTC_Time;
+//                RTC_DateTypeDef RTC_Date;
+//                RTC_TimeTypeDef RTC_Time;
 
                 clock_dial = Set_Start.dial;    // 设置表盘
 
-                RTC_Time.RTC_Hours = GetListCurselVal(hwnd, ID_CLOCK_SetHour);        // 读取列表的时
-                RTC_Time.RTC_Minutes = GetListCurselVal(hwnd, ID_CLOCK_SetMinute);    // 读取列表的分
-                RTC_Time.RTC_Seconds = 0;
-                RTC_SetTime(RTC_Format_BIN, &RTC_Time);    // 设置时间
+                rtc_time.Hours = GetListCurselVal(hwnd, ID_CLOCK_SetHour);        // 读取列表的时
+                rtc_time.Minutes = GetListCurselVal(hwnd, ID_CLOCK_SetMinute);    // 读取列表的分
+                rtc_time.Seconds = 0;
+                HAL_RTC_SetTime(&Rtc_Handle,&rtc_time,RTC_FORMAT_BIN);    // 设置时间
 
-                RTC_Date.RTC_Year = GetListCurselVal(hwnd, ID_CLOCK_SetYear) - 2000;    // 读取列表的年
-                RTC_Date.RTC_Month = GetListCurselVal(hwnd, ID_CLOCK_SetMonth);         // 读取列表的月
-                RTC_Date.RTC_Date = GetListCurselVal(hwnd, ID_CLOCK_SetDate);           // 读取列表的日
+                RTC_Date.Year = GetListCurselVal(hwnd, ID_CLOCK_SetYear) - 2000;    // 读取列表的年
+                RTC_Date.Month = GetListCurselVal(hwnd, ID_CLOCK_SetMonth);         // 读取列表的月
+                RTC_Date.Date = GetListCurselVal(hwnd, ID_CLOCK_SetDate);           // 读取列表的日
                 /* 基姆拉尔森周计算公式 */
-                RTC_Date.RTC_WeekDay = (RTC_Date.RTC_Date + 2 * RTC_Date.RTC_Month + 3     \
-                                        * (RTC_Date.RTC_Month + 1) / 5 + RTC_Date.RTC_Year \
-                                        + RTC_Date.RTC_Year / 4 - RTC_Date.RTC_Year / 100  \
-                                        + RTC_Date.RTC_Year / 400) % 7 + 1;
-                RTC_SetDate(RTC_Format_BIN, &RTC_Date);                                 // 设置日期
-
+                RTC_Date.WeekDay = (RTC_Date.Date + 2 * RTC_Date.Month + 3     \
+                                        * (RTC_Date.Month + 1) / 5 + RTC_Date.Year \
+                                        + RTC_Date.Year / 4 - RTC_Date.Year / 100  \
+                                        + RTC_Date.Year / 400) % 7 + 1;
+//                RTC_SetDate(RTC_Format_BIN, &RTC_Date);                                 // 设置日期
+                HAL_RTC_SetDate(&Rtc_Handle,&RTC_Date,RTC_FORMAT_BIN);
                 /* 设置当前显示日期 */
                 WCHAR wbuf[5];
                 
-                x_wsprintf(wbuf, L"%d", RTC_Date.RTC_Date);
+                x_wsprintf(wbuf, L"%d", RTC_Date.Date);
                 SetWindowText(GetDlgItem(clock_hwnd, ID_CLOCK_DAY), wbuf);    // 设置日期
                 
-                x_wsprintf(wbuf, L"%d月", RTC_Date.RTC_Month);
+                x_wsprintf(wbuf, L"%d月", RTC_Date.Month);
                 SetWindowText(GetDlgItem(clock_hwnd, ID_CLOCK_MONTH), wbuf);    // 设置月
                 
-                SetWindowText(GetDlgItem(clock_hwnd, ID_CLOCK_WEEK), Week_List[RTC_Date.RTC_WeekDay - 1]);    // 设置星期
+                SetWindowText(GetDlgItem(clock_hwnd, ID_CLOCK_WEEK), Week_List[RTC_Date.WeekDay - 1]);    // 设置星期
               }
 
               PostCloseMessage(hwnd);    // 发送关闭窗口的消息
@@ -1229,16 +1232,17 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         /* 初始化日期 */
         WCHAR wbuf[5];
-        RTC_TIME rtc_time;
-        RTC_GetDate(RTC_Format_BIN, &rtc_time.RTC_Date);
-        
-        x_wsprintf(wbuf, L"%d", rtc_time.RTC_Date.RTC_Date);
+        //RTC_TIME rtc_time;
+        //RTC_GetDate(RTC_Format_BIN, &rtc_time.RTC_Date);
+				
+        HAL_RTC_GetDate(&Rtc_Handle,&RTC_Date,RTC_FORMAT_BIN);
+        x_wsprintf(wbuf, L"%d", RTC_Date.Date);
         SetWindowText(GetDlgItem(hwnd, ID_CLOCK_DAY), wbuf);    // 设置日期
         
-        x_wsprintf(wbuf, L"%d月", rtc_time.RTC_Date.RTC_Month);
+        x_wsprintf(wbuf, L"%d月", RTC_Date.Month);
         SetWindowText(GetDlgItem(hwnd, ID_CLOCK_MONTH), wbuf);    // 设置月
         
-        SetWindowText(GetDlgItem(hwnd, ID_CLOCK_WEEK), Week_List[rtc_time.RTC_Date.RTC_WeekDay - 1]);    // 设置星期
+        SetWindowText(GetDlgItem(hwnd, ID_CLOCK_WEEK), Week_List[RTC_Date.WeekDay - 1]);    // 设置星期
 
         SetTimer(hwnd, 1, 400, TMR_START, NULL);
         
@@ -1268,16 +1272,17 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
           WCHAR wbuf[5];
           
-          RTC_TIME rtc_time;
-          RTC_GetDate(RTC_Format_BIN, &rtc_time.RTC_Date);
-          
-          x_wsprintf(wbuf, L"%d", rtc_time.RTC_Date.RTC_Date);
+//          RTC_TIME rtc_time;
+//          RTC_GetDate(RTC_Format_BIN, &rtc_time.RTC_Date);
+          HAL_RTC_GetDate(&Rtc_Handle,&RTC_Date,RTC_FORMAT_BIN);
+					
+          x_wsprintf(wbuf, L"%d", RTC_Date.Date);
           SetWindowText(GetDlgItem(hwnd, ID_CLOCK_DAY), wbuf);    // 设置日期
           
-          x_wsprintf(wbuf, L"%d月", rtc_time.RTC_Date.RTC_Month);
+          x_wsprintf(wbuf, L"%d月", RTC_Date.Month);
           SetWindowText(GetDlgItem(hwnd, ID_CLOCK_MONTH), wbuf);    // 设置月
           
-          SetWindowText(GetDlgItem(hwnd, ID_CLOCK_WEEK), Week_List[rtc_time.RTC_Date.RTC_WeekDay - 1]);    // 设置星期
+          SetWindowText(GetDlgItem(hwnd, ID_CLOCK_WEEK), Week_List[RTC_Date.WeekDay - 1]);    // 设置星期
           /* Unfreeze the RTC DR Register */
           (void)RTC->DR;
           
@@ -1321,7 +1326,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //            // res = FS_Load_Content(clock_png_info[xC].pic_name, (char**)&pic_buf, &pic_size);
 //            if(res)
 //            {
-//              png_dec = PNG_Open(pic_buf, pic_size);
+//              png_dec = PNG_Open(pic_buf);
 //              PNG_GetBitmap(png_dec, &png_bm);
 //              DrawBitmap(hdc_clock_png[clock_png_info[xC].id], 0, 0, &png_bm, NULL);
 //              PNG_Close(png_dec);

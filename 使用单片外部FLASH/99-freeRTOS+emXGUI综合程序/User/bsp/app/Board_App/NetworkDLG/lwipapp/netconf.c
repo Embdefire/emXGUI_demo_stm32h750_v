@@ -36,7 +36,7 @@
 #include "ethernetif.h"
 #include "netconf.h"
 #include <stdio.h>
-#include "./LAN8742A/LAN8742A.h"
+#include "./LAN8720A/LAN8720A.h"
 #include "lwipopts.h"
 
 /* Private typedef -----------------------------------------------------------*/

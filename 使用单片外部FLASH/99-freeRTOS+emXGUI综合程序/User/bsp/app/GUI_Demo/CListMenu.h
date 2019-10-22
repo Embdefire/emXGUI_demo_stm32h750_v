@@ -15,9 +15,10 @@ extern "C" {
         MSG_SETCFG = WM_WIDGET + 0,
         MSG_MOVE_PREV,
         MSG_MOVE_NEXT,
-		MSG_SET_SEL,              // [设置选中的对象]: <wParam>设置被选中的索引值; <lParam>忽略; <返回>忽略.
-	MSG_LIST_DRAG_ENABLE,     // [列表滑动使能]: <wParam>TRUE:使能;FALSE：禁止; <lParam>忽略; <返回>忽略.
-		MSG_LISTMENU_END,
+		    MSG_SET_SEL,              // [设置选中的对象]: <wParam>设置被选中的索引值; <lParam>忽略; <返回>忽略.
+	      MSG_LIST_DRAG_ENABLE,     // [列表滑动使能]: <wParam>TRUE:使能;FALSE：禁止; <lParam>忽略; <返回>忽略.
+	    	MSG_LISTMENU_END,
+	  		MSG_SET_BGCOLOR,      // [设置背景颜色]: <wParam>要设置的颜色值;1：不使用当前颜色，使用图片作为背景; <lParam>忽略; <返回>忽略.
     };
 
 

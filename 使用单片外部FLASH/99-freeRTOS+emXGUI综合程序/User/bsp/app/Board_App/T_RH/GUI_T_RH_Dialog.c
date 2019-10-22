@@ -9,9 +9,10 @@
 #include "emxgui_png.h"
 #include "./app/Board_App/T_RH/dht11/bsp_dht11.h"
 /* 图片资源 */
+#define GUI_HUMITURE_BACKGROUNG_PIC    "humiture_desktop.jpg"
+#if 0
 #define GUI_HUMITURE_BACKGROUNG_PIC    "0:/humiture_desktop.jpg"
-
-
+#endif
 /* 窗口 ID */
 #define ID_TEXTBOX_Title    0x00     // 标题栏
 #define ID_TEXTBOX_T        0x01     // 温度显示
@@ -338,8 +339,8 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       u8 *jpeg_buf;
       u32 jpeg_size;
       JPG_DEC *dec;
-      //res = RES_Load_Content(GUI_HUMITURE_BACKGROUNG_PIC, (char**)&jpeg_buf, &jpeg_size);
-      res = FS_Load_Content(GUI_HUMITURE_BACKGROUNG_PIC, (char**)&jpeg_buf, &jpeg_size);
+      res = RES_Load_Content(GUI_HUMITURE_BACKGROUNG_PIC, (char**)&jpeg_buf, &jpeg_size);
+      //res = FS_Load_Content(GUI_HUMITURE_BACKGROUNG_PIC, (char**)&jpeg_buf, &jpeg_size);
       bk_hdc = CreateMemoryDC(SURF_SCREEN, GUI_XSIZE, GUI_YSIZE);
       if(res)
       {

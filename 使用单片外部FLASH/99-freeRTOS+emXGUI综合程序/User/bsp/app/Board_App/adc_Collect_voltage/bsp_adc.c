@@ -1,142 +1,202 @@
 /**
-  ******************************************************************************
-  * @file    bsp_bsp_adc.c
+  ******************************************************************
+  * @file    bsp_adcd.c
   * @author  fire
-  * @version V1.0
-  * @date    2015-xx-xx
-  * @brief   adc驱动
-  ******************************************************************************
+  * @version V1.1
+  * @date    2018-xx-xx
+  * @brief   adc应用函数接口
+  ******************************************************************
   * @attention
   *
-  * 实验平台:野火  STM32 F429 开发板  
+  * 实验平台:野火 STM32H750开发板 
+  * 公司    :http://www.embedfire.com
   * 论坛    :http://www.firebbs.cn
   * 淘宝    :https://fire-stm32.taobao.com
   *
-  ******************************************************************************
+  ******************************************************************
+  */
+#include "./bsp_adc.h" 
+
+extern double ADC_vol;
+
+ADC_HandleTypeDef Init_ADC_Handle;
+DMA_HandleTypeDef hdma_adc;
+//__attribute__ ((at(0x30000000))) 
+__IO uint16_t ADC_ConvertedValue = 0x75BE;
+
+
+/**
+  * @brief  ADC引脚配置函数
+  * @param  无
+  * @retval 无
+  */  
+static void ADC_GPIO_Mode_Config(void)
+{
+    /* 定义一个GPIO_InitTypeDef类型的结构体 */
+    GPIO_InitTypeDef  GPIO_InitStruct;
+    /* 使能ADC引脚的时钟 */
+    RHEOSTAT_ADC_GPIO_CLK_ENABLE();
+    
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG; 
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pin = RHEOSTAT_ADC_PIN; 
+    /* 配置为模拟输入，不需要上拉电阻 */ 
+    HAL_GPIO_Init(RHEOSTAT_ADC_GPIO_PORT, &GPIO_InitStruct);
+  
+}
+
+/**
+  * @brief  ADC工作模式配置函数
+  * @param  无
+  * @retval 无
   */ 
-#include "bsp_adc.h"
-
-__IO uint16_t ADC_ConvertedValue;
-
-static void Rheostat_ADC_GPIO_Config(void)
+static void ADC_Mode_Config(void)
 {
-		GPIO_InitTypeDef GPIO_InitStructure;
-	
-	// 使能 GPIO 时钟
-	RCC_AHB1PeriphClockCmd(RHEOSTAT_ADC_GPIO_CLK, ENABLE);
-		
-	// 配置 IO
-	GPIO_InitStructure.GPIO_Pin = RHEOSTAT_ADC_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;	    
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ; //不上拉不下拉
-	GPIO_Init(RHEOSTAT_ADC_GPIO_PORT, &GPIO_InitStructure);		
+    ADC_ChannelConfTypeDef ADC_Config;
+  
+    RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;  
+    /*            配置ADC3时钟源             */
+    /*    HSE Frequency(Hz)    = 25000000   */                                             
+    /*         PLL_M                = 5     */
+    /*         PLL_N                = 160   */
+    /*         PLL_P                = 25    */
+    /*         PLL_Q                = 2     */
+    /*         PLL_R                = 2     */
+    /*     ADC_ker_clk         = 32000000   */
+		RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+    RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
+    RCC_PeriphClkInit.PLL2.PLL2M = 5;
+    RCC_PeriphClkInit.PLL2.PLL2N = 160;
+    RCC_PeriphClkInit.PLL2.PLL2P = 25;
+    RCC_PeriphClkInit.PLL2.PLL2Q = 2;
+    RCC_PeriphClkInit.PLL2.PLL2R = 2;
+    RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
+    RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+    RCC_PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2; 
+		HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit);  
+  
+    /* 使能ADC时钟 */
+    RHEOSTAT_ADC_CLK_ENABLE();
+    /* 使能DMA时钟 */
+    RHEOSTAT_ADC_DMA_CLK_ENABLE();
+    
+    //选择DMA1的Stream1
+    hdma_adc.Instance = RHEOSTAT_ADC_DMA_Base;
+    //ADC1的DMA请求
+    hdma_adc.Init.Request = RHEOSTAT_ADC_DMA_Request;
+    //传输方向：外设-》内存
+    hdma_adc.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    //外设地址不自增
+    hdma_adc.Init.PeriphInc = DMA_PINC_DISABLE;
+    //内存地址不自增
+    hdma_adc.Init.MemInc = DMA_PINC_DISABLE;
+    //外设数据宽度：半字
+    hdma_adc.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    //内存数据宽度：半字
+    hdma_adc.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    //DMA循环传输
+    hdma_adc.Init.Mode = DMA_CIRCULAR;
+    //DMA的软件优先级：低
+    hdma_adc.Init.Priority = DMA_PRIORITY_LOW;
+    //FIFO模式关闭
+    hdma_adc.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    //DMA初始化
+    HAL_DMA_Init(&hdma_adc);
+    //hdma_adc和ADC_Handle.DMA_Handle链接
+    __HAL_LINKDMA(&Init_ADC_Handle,DMA_Handle,hdma_adc);    
+      
+    
+    Init_ADC_Handle.Instance = RHEOSTAT_ADC;
+    //ADC时钟1分频
+    Init_ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+    //使能连续转换模式
+    Init_ADC_Handle.Init.ContinuousConvMode = ENABLE;
+    //数据存放在数据寄存器中
+    Init_ADC_Handle.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
+    //关闭不连续转换模式
+    Init_ADC_Handle.Init.DiscontinuousConvMode = DISABLE;
+    //单次转换
+    Init_ADC_Handle.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+    //软件触发
+    Init_ADC_Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    //关闭低功耗自动等待
+    Init_ADC_Handle.Init.LowPowerAutoWait = DISABLE;
+    //数据溢出时，覆盖写入
+    Init_ADC_Handle.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+    //不使能过采样模式
+    Init_ADC_Handle.Init.OversamplingMode = DISABLE;
+    //分辨率为：16bit
+    Init_ADC_Handle.Init.Resolution = ADC_RESOLUTION_16B;
+    //不使能多通道扫描
+    Init_ADC_Handle.Init.ScanConvMode = DISABLE;
+    //初始化 ADC
+    HAL_ADC_Init(&Init_ADC_Handle);
+          
+    //使用通道18
+    ADC_Config.Channel = RHEOSTAT_ADC_CHANNEL;
+    //转换顺序为1
+    ADC_Config.Rank = ADC_REGULAR_RANK_1;
+    //采样周期为64.5个周期
+    ADC_Config.SamplingTime = ADC_SAMPLETIME_64CYCLES_5;
+    //不使用差分输入的功能
+    ADC_Config.SingleDiff = ADC_SINGLE_ENDED ;
+    //配置ADC通道
+    HAL_ADC_ConfigChannel(&Init_ADC_Handle, &ADC_Config);    
+    
+    //使能ADC1、2
+    ADC_Enable(&Init_ADC_Handle);
+    
+    HAL_ADC_Start_DMA(&Init_ADC_Handle, (uint32_t*)&ADC_ConvertedValue, 1);
+    
+}
+/**
+  * @brief  ADC中断优先级配置函数
+  * @param  无
+  * @retval 无
+  */  
+void Rheostat_ADC_NVIC_Config(void)
+{
+    HAL_NVIC_SetPriority(Rheostat_ADC12_IRQ, 0, 0);
+    HAL_NVIC_EnableIRQ(Rheostat_ADC12_IRQ);
 }
 
-static void Rheostat_ADC_Mode_Config(void)
+/**
+  * @brief  ADC初始化函数
+  * @param  无
+  * @retval 无
+  */
+void ADC_Init(void)
 {
-	DMA_InitTypeDef DMA_InitStructure;
-	ADC_InitTypeDef ADC_InitStructure;
-  ADC_CommonInitTypeDef ADC_CommonInitStructure;
-	
-  // ------------------DMA Init 结构体参数 初始化--------------------------
-  // ADC1使用DMA2，数据流0，通道0，这个是手册固定死的
-  // 开启DMA时钟
-  RCC_AHB1PeriphClockCmd(RHEOSTAT_ADC_DMA_CLK, ENABLE); 
-	// 外设基址为：ADC 数据寄存器地址
-	DMA_InitStructure.DMA_PeripheralBaseAddr = RHEOSTAT_ADC_DR_ADDR;	
-  // 存储器地址，实际上就是一个内部SRAM的变量	
-	DMA_InitStructure.DMA_Memory0BaseAddr = (u32)&ADC_ConvertedValue;  
-  // 数据传输方向为外设到存储器	
-	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;	
-	// 缓冲区大小为，指一次传输的数据量
-	DMA_InitStructure.DMA_BufferSize = 1;	
-	// 外设寄存器只有一个，地址不用递增
-	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-  // 存储器地址固定
-	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable; 
-  // // 外设数据大小为半字，即两个字节 
-	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord; 
-  //	存储器数据大小也为半字，跟外设数据大小相同
-	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;	
-	// 循环传输模式
-	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
-  // DMA 传输通道优先级为高，当使用一个DMA通道时，优先级设置不影响
-	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-  // 禁止DMA FIFO	，使用直连模式
-  DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;  
-  // FIFO 大小，FIFO模式禁止时，这个不用配置	
-  DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
-  DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
-  DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;  
-	// 选择 DMA 通道，通道存在于流中
-  DMA_InitStructure.DMA_Channel = RHEOSTAT_ADC_DMA_CHANNEL; 
-  //初始化DMA流，流相当于一个大的管道，管道里面有很多通道
-	DMA_Init(RHEOSTAT_ADC_DMA_STREAM, &DMA_InitStructure);
-	// 使能DMA流
-  DMA_Cmd(RHEOSTAT_ADC_DMA_STREAM, ENABLE);
-	
-	// 开启ADC时钟
-	RCC_APB2PeriphClockCmd(RHEOSTAT_ADC_CLK , ENABLE);
-  // -------------------ADC Common 结构体 参数 初始化------------------------
-	// 独立ADC模式
-  ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-  // 时钟为fpclk x分频	
-  ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-  // 禁止DMA直接访问模式	
-  ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-  // 采样时间间隔	
-  ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_20Cycles;  
-  ADC_CommonInit(&ADC_CommonInitStructure);
-	
-  // -------------------ADC Init 结构体 参数 初始化--------------------------
-	ADC_StructInit(&ADC_InitStructure);
-  // ADC 分辨率
-  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
-  // 禁止扫描模式，多通道采集才需要	
-  ADC_InitStructure.ADC_ScanConvMode = DISABLE; 
-  // 连续转换	
-  ADC_InitStructure.ADC_ContinuousConvMode = ENABLE; 
-  //禁止外部边沿触发
-  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
-  //外部触发通道，本例子使用软件触发，此值随便赋值即可
-  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
-  //数据右对齐	
-  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-  //转换通道 1个
-  ADC_InitStructure.ADC_NbrOfConversion = 1;                                    
-  ADC_Init(RHEOSTAT_ADC, &ADC_InitStructure);
-  //---------------------------------------------------------------------------
-	
-  // 配置 ADC 通道转换顺序为1，第一个转换，采样时间为3个时钟周期
-  ADC_RegularChannelConfig(RHEOSTAT_ADC, RHEOSTAT_ADC_CHANNEL, 1, ADC_SampleTime_56Cycles);
-
-  // 使能DMA请求 after last transfer (Single-ADC mode)
-  ADC_DMARequestAfterLastTransferCmd(RHEOSTAT_ADC, ENABLE);
-  // 使能ADC DMA
-  ADC_DMACmd(RHEOSTAT_ADC, ENABLE);
-	
-	// 使能ADC
-  ADC_Cmd(RHEOSTAT_ADC, ENABLE);  
-  //开始adc转换，软件触发
-  ADC_SoftwareStartConv(RHEOSTAT_ADC);
+    
+    ADC_GPIO_Mode_Config();
+  
+    ADC_Mode_Config();
+  
+    HAL_ADC_Start(&Init_ADC_Handle);
 }
 
-void Rheostat_Init(void)
+/**
+  * @brief  转换完成中断回调函数（非阻塞模式）
+  * @param  AdcHandle : ADC句柄
+  * @retval 无
+  */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle)
 {
-	Rheostat_ADC_GPIO_Config();
-	Rheostat_ADC_Mode_Config();
+  /* 获取结果 */
+    ADC_ConvertedValue = HAL_ADC_GetValue(AdcHandle); 
 }
 
 void Rheostat_DISABLE(void)
 {
 	// 使能ADC DMA
-  ADC_DMACmd(RHEOSTAT_ADC, DISABLE);
-
-  DMA_Cmd(RHEOSTAT_ADC_DMA_STREAM, DISABLE);
+	HAL_ADC_Stop(&Init_ADC_Handle);
 	
-	// 使能ADC
-  ADC_Cmd(RHEOSTAT_ADC, DISABLE);
+	ADC_Disable(&Init_ADC_Handle);//他停止采集
+	
+	HAL_ADC_Stop_DMA(&Init_ADC_Handle);
+	
 }
 
-   
+/*********************************************END OF FILE**********************/
+
 

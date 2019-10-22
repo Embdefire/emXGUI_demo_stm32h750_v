@@ -25,6 +25,7 @@
   */
 void GSM_USART_Config(void)
 {
+#if 0
   GPIO_InitTypeDef GPIO_InitStructure;
   USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -80,7 +81,7 @@ void GSM_USART_Config(void)
 	USART_ITConfig(GSM_USART, USART_IT_RXNE, ENABLE);
   /* 使能串口空闲中断 */
   USART_ITConfig(GSM_USART, USART_IT_IDLE, ENABLE);
-  
+ #endif
 }
 
 
@@ -144,6 +145,7 @@ volatile    uint16_t gsm_pBuffer = 0;
 uint8_t     gsm_usart_buf[UART_BUFF_SIZE] __EXRAM;
 void GSM_USART_IRQHandler(void)
 {
+	#if 0
   if(gsm_pBuffer<UART_BUFF_SIZE)
   {
     if(USART_GetITStatus(GSM_USART, USART_IT_RXNE) != RESET)
@@ -161,6 +163,7 @@ void GSM_USART_IRQHandler(void)
     USART_ClearFlag(GSM_USART, USART_IT_IDLE);            // 清除空闲中断
     Sim900aReceiveAcc=1;
   }
+	#endif
 }
 
 //获取接收到的数据和长度
@@ -195,6 +198,7 @@ void gsm_clean_rebuff(void)
  */
 void GSM_USART_printf(USART_TypeDef* USARTx, char *Data,...)
 {
+	#if 0
 	const char *s;
   int d;   
   char buf[16];
@@ -253,6 +257,7 @@ void GSM_USART_printf(USART_TypeDef* USARTx, char *Data,...)
 		else USART_SendData(USARTx, *Data++);
 		while( USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET );
 	}
+	#endif
 }
 
 /*********************************************END OF FILE**********************/

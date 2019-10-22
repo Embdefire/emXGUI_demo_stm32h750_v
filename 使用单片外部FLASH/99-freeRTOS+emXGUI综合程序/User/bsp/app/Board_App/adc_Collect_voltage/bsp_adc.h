@@ -1,32 +1,29 @@
-#ifndef __BSP_ADC_H
-#define	__BSP_ADC_H
+#ifndef __ADC_H
+#define	__ADC_H
 
-#include "stm32f4xx.h"
+#include "stm32h7xx.h"
 
-extern __IO uint16_t ADC_ConvertedValue;
 
-// ADC GPIO 宏定义
-#define RHEOSTAT_ADC_GPIO_PORT    GPIOC
-#define RHEOSTAT_ADC_GPIO_PIN     GPIO_Pin_3
-#define RHEOSTAT_ADC_GPIO_CLK     RCC_AHB1Periph_GPIOC
+//引脚定义
+#define RHEOSTAT_ADC_PIN                            GPIO_PIN_3                 
+#define RHEOSTAT_ADC_GPIO_PORT                      GPIOC                     
+#define RHEOSTAT_ADC_GPIO_CLK_ENABLE()              __GPIOC_CLK_ENABLE()
 
 // ADC 序号宏定义
-#define RHEOSTAT_ADC              ADC1
-#define RHEOSTAT_ADC_CLK          RCC_APB2Periph_ADC1
-#define RHEOSTAT_ADC_CHANNEL      ADC_Channel_13
+#define RHEOSTAT_ADC                                ADC3
+#define RHEOSTAT_ADC_CLK_ENABLE()                   __ADC3_CLK_ENABLE()
+#define RHEOSTAT_ADC_CHANNEL                        ADC_CHANNEL_1
+//DMA时钟使能
+#define RHEOSTAT_ADC_DMA_CLK_ENABLE()               __HAL_RCC_DMA1_CLK_ENABLE();
+#define RHEOSTAT_ADC_DMA_Base                       DMA1_Stream1
+#define RHEOSTAT_ADC_DMA_Request                    DMA_REQUEST_ADC3
+//DMA中断服务函数
+#define RHEOSTAT_ADC_DMA_IRQHandler                 DMA1_Stream1_IRQHandler
 
-// ADC DR寄存器宏定义，ADC转换后的数字值则存放在这里
-#define RHEOSTAT_ADC_DR_ADDR    ((u32)ADC1+0x4c)
+#define Rheostat_ADC12_IRQ                          ADC_IRQn
 
-// ADC DMA 通道宏定义，这里我们使用DMA传输
-#define RHEOSTAT_ADC_DMA_CLK      RCC_AHB1Periph_DMA2
-#define RHEOSTAT_ADC_DMA_CHANNEL  DMA_Channel_0
-#define RHEOSTAT_ADC_DMA_STREAM   DMA2_Stream0
-
-void Rheostat_Init(void);
+void ADC_Init(void);
 void Rheostat_DISABLE(void);
-
-#endif /* __BSP_ADC_H */
-
-
-
+uint16_t ADC_GetValue(void);
+void Rheostat_ADC_NVIC_Config(void);
+#endif /* __ADC_H */

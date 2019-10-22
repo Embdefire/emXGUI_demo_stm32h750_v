@@ -37,9 +37,10 @@ const wchar_t header_slogan_board[] = L"野火 · STM32教育专家";
 extern const char res_slogan[];
 /* 外部图片数据大小 */
 extern unsigned int res_slogan_size(void);
+extern uint8_t Theme_Flag;   // 主题标志
 
 #define GUI_DEMO_PIC  "explain_desktop.jpg"
-
+#define GUI_EXPLAINDESKTOP_PIC   "explain_desktop.jpg"
 /*============================================================================*/
 /**
   * @brief  emXGUI slogan界面函数，
@@ -161,15 +162,40 @@ static LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	RECT rc;
 	static int win_pos = 0;
 	static HDC hdc_mem = NULL;
-
+  static HDC hdc_mem_pic = NULL;
+	
 	switch (msg)
 	{
 	case WM_CREATE: //窗口创建时,会自动产生该消息,在这里做一些初始化的操作或创建子窗口
 	{
 		GetClientRect(hwnd, &rc); //获得窗口的客户区矩形
 
-  /* 创建内存对象 */
+    /* 创建内存对象 */
 		hdc_mem = CreateMemoryDC(SURF_SCREEN, rc.w, rc.h);
+    hdc_mem_pic = CreateMemoryDC(SURF_SCREEN, rc.w, rc.h);
+		
+	  BOOL res;
+    u8 *jpeg_buf;
+    u32 jpeg_size;
+		JPG_DEC *dec;
+
+    /* 资源设备中加载 */
+    res = RES_Load_Content(GUI_EXPLAINDESKTOP_PIC, (char **)&jpeg_buf, &jpeg_size);    /* 使用图片 */
+    //res = FS_Load_Content(GUI_EXPLAINDESKTOP_PIC, (char **)&jpeg_buf, &jpeg_size);
+    if(res)
+    {
+      /* 根据图片数据创建JPG_DEC句柄 */
+      dec = JPG_Open(jpeg_buf, jpeg_size);
+
+      /* 绘制至内存对象 */
+      JPG_Draw(hdc_mem_pic, 0, 0, dec);
+
+      /* 关闭JPG_DEC句柄 */
+      JPG_Close(dec);
+    }
+    
+    /* 释放图片内容空间 */
+    RES_Release_Content((char **)&jpeg_buf);
 
 		/* 绘制slogan到内存设备 */
 		CreateSlogan(hdc_mem, NULL, hwnd);
@@ -271,7 +297,14 @@ static LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		////用户的绘制内容...
 		GetClientRect(hwnd, &rc0);
 		/* 把内存对象绘制至屏幕 */
-		BitBlt(hdc, 0, 0, rc0.w, rc0.h, hdc_mem, 0, 0, SRCCOPY);
+		if (Theme_Flag == 0)
+		{
+			BitBlt(hdc, 0, 0, rc0.w, rc0.h, hdc_mem_pic, 0, 0, SRCCOPY);
+		}
+		else
+		{
+			BitBlt(hdc, 0, 0, rc0.w, rc0.h, hdc_mem, 0, 0, SRCCOPY);
+		}
 
 		EndPaint(hwnd, &ps);
 		//////////

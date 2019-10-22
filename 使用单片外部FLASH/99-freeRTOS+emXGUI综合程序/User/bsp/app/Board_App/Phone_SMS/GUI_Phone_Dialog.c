@@ -6,7 +6,7 @@
 #include "GUI_AppDef.h"
 #include "emXGUI_JPEG.h"
 #include "emxgui_png.h"
-
+#include "./Phone_SMS/sim900a/bsp_sim900a.h"
 /* 来电信号量 */
 GUI_SEM *Call_Sem;
 TaskHandle_t* CallCallMonitorHandle;    // 来电监测任务控制块

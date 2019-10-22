@@ -71,7 +71,7 @@ public:
     void draw_icon_obj(HDC hdc, struct __x_obj_item *obj, u32 flag, u32 style);
     struct __x_obj_item *focus_list_obj;
     void ListDragEnable(BOOL en);
-
+    void set_bg_color(u32 temp_bg_color);
 
 private:
     //BOOL Init(int x,int y,int w,int h,int x_count,int y_count,const struct __obj_list *list_objs);
@@ -140,6 +140,11 @@ static BOOL is_page_move(HWND hwnd)
 /*============================================================================*/
 
 #define	OBJ_ACTIVE	(1<<0)
+
+void CListMenu::set_bg_color(u32 temp_bg_color)
+{
+    bg_color = temp_bg_color;    // ÉèÖÃÑÕÉ«
+}
 
 void CListMenu::draw_icon_obj(HDC hdc, struct __x_obj_item *obj, u32 flag, u32 style)
 {
@@ -1735,6 +1740,14 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         tmr_id = wParam;
         return pApp->OnTimer(hwnd, tmr_id);
     }
+		case MSG_SET_BGCOLOR:
+    {
+        u32 color;
+
+        color = wParam;
+        pApp->set_bg_color(color);
+    }
+    break;
 //    break;
     /////
 

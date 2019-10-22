@@ -36,16 +36,15 @@
  * fabsf(float x)
  * min(int a, int b)
  */
-#if defined EMPL_TARGET_STM32F4
+#if defined EMPL_TARGET_STM32F7
 #include "./i2c/i2c.h"  
-#include "log.h"
 #include "emXGUI_Arch.h"
+#include "log.h"
    
 #define i2c_write   Sensors_I2C_WriteRegister
 #define i2c_read    Sensors_I2C_ReadRegister 
 #define delay_ms    GUI_msleep
 #define get_ms(Tick)      *(Tick) = (unsigned long)xTaskGetTickCount
-
 #define log_i       MPL_LOGI
 #define log_e       MPL_LOGE
 #define min(a,b) ((a<b)?a:b)
@@ -501,7 +500,7 @@ const struct gyro_reg_s reg = {
 #endif
 };
 const struct hw_s hw = {
-    .addr           = 0x68,
+    .addr           = 0xD0,
     .max_fifo       = 1024,
     .num_reg        = 118,
     .temp_sens      = 340,
@@ -771,7 +770,7 @@ int mpu_init(struct int_param_s *int_param)
     if (mpu_configure_fifo(0))
         return -1;
 
-#ifndef EMPL_TARGET_STM32F4    
+#ifndef EMPL_TARGET_STM32F7  
     if (int_param)
         reg_int_cb(int_param);
 #endif

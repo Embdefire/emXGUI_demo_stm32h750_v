@@ -1,7 +1,7 @@
 #ifndef _BSP_SIM900A_H_
 #define _BSP_SIM900A_H_
 
-#include "stm32f4xx.h"
+#include "stm32h7xx.h"
 #include "bsp_usart_gsm.h"
 
 typedef enum{
@@ -27,7 +27,7 @@ uint8_t   sim900a_cmd_check(char *reply);
 #define   SIM900A_TX(cmd)                	sim900a_tx_printf("%s",cmd)
 #define   SIM900A_IS_RX()                 (USART_GetFlagStatus(GSM_USART, USART_FLAG_RXNE) != RESET)
 #define   SIM900A_RX(len)                 ((char *)gsm_get_rebuff(&(len)))
-#define   SIM900A_DELAY(time)             CPU_TS_Tmr_Delay_MS(time)                 //延时
+#define   SIM900A_DELAY(time)             GUI_msleep(time)                 //延时
 #define   SIM900A_SWAP16(data)    		    __REVSH(data)
 
 /*************************** 电话 功能 ***************************/

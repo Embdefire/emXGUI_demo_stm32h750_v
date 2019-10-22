@@ -10,7 +10,7 @@
 #include "emXGUI_JPEG.h"
 #include	"CListMenu.h"
 #include "GUI_AppDef.h"
-
+#include "./pic_load/gui_pic_load.h"
 
  /*============================================================================*/
 
@@ -44,6 +44,8 @@ static void dummy(HWND hwnd)
 
 }
 
+HWND	app_hwnd_desktop;
+extern uint8_t Theme_Flag;   // 主题标志
 
 extern void	GUI_DEMO_Graphics_Accelerator(void);
 extern void	GUI_DEMO_ShowWave(void);
@@ -124,8 +126,8 @@ static void button_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 	hdc = ds->hDC;   //button的绘图上下文句柄.
 	rc = ds->rc;     //button的绘制矩形区.
 
-	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-	FillRect(hdc, &rc); //用矩形填充背景
+//	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+//	FillRect(hdc, &rc); //用矩形填充背景
 
 	if (IsWindowEnabled(hwnd) == FALSE)
 	{
@@ -183,8 +185,8 @@ static void exit_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
    
    
 
-   SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-	FillRect(hdc, &rc); //用矩形填充背景
+//   SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+//	FillRect(hdc, &rc); //用矩形填充背景
 
 	if (IsWindowEnabled(hwnd) == FALSE)
 	{
@@ -260,9 +262,17 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		cfg.list_objs = menu_list_1; //指定list列表.
 		cfg.x_num = 3; //水平项数.
 		cfg.y_num = 1; //垂直项数.
-    cfg.bg_color = COLOR_DESKTOP_BACK_GROUND_HEX;
+		
+    if (Theme_Flag == 0)
+    {
+      cfg.bg_color = 1;    // 为 1 时不使用这个颜色作为背景色
+    }
+    else 
+    {
+      cfg.bg_color = COLOR_DESKTOP_BACK_GROUND_HEX;    // 为 1 时不使用这个颜色作为背景色
+    }
 
-		chwnd = CreateWindow(&wcex_ListMenu,
+		app_hwnd_desktop = CreateWindow(&wcex_ListMenu,
                             L"ListMenu1",
                             WS_VISIBLE | LMS_ICONFRAME| LMS_ICONINNERFRAME,
                             rc.x + 100, rc.y + 70, rc.w - 200, rc.h - 80,
@@ -276,16 +286,16 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //    SetWindowLong(chwnd, GWL_USERDATA , (LONG)&bg_color );
 
 		/* 上一步按钮 */
-		wnd = CreateWindow(BUTTON, L"L", BS_FLAT | BS_NOTIFY | WS_OWNERDRAW | WS_VISIBLE,
+		wnd = CreateWindow(BUTTON, L"L", BS_FLAT | BS_NOTIFY | WS_OWNERDRAW | WS_VISIBLE|WS_TRANSPARENT,
 			0, (rc.h-80)/ 2, 70, 70, hwnd, ICON_VIEWER_ID_PREV, NULL, NULL);
 		SetWindowFont(wnd, controlFont_64); //设置控件窗口字体.
 
 		 /* 下一步按钮 */
-		wnd = CreateWindow(BUTTON, L"K", BS_FLAT | BS_NOTIFY | WS_OWNERDRAW | WS_VISIBLE,
+		wnd = CreateWindow(BUTTON, L"K", BS_FLAT | BS_NOTIFY | WS_OWNERDRAW | WS_VISIBLE|WS_TRANSPARENT,
 			rc.w - 65, (rc.h - 80) / 2, 70, 70, hwnd, ICON_VIEWER_ID_NEXT, NULL, NULL);
 		SetWindowFont(wnd, controlFont_64); //设置控件窗口字体.ID_EXIT
       
-         CreateWindow(BUTTON, L"F", BS_FLAT | BS_NOTIFY|WS_OWNERDRAW |WS_VISIBLE,
+         CreateWindow(BUTTON, L"F", BS_FLAT | BS_NOTIFY|WS_OWNERDRAW |WS_VISIBLE|WS_TRANSPARENT,
                         0, 0, 200, 70, hwnd, ID_EXIT, NULL, NULL);
          
 		//SetTimer(hwnd, 1, 50, TMR_START, NULL);
@@ -340,13 +350,28 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_ERASEBKGND:
 	{
 		HDC hdc = (HDC)wParam;
-		RECT rc;
+		RECT rc =*(RECT*)lParam;
 
-		GetClientRect(hwnd, &rc);
-		SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-		FillRect(hdc, &rc);
+		if (Theme_Flag == 0) 
+		{
+				BitBlt(hdc, rc.x, rc.y, rc.w, rc.h, hdc_home_bk, rc.x, rc.y, SRCCOPY);
+		}
+		else if (Theme_Flag == 1)
+		{
+				GetClientRect(hwnd, &rc);
+				SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+				FillRect(hdc, &rc);
+		}
+		else
+		{
+				GetClientRect(hwnd, &rc);
+				SetBrushColor(hdc, MapRGB(hdc, 100, 100, 100));
+				FillRect(hdc, &rc);
+		}
+
+		return TRUE;
 	}
-	break;
+
 
 	case WM_PAINT:
 	{
@@ -361,8 +386,8 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     SetFont(hdc, GB2312_32_Font);
       
-    SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-    FillRect(hdc, &rc);
+//    SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+//    FillRect(hdc, &rc);
     SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
     rc.y += 20;
    
@@ -471,7 +496,7 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 /*============================================================================*/
 
-void	GUI_App_Desktop(void)
+void	GUI_App_Desktop(void *p)
 //static void	AppMain(void)
 {
 	HWND	hwnd;
@@ -490,7 +515,7 @@ void	GUI_App_Desktop(void)
 	wcex.hCursor = NULL;//LoadCursor(NULL, IDC_ARROW);
 
 	//创建主窗口
-	hwnd = CreateWindowEx(NULL,
+	hwnd = CreateWindowEx(WS_EX_FRAMEBUFFER,
 		&wcex,
       L"IconViewer",
 		//								/*WS_MEMSURFACE|*/WS_CAPTION|WS_DLGFRAME|WS_BORDER|WS_CLIPCHILDREN,

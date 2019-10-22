@@ -127,6 +127,37 @@ static void BSP_Init(void)
     printf("检测不到WM8978芯片!!!\n");
     while (1);	/* 停机 */
   }
+	
+	RTC_CLK_Config();
+	
+	if (HAL_RTCEx_BKUPRead(&Rtc_Handle,RTC_BKP_DRX) != 0X32F3)
+	{				
+		/* 设置时间和日期 */
+		RTC_TimeAndDate_Set();
+	}
+	else
+	{
+		/* 检查是否电源复位 */
+		if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST) != RESET)
+		{
+			printf("\r\n 发生电源复位....\r\n");
+		}
+		/* 检查是否外部复位 */
+		else if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) != RESET)
+		{
+			printf("\r\n 发生外部复位....\r\n");
+		}
+		printf("\r\n 不需要重新配置RTC....\r\n");    
+		/* 使能 PWR 时钟 */
+		__HAL_RCC_RTC_ENABLE();
+		/* PWR_CR:DBF置1，使能RTC、RTC备份寄存器和备份SRAM的访问 */
+		HAL_PWR_EnableBkUpAccess();
+		/* 等待 RTC APB 寄存器同步 */
+		HAL_RTC_WaitForSynchro(&Rtc_Handle);
+	} 
+	
+
+	
   /*hardfault 跟踪器初始化*/ 
   cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
   

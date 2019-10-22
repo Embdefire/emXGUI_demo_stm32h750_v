@@ -38,8 +38,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "./sai/bsp_sai.h" 
+#include "bsp_mpu_exti.h"
 
+extern RTC_HandleTypeDef hrtc;
 extern SD_HandleTypeDef uSdHandle;
+extern volatile uint8_t timeout;
+extern void gyro_data_ready_cb(void);
 /* External variables --------------------------------------------------------*/
 
 /******************************************************************************/
@@ -182,17 +186,17 @@ void BASIC_TIM_IRQHandler(void)
   * @param  htim : TIM句柄
   * @retval 无
   */
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-//{
-//    if(htim->Instance == TIM6)
-//      xPortGetFreeHeapSize(); 
-//    //CPU_RunTime++;
-//    if(htim->Instance == TIM3)
-//    {
-//      //timeout = 1;
-////      LED1_TOGGLE;
-//    }
-//}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if(htim->Instance == TIM6)
+      xPortGetFreeHeapSize(); 
+    //CPU_RunTime++;
+    if(htim->Instance == TIM3)
+    {
+        timeout = 1;
+//      LED1_TOGGLE;
+    }
+}
 
 //void DMA1_Stream2_IRQHandler(void)
 //{
@@ -202,6 +206,10 @@ void BASIC_TIM_IRQHandler(void)
 //  I2Sx_TX_DMA_STREAM_IRQFUN();
 ////  taskEXIT_CRITICAL_FROM_ISR( ulReturn );  
 //}
+void RTC_Alarm_IRQHandler(void)
+{
+  HAL_RTC_AlarmIRQHandler(&Rtc_Handle);
+}
 
 void DMA1_Stream2_IRQHandler(void)
 {
@@ -212,3 +220,13 @@ void DMA1_Stream3_IRQHandler(void)
   SAI_RX_DMA_STREAM_IRQFUN();
 }
 
+void EXTI3_IRQHandler(void)
+{
+	if (__HAL_GPIO_EXTI_GET_IT(MPU_INT_GPIO_PIN) != RESET) //确保是否产生了EXTI Line中断
+	{
+		/* Handle new gyro*/
+		gyro_data_ready_cb();
+
+		__HAL_GPIO_EXTI_CLEAR_IT(MPU_INT_GPIO_PIN);     //清除中断标志位
+	}
+}

@@ -1636,7 +1636,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/MP3</GroupName>
+          <GroupName>tutorial/mp3</GroupName>
           <Files>
             <File>
               <FileName>GUI_MUSICPLAYER_DIALOG.c</FileName>
@@ -1656,7 +1656,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/MP3_BSP</GroupName>
+          <GroupName>tutorial/bsp_mp3</GroupName>
           <Files>
             <File>
               <FileName>mp3dec.c</FileName>
@@ -1771,7 +1771,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/RECORDER</GroupName>
+          <GroupName>tutorial/recorder</GroupName>
           <Files>
             <File>
               <FileName>Backend_Recorder.c</FileName>
@@ -1786,7 +1786,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/RGB_LED</GroupName>
+          <GroupName>tutorial/rgb_led</GroupName>
           <Files>
             <File>
               <FileName>Backend_RGBLED.c</FileName>
@@ -1851,7 +1851,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>PhoneCallMonitorTask</GroupName>
+          <GroupName>tutorial/PhoneCallMonitorTask</GroupName>
           <Files>
             <File>
               <FileName>GUI_Phone_Dialog.c</FileName>
@@ -1859,34 +1859,34 @@
               <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\GUI_Phone_Dialog.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_sim900a.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_sim900a.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_sim900a.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_sim900a.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usart_gsm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_usart_gsm.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usart_gsm.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_usart_gsm.h</FilePath>
-            </File>
-            <File>
               <FileName>GUI_SMS_Dialog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\GUI_SMS_Dialog.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_gsm_gprs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_gprs.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gsm_gprs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_gprs.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gsm_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gsm_usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_usart.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/CAMERA</GroupName>
+          <GroupName>tutorial/camera</GroupName>
           <Files>
             <File>
               <FileName>bsp_ov5640.c</FileName>
@@ -1962,17 +1962,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>DOC</GroupName>
-          <Files>
-            <File>
-              <FileName>必读说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\必读说明.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>tutorial/DTH11</GroupName>
+          <GroupName>tutorial/dth11</GroupName>
           <Files>
             <File>
               <FileName>GUI_T_RH_Dialog.c</FileName>
@@ -1987,7 +1977,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/ADC</GroupName>
+          <GroupName>tutorial/adc</GroupName>
           <Files>
             <File>
               <FileName>bsp_adc.c</FileName>
@@ -2012,7 +2002,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/CLOCK</GroupName>
+          <GroupName>tutorial/clock</GroupName>
           <Files>
             <File>
               <FileName>GUI_CLOCK_DIALOG.c</FileName>
@@ -2027,7 +2017,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/GYRO</GroupName>
+          <GroupName>tutorial/gyro</GroupName>
           <Files>
             <File>
               <FileName>GUI_Gyro_Dialog.c</FileName>
@@ -2042,92 +2032,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>MPU_eMPL</GroupName>
-          <Files>
-            <File>
-              <FileName>eMPL_outputs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal\eMPL_outputs.c</FilePath>
-            </File>
-            <File>
-              <FileName>inv_mpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu.c</FilePath>
-            </File>
-            <File>
-              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>log_stm32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L\log_stm32.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>MPU_mllite</GroupName>
-          <Files>
-            <File>
-              <FileName>data_builder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\data_builder.c</FilePath>
-            </File>
-            <File>
-              <FileName>hal_outputs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\hal_outputs.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_layer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\message_layer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ml_math_func.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\ml_math_func.c</FilePath>
-            </File>
-            <File>
-              <FileName>mlmath.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mlmath.c</FilePath>
-            </File>
-            <File>
-              <FileName>mpl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mpl.c</FilePath>
-            </File>
-            <File>
-              <FileName>results_holder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\results_holder.c</FilePath>
-            </File>
-            <File>
-              <FileName>start_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\start_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>storage_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\storage_manager.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>MPU_mpl</GroupName>
-          <Files>
-            <File>
-              <FileName>libmpllib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl\libmpllib_Keil_M4\libmpllib.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>tutorial/SETTING</GroupName>
+          <GroupName>tutorial/setting</GroupName>
           <Files>
             <File>
               <FileName>GUI_Network_Dialog.c</FileName>
@@ -2142,7 +2047,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/LWIP</GroupName>
+          <GroupName>tutorial/lwip</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -2416,7 +2321,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/LWIP_BSP</GroupName>
+          <GroupName>tutorial/bsp_lwip</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -2577,6 +2482,101 @@
               <FileName>udp_echoserver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPU_eMPL</GroupName>
+          <Files>
+            <File>
+              <FileName>eMPL_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal\eMPL_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>inv_mpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>log_stm32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L\log_stm32.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPU_mllite</GroupName>
+          <Files>
+            <File>
+              <FileName>data_builder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\data_builder.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\hal_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_layer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\message_layer.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml_math_func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\ml_math_func.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlmath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mlmath.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mpl.c</FilePath>
+            </File>
+            <File>
+              <FileName>results_holder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\results_holder.c</FilePath>
+            </File>
+            <File>
+              <FileName>start_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\start_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>storage_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\storage_manager.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPU_mpl</GroupName>
+          <Files>
+            <File>
+              <FileName>libmpllib.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl\libmpllib_Keil_M4\libmpllib.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DOC</GroupName>
+          <Files>
+            <File>
+              <FileName>必读说明.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\必读说明.txt</FilePath>
             </File>
           </Files>
         </Group>
@@ -4212,7 +4212,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/MP3</GroupName>
+          <GroupName>tutorial/mp3</GroupName>
           <Files>
             <File>
               <FileName>GUI_MUSICPLAYER_DIALOG.c</FileName>
@@ -4232,7 +4232,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/MP3_BSP</GroupName>
+          <GroupName>tutorial/bsp_mp3</GroupName>
           <Files>
             <File>
               <FileName>mp3dec.c</FileName>
@@ -4347,7 +4347,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/RECORDER</GroupName>
+          <GroupName>tutorial/recorder</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -4431,7 +4431,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/RGB_LED</GroupName>
+          <GroupName>tutorial/rgb_led</GroupName>
           <Files>
             <File>
               <FileName>Backend_RGBLED.c</FileName>
@@ -4565,7 +4565,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>PhoneCallMonitorTask</GroupName>
+          <GroupName>tutorial/PhoneCallMonitorTask</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -4642,34 +4642,34 @@
               <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\GUI_Phone_Dialog.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_sim900a.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_sim900a.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_sim900a.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_sim900a.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usart_gsm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_usart_gsm.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usart_gsm.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\sim900a\bsp_usart_gsm.h</FilePath>
-            </File>
-            <File>
               <FileName>GUI_SMS_Dialog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\GUI_SMS_Dialog.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_gsm_gprs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_gprs.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gsm_gprs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_gprs.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gsm_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gsm_usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\Phone_SMS\bsp_sim\bsp_gsm_usart.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/CAMERA</GroupName>
+          <GroupName>tutorial/camera</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -4763,17 +4763,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>DOC</GroupName>
-          <Files>
-            <File>
-              <FileName>必读说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\必读说明.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>tutorial/DTH11</GroupName>
+          <GroupName>tutorial/dth11</GroupName>
           <Files>
             <File>
               <FileName>GUI_T_RH_Dialog.c</FileName>
@@ -4788,7 +4778,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/ADC</GroupName>
+          <GroupName>tutorial/adc</GroupName>
           <Files>
             <File>
               <FileName>bsp_adc.c</FileName>
@@ -4813,7 +4803,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/CLOCK</GroupName>
+          <GroupName>tutorial/clock</GroupName>
           <Files>
             <File>
               <FileName>GUI_CLOCK_DIALOG.c</FileName>
@@ -4828,7 +4818,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/GYRO</GroupName>
+          <GroupName>tutorial/gyro</GroupName>
           <Files>
             <File>
               <FileName>GUI_Gyro_Dialog.c</FileName>
@@ -4843,92 +4833,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>MPU_eMPL</GroupName>
-          <Files>
-            <File>
-              <FileName>eMPL_outputs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal\eMPL_outputs.c</FilePath>
-            </File>
-            <File>
-              <FileName>inv_mpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu.c</FilePath>
-            </File>
-            <File>
-              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>log_stm32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L\log_stm32.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>MPU_mllite</GroupName>
-          <Files>
-            <File>
-              <FileName>data_builder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\data_builder.c</FilePath>
-            </File>
-            <File>
-              <FileName>hal_outputs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\hal_outputs.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_layer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\message_layer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ml_math_func.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\ml_math_func.c</FilePath>
-            </File>
-            <File>
-              <FileName>mlmath.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mlmath.c</FilePath>
-            </File>
-            <File>
-              <FileName>mpl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mpl.c</FilePath>
-            </File>
-            <File>
-              <FileName>results_holder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\results_holder.c</FilePath>
-            </File>
-            <File>
-              <FileName>start_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\start_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>storage_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\storage_manager.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>MPU_mpl</GroupName>
-          <Files>
-            <File>
-              <FileName>libmpllib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl\libmpllib_Keil_M4\libmpllib.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>tutorial/SETTING</GroupName>
+          <GroupName>tutorial/setting</GroupName>
           <Files>
             <File>
               <FileName>GUI_Network_Dialog.c</FileName>
@@ -4943,7 +4848,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/LWIP</GroupName>
+          <GroupName>tutorial/lwip</GroupName>
           <Files>
             <File>
               <FileName>netconf.c</FileName>
@@ -5148,7 +5053,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/LWIP_BSP</GroupName>
+          <GroupName>tutorial/bsp_lwip</GroupName>
           <Files>
             <File>
               <FileName>bsp_eth.c</FileName>
@@ -5189,6 +5094,101 @@
               <FileName>udp_echoserver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPU_eMPL</GroupName>
+          <Files>
+            <File>
+              <FileName>eMPL_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal\eMPL_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>inv_mpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>log_stm32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L\log_stm32.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPU_mllite</GroupName>
+          <Files>
+            <File>
+              <FileName>data_builder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\data_builder.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\hal_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_layer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\message_layer.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml_math_func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\ml_math_func.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlmath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mlmath.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\mpl.c</FilePath>
+            </File>
+            <File>
+              <FileName>results_holder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\results_holder.c</FilePath>
+            </File>
+            <File>
+              <FileName>start_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\start_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>storage_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite\storage_manager.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MPU_mpl</GroupName>
+          <Files>
+            <File>
+              <FileName>libmpllib.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl\libmpllib_Keil_M4\libmpllib.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DOC</GroupName>
+          <Files>
+            <File>
+              <FileName>必读说明.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\必读说明.txt</FilePath>
             </File>
           </Files>
         </Group>

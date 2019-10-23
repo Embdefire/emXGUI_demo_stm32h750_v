@@ -60,17 +60,17 @@ void Read_Text(HWND hListWnd)
   uint16_t ListData = 0;    // 最高位 0:发，1:收，后15位为短信地址
   uint8_t Temp = 0;
   
-  sim900a_tx_printf("AT+CNMI=2,1\r");
-  SIM900A_DELAY(100);  
-  sim900a_tx_printf("AT+CMGF=1\r");           //文本模式
-  SIM900A_DELAY(100); 
-  sim900a_tx_printf("AT+CSCS=\"UCS2\"\r");     //"GSM"字符集
-  SIM900A_DELAY(100); 
+  gsm_cmd("AT+CNMI=2,1\r","OK", 100);
+//  SIM900A_DELAY(100);  
+  gsm_cmd("AT+CMGF=1\r","OK", 100);           //文本模式
+//  SIM900A_DELAY(100); 
+  gsm_cmd("AT+CSCS=\"UCS2\"\r","OK", 100);     //"GSM"字符集
+//  SIM900A_DELAY(100); 
   
   wNumber = (char *)GUI_VMEM_Alloc(200);
   wTime = (char *)GUI_VMEM_Alloc(3*1024);
 
-  SIM900A_CLEAN_RX();
+  GSM_CLEAN_RX();
   Temp = ReadMessageInfo(xC, wNumber, wTime);
 
 	while((Temp) != 0)
@@ -98,7 +98,7 @@ void Read_Text(HWND hListWnd)
     }
 		SendMessage(hListWnd, LB_SETITEMDATA, i, (LPARAM)ListData);
     
-    SIM900A_CLEAN_RX();
+    GSM_CLEAN_RX();
     
     Temp = ReadMessageInfo(xC, wNumber, wTime);
 	}
@@ -389,7 +389,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       GetClientRect(hwnd, &rc);
 
       /* 初始化 GSM 模块 */
-      if (sim900a_init() != SIM900A_TRUE)//
+      if (gsm_init() != GSM_TRUE)//
       {
         SetTimer(hwnd, 2, 1, TMR_START|TMR_SINGLE, NULL);    // 初始化失败开启错误提示定时器
       }
@@ -438,11 +438,11 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         newmessadd=IsReceiveMS();      
         if(newmessadd)
         {	
-          SIM900A_DELAY(500); 
-          sim900a_tx_printf("AT+CSCS=\"UCS2\"\r");     //"GSM"字符集        
-          SIM900A_DELAY(500);        
+          GSM_DELAY(500); 
+          gsm_cmd("AT+CSCS=\"UCS2\"\r","OK", 100);     //"GSM"字符集        
+          GSM_DELAY(500);        
           BEEP_ON;
-          SIM900A_CLEAN_RX();//清除接收缓存
+          GSM_CLEAN_RX();//清除接收缓存
           
           u32 i = 0;
           WCHAR wbuf[40];
@@ -457,7 +457,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
           wNumber = (char *)GUI_VMEM_Alloc(200);
           wTime = (char *)GUI_VMEM_Alloc(3*1024);
 
-          SIM900A_CLEAN_RX();
+          GSM_CLEAN_RX();
           Temp = ReadMessageInfo(newmessadd, wNumber, wTime);
           BEEP_OFF;
           if (Temp != 0)
@@ -477,7 +477,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             SendMessage(hListWnd, LB_SETITEMDATA, i, (LPARAM)ListData);
             
-            SIM900A_CLEAN_RX();
+            GSM_CLEAN_RX();
             InvalidateRect(hListWnd, NULL, TRUE);
           }
           
@@ -636,7 +636,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
               
               if (SelectDialogBox(hwnd, RC, L"将会删除全部已收发短信。", L"删除", &ops) == 0)    // 显示确认提示框
               {
-                sim900a_tx_printf("AT+CMGDA=\"DEL ALL\"\r");                           // 删除全部短信
+                gsm_cmd("AT+CMGDA=\"DEL ALL\"\r","OK",100);                           // 删除全部短信
                 SendMessage(GetDlgItem(hwnd, eID_SMS_LIST), LB_RESETCONTENT, 0, 0);    // 清空列表
                 InvalidateRect(GetDlgItem(hwnd, eID_SMS_LIST), NULL, TRUE);            // 重绘列表
               }
@@ -672,7 +672,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
               x_wcstombs_cp936(cNumber, wNumber, 99);
               x_wcstombs_cp936(cContent, wContent, 2000);
               
-              Add = sim900a_save_sms(cNumber, cContent);
+              Add = gsm_save_sms(cNumber, cContent);
               if (Add)
               {
                 //在Listbox中增加一个Item项，记录文件名和文件属性.

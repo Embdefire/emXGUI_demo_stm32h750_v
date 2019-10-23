@@ -466,16 +466,11 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       // EnableAntiAlias(hdc_adc_png[hdc_adc_circle], FALSE);
 
       /* 画三角形指针 */
-			GUI_DEBUG("12");
       TrianglePointer_DC = CreateMemoryDC((SURF_FORMAT)COLOR_FORMAT_ARGB8888, TriangleLen, CircleCenter_1 * 2);    // 创建三角形指针内存 DC
-			GUI_DEBUG("13");
       ClrDisplay(TrianglePointer_DC, NULL, 0);
-			GUI_DEBUG("14");
       X_MeterPointer(TrianglePointer_DC, TriangleLen/2, CircleCenter_1, CircleCenter_1-2, MapARGB(TrianglePointer_DC, 255, 250, 20, 20), 0);
       /* 转换成bitmap */
-			GUI_DEBUG("15");
       DCtoBitmap(TrianglePointer_DC,&bm_Triangle);
-      GUI_DEBUG("16");
 //      /* 创建滑动条按钮的 HDC */
 //      hdc_adc_png[hdc_adc_slider_btn] = CreateMemoryDC((SURF_FORMAT)COLOR_FORMAT_ARGB8888, 90, 90);
 //      ClrDisplay(hdc_adc_png[hdc_adc_slider_btn],NULL,0);
@@ -514,13 +509,10 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       
       /* 创建圆形区域的最终 DC */
       hdc_mem = CreateMemoryDC((SURF_FORMAT)COLOR_FORMAT_ARGB8888, CircleSize, CircleSize);
-      GUI_DEBUG("17");
       ClrDisplay(hdc_mem, NULL, 0);
-GUI_DEBUG("18");
       //SetTimer(hwnd, 2, 50, TMR_START, NULL);
       
       x_wsprintf(Backlightwbuf, L"%d", 50);
-GUI_DEBUG("18");
       res_prep = 1;    // 标记资源加载完成
       SetTimer(hwnd, 4, 10, TMR_START | TMR_SINGLE, NULL);
 
@@ -670,7 +662,7 @@ GUI_DEBUG("18");
       hdc = BeginPaint(hwnd, &ps);
 
       if (Update_Circle_Flag == TRUE)    /* 需要更新 */
-      {printf("2");
+      {
         Update_Circle_Flag = FALSE;
         ClrDisplay(hdc_mem, NULL, 0);
         Circle_Paint(hwnd, hdc_mem);    /* 绘制圆形显示区域 */
@@ -692,7 +684,6 @@ GUI_DEBUG("18");
       SetFont(hdc, controlFont_48);
       DrawText(hdc, L"H", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式)
       SetFont(hdc, defaultFont);
-printf("111111111111111111111111");
       EndPaint(hwnd, &ps);
 
       break;

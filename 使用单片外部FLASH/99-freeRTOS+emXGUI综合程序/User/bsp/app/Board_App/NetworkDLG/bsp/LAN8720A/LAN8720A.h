@@ -128,9 +128,7 @@
 #define PHY_ISFR_INT4                   ((uint16_t)0x0010)  /*!< PHY Link down inturrupt */
 
 
-/* Ethernet Flags for EthStatus variable */   
-#define ETH_INIT_FLAG           0x01 /* Ethernet Init Flag */
-#define ETH_LINK_FLAG           0x10 /* Ethernet Link Flag */
+
 
 
 

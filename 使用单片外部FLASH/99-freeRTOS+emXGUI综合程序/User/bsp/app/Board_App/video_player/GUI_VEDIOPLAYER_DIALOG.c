@@ -508,7 +508,7 @@ static LRESULT Dlg_VideoList_WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                    0, 0, 240, 80, hwnd, eID_VIDEO_RETURN, NULL, NULL);  
       /* 需要分配N+1项，最后一项为空 */
       menu_list = (struct __obj_list *)GUI_VMEM_Alloc(sizeof(struct __obj_list)*(VideoDialog.avi_file_num+1));
-      wbuf = (WCHAR (*)[128])GUI_VMEM_Alloc(sizeof(WCHAR *)*VideoDialog.avi_file_num);
+      wbuf = (WCHAR (*)[128])GUI_VMEM_Alloc(sizeof(WCHAR *)*VideoDialog.avi_file_num * 128);
       if(menu_list == NULL || wbuf == NULL)
        return 0;
       for(;i < VideoDialog.avi_file_num; i++)

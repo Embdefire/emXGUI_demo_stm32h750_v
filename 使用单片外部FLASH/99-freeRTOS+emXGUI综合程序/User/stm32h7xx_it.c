@@ -42,7 +42,8 @@
 
 extern RTC_HandleTypeDef hrtc;
 extern SD_HandleTypeDef uSdHandle;
-extern volatile uint8_t timeout;
+extern volatile uint8_t video_timeout;//视频播放引入
+extern __IO uint32_t LocalTime;//以太网提供tick
 extern void gyro_data_ready_cb(void);
 /* External variables --------------------------------------------------------*/
 
@@ -176,7 +177,6 @@ void SysTick_Handler(void)
 
 volatile uint32_t CPU_RunTime = 0UL;
 extern TIM_HandleTypeDef TIM_Base;
-//extern volatile uint8_t timeout;
 void BASIC_TIM_IRQHandler(void)
 {
     HAL_TIM_IRQHandler(&TIM_Base);
@@ -193,7 +193,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     //CPU_RunTime++;
     if(htim->Instance == TIM3)
     {
-        timeout = 1;
+        video_timeout = 1;
+			  LocalTime+=10;
 //      LED1_TOGGLE;
     }
 }

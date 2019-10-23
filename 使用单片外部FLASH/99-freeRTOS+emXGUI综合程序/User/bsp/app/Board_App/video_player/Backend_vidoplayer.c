@@ -28,7 +28,7 @@ uint16_t  Strtype;
 
 TIM_HandleTypeDef TIM3_Handle;
 
-volatile uint8_t timeout;
+volatile uint8_t video_timeout;
 extern WAVEFORMAT*   wavinfo;
 extern avih_TypeDef* avihChunk;
 //extern HWND avi_wnd_time;
@@ -152,7 +152,7 @@ void AVI_play(char *filename)
 //  I2S_Play_Stop();
   SAIA_TX_DMA_Init((uint32_t )Sound_buf[1],(uint32_t )Sound_buf[2],audiosize/2);
   audiobufflag=0;	    
-  timeout=0;
+  video_timeout=0;
   audiosavebuf=0;
   audiobufflag=0;
   TIM3_Config((avihChunk->SecPerFrame/100)-1,20000-1);
@@ -233,7 +233,7 @@ void AVI_play(char *filename)
         GUI_DEBUG("E\n");
       }
          
-			timeout=0;
+			video_timeout=0;
 		
 			if(frame&1)
 			{	
@@ -273,14 +273,14 @@ void AVI_play(char *filename)
 				GUI_msleep(5);
 			}
 
-      while(timeout==0)
+      while(video_timeout==0)
       {   
 				//rt_thread_delay(1); //不要死等，最好用信号量.				
         GUI_msleep(5);
       }      
 	  bDrawVideo=FALSE;
 
-      timeout=0;
+      video_timeout=0;
     }//显示帧
     else if(Strtype==T_auds)//音频输出
     { 

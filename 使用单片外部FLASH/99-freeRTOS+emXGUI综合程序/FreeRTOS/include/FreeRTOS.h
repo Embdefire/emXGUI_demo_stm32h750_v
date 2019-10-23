@@ -825,7 +825,7 @@ V8 if desired. */
 	#define portTickType TickType_t
 	#define xTaskHandle TaskHandle_t
 	#define xQueueHandle QueueHandle_t
-	#define xSemaphoreHandle f
+	#define xSemaphoreHandle SemaphoreHandle_t
 	#define xQueueSetHandle QueueSetHandle_t
 	#define xQueueSetMemberHandle QueueSetMemberHandle_t
 	#define xTimeOutType TimeOut_t

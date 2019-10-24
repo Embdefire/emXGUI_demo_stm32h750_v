@@ -91,7 +91,7 @@ static err_t tcp_echoclient_connected(void *arg, struct tcp_pcb *tpcb, err_t err
 */
 uint8_t tcp_echoclient_connect(DRV_NETWORK network)
 {
-  struct ip_addr DestIPaddr;
+  struct ip4_addr DestIPaddr;
 	err_t err;	
   /* create new tcp pcb */
   echoclient_pcb = tcp_new();

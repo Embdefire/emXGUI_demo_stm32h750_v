@@ -30,11 +30,13 @@ HWND Network_Main_Handle;
               
 uint8_t network_start_flag=0;
 
-extern struct netif gnetif;
 //extern __IO uint8_t EthLinkStatus;
 __IO uint8_t EthLinkStatus;//用不到的变量
 __IO uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 10ms */
 DRV_NETWORK drv_network;
+
+extern uint8_t IP_ADDRESS[4];
+
 uint16_t bsp_result=0;
 
 /* 从 Backend_vidoplayer.c 引入 */
@@ -104,7 +106,7 @@ void Network_Dispose_Task(void *p)
     }
 
   }
-#if 0  
+#if 0
   if((drv_network.net_init==0)&&((bsp_result&1)==0))
   {     
     /* Initilaize the LwIP stack */
@@ -311,13 +313,19 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       GetClientRect(hwnd, &rc); 
       HWND Temp_Handle;
       
-      xTaskCreate((TaskFunction_t )Network_Dispose_Task,      /* 任务入口函数 */
-                  (const char*    )"Network Dispose Task",    /* 任务名字 */
-                  (uint16_t       )3*1024/4,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
-                  (void*          )NULL,                      /* 任务入口函数参数 */
-                  (UBaseType_t    )5,                         /* 任务的优先级 */
-                  (TaskHandle_t*  )&Network_Task_Handle);     /* 任务控制块指针 */
-                      
+			BaseType_t xReturn = pdPASS;
+			
+      xReturn = xTaskCreate((TaskFunction_t )Network_Dispose_Task,      /* 任务入口函数 */
+														(const char*    )"Network Dispose Task",    /* 任务名字 */
+														(uint16_t       )3*1024/4,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+														(void*          )NULL,                      /* 任务入口函数参数 */
+														(UBaseType_t    )5,                         /* 任务的优先级 */
+														(TaskHandle_t*  )&Network_Task_Handle);     /* 任务控制块指针 */
+      if(xReturn != pdPASS)  
+			{
+				GUI_ERROR("Fail to create Network_Dispose_Task!\r\n");
+			}				
+														
       CreateWindow(BUTTON, L"O", WS_TRANSPARENT|BS_FLAT | BS_NOTIFY |WS_OWNERDRAW|WS_VISIBLE,
                   740, 10, 36, 36, hwnd, eID_Network_EXIT, NULL, NULL); 
 
@@ -479,9 +487,10 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       DrawText(hdc, L"远端IP地址&端口：", -1, &rc, DT_LEFT|DT_TOP);
       
       SetTextColor(hdc, MapRGB(hdc, 10, 10, 10));
-      x_wsprintf(tempstr, L"[%d.%d.%d.%d:%d]",drv_network.net_local_ip1,drv_network.net_local_ip2,\
-                                       drv_network.net_local_ip3,drv_network.net_local_ip4,\
-                                       drv_network.net_local_port);
+//      x_wsprintf(tempstr, L"[%d.%d.%d.%d:%d]",drv_network.net_local_ip1,drv_network.net_local_ip2,\
+//                                       drv_network.net_local_ip3,drv_network.net_local_ip4,\
+//                                       drv_network.net_local_port);
+      x_wsprintf(tempstr, L"[%d.%d.%d.%d:%d]",IP_ADDRESS[0],IP_ADDRESS[1],IP_ADDRESS[2],IP_ADDRESS[3],LOCAL_PORT);
       rc.w = 300;
       rc.h = 30;
       rc.x = 412;

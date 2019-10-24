@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,X_GUI_USE_FREERTOS,APPLICATION_ADDRESS=0x8000000,Fire_H7_InFlash,USE_DMP,MPL_LOG_NDEBUG=1,EMPL,MPU6050,EMPL_TARGET_STM32F7</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\User\bsp;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\User\bsp\cm_backtrace;..\..\emXGUI_Lib\inc;..\..\emXGUI_Lib\drv;..\..\emXGUI_Lib\arch\Inc;..\..\emXGUI_Lib\app\base;..\..\User\bsp\FATFS;..\..\emXGUI_Lib\app\base\res_writer;..\..\emXGUI_Lib\app\tutorial\rgb_led;..\..\User\OwnerDraw;..\..\emXGUI_Lib\app\tutorial\music_player;..\..\User\bsp\mp3\real;..\..\User\bsp\mp3\pub;..\..\emXGUI_Lib\app\tutorial\pic_view;..\..\emXGUI_Lib\app\tutorial\camera;..\..\emXGUI_Lib\app\base\boot_interface;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\include;..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite;..\..\User\bsp\app\Board_App\gyro\i2c;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL;..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl;..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\GUI_Demo;..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\LAN8720A;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include;..\..\User\bsp\app\Board_App\NetworkDLG;..\..\User\bsp\app\Board_App\NetworkDLG\arch</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\User\bsp;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\User\bsp\cm_backtrace;..\..\emXGUI_Lib\inc;..\..\emXGUI_Lib\drv;..\..\emXGUI_Lib\arch\Inc;..\..\emXGUI_Lib\app\base;..\..\User\bsp\FATFS;..\..\emXGUI_Lib\app\base\res_writer;..\..\emXGUI_Lib\app\tutorial\rgb_led;..\..\User\OwnerDraw;..\..\emXGUI_Lib\app\tutorial\music_player;..\..\User\bsp\mp3\real;..\..\User\bsp\mp3\pub;..\..\emXGUI_Lib\app\tutorial\pic_view;..\..\emXGUI_Lib\app\tutorial\camera;..\..\emXGUI_Lib\app\base\boot_interface;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\include;..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite;..\..\User\bsp\app\Board_App\gyro\i2c;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL;..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl;..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\GUI_Demo;..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\LAN8720A;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include;..\..\User\bsp\app\Board_App\NetworkDLG;..\..\User\bsp\app\Board_App\NetworkDLG\arch;..\..\emXGUI_Lib\</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -2053,6 +2053,57 @@
               <FileName>bsp_eth.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\bsp\eth\bsp_eth.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>LAN8720a.c</FileName>
@@ -2401,6 +2452,46 @@
               <FileName>ethernetif.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\arch\ethernetif.c</FilePath>
+            </File>
+            <File>
+              <FileName>lwipopts.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\arch\lwipopts.h</FilePath>
+            </File>
+            <File>
+              <FileName>opt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip\opt.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LwIP/app</GroupName>
+          <Files>
+            <File>
+              <FileName>tcp_echoclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcp_echoclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcp_echoserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcp_echoserver.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpecho.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcpecho.c</FilePath>
+            </File>
+            <File>
+              <FileName>udp_echoclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>udp_echoserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5026,6 +5117,46 @@
               <FileName>ethernetif.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\arch\ethernetif.c</FilePath>
+            </File>
+            <File>
+              <FileName>lwipopts.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\arch\lwipopts.h</FilePath>
+            </File>
+            <File>
+              <FileName>opt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip\opt.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LwIP/app</GroupName>
+          <Files>
+            <File>
+              <FileName>tcp_echoclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcp_echoclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcp_echoserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcp_echoserver.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpecho.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcpecho.c</FilePath>
+            </File>
+            <File>
+              <FileName>udp_echoclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>udp_echoserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
             </File>
           </Files>
         </Group>

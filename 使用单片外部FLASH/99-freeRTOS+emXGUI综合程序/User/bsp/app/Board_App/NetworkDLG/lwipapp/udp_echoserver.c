@@ -34,7 +34,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "udp_echoserver.h"
-
+#include "./lwip/netif.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #undef  UDP_SERVER_PORT
@@ -44,10 +44,10 @@
 #define UDP_CLIENT_PORT 8088
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-struct udp_pcb *upcb;
+static struct udp_pcb *upcb;
 
 /* Private function prototypes -----------------------------------------------*/
-void udp_echoserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port);
+void udp_echoserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip4_addr *addr, uint16_t port);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -98,7 +98,7 @@ void udp_echoserver_init(void)
   * @param port the remote port from which the packet was received
   * @retval None
   */
-void udp_echoserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
+void udp_echoserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip4_addr *addr, uint16_t port)
 {
   char recdata[100]={0};
   /* Connect to the remote client */

@@ -29,6 +29,7 @@
  */
 #ifndef __ECHO_H__
 #define __ECHO_H__
+#include "stm32h7xx.h"
 
 
 void udp_echoserver_init(void);

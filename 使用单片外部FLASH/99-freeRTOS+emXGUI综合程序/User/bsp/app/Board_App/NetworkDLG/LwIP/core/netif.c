@@ -400,7 +400,7 @@ netif_add(struct netif *netif,
           break;
         }
       }
-    } while (netif2 != NULL);
+    } while (netif2 != NULL && num_netifs <=255);
   }
   if (netif->num == 254) {
     netif_num = 0;

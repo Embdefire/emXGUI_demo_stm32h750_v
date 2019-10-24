@@ -43,12 +43,12 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-void udp_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port);
+void udp_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip4_addr *addr, u16_t port);
 
 static uint8_t   data[100];
 static __IO uint32_t message_count = 0;
 
-struct udp_pcb *upcb;
+static struct udp_pcb *upcb;
 extern DRV_NETWORK drv_network;
 extern HWND Receive_Handle;
 /* Private functions ---------------------------------------------------------*/
@@ -62,7 +62,7 @@ uint8_t udp_echoclient_connect(DRV_NETWORK network)
 {
 
   struct pbuf *p;
-  struct ip_addr DestIPaddr;
+  struct ip4_addr DestIPaddr;
   err_t err;
        
   /* Create a new UDP control block  */
@@ -170,7 +170,7 @@ uint8_t udp_echoclient_send(char *data)
   * @param port the remote port from which the packet was received
   * @retval None
   */
-void udp_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
+void udp_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip4_addr *addr, u16_t port)
 {
 	WCHAR *recdata = NULL;
   WCHAR *wbuf;

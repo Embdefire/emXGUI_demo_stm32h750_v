@@ -163,27 +163,27 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>data[9]</ItemText>
+          <ItemText>echoclient_pcb</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>data[1]</ItemText>
+          <ItemText>gnetif.ip_addr</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>gyro,0x0A</ItemText>
+          <ItemText>ipaddr</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>data_ptr,0x0A</ItemText>
+          <ItemText>dhcp</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>data[0]</ItemText>
+          <ItemText>result</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -2963,7 +2963,7 @@
 
   <Group>
     <GroupName>tutorial/mp3</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3763,7 +3763,7 @@
 
   <Group>
     <GroupName>tutorial/lwip</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -4592,6 +4592,98 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\arch\ethernetif.c</PathWithFileName>
       <FilenameWithoutPath>ethernetif.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>42</GroupNumber>
+      <FileNumber>316</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\arch\lwipopts.h</PathWithFileName>
+      <FilenameWithoutPath>lwipopts.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>42</GroupNumber>
+      <FileNumber>317</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip\opt.h</PathWithFileName>
+      <FilenameWithoutPath>opt.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>LwIP/app</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>43</GroupNumber>
+      <FileNumber>318</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcp_echoclient.c</PathWithFileName>
+      <FilenameWithoutPath>tcp_echoclient.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>43</GroupNumber>
+      <FileNumber>319</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcp_echoserver.c</PathWithFileName>
+      <FilenameWithoutPath>tcp_echoserver.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>43</GroupNumber>
+      <FileNumber>320</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\tcpecho.c</PathWithFileName>
+      <FilenameWithoutPath>tcpecho.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>43</GroupNumber>
+      <FileNumber>321</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoclient.c</PathWithFileName>
+      <FilenameWithoutPath>udp_echoclient.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>43</GroupNumber>
+      <FileNumber>322</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</PathWithFileName>
+      <FilenameWithoutPath>udp_echoserver.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

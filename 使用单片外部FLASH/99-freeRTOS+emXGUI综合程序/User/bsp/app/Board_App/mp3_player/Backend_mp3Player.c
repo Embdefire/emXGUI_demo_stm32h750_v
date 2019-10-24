@@ -116,7 +116,7 @@ uint32_t mp3_GetID3V2_Size(unsigned char *buf)
   */
 uint8_t NUM = 0;
 static uint16_t curtime,alltime;//歌词的当前的时间以及总时间长度
-void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
+void mp3PlayerDemo(HWND hwnd,const char *mp3file, uint8_t vol,uint8_t vol_horn, HDC hdc)
 {
 	uint8_t *read_ptr=inputbuf;
 	uint32_t frames=0;//歌曲的帧数（26ms一帧）
@@ -167,12 +167,23 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 	Delay_ms(10);	/* 延迟一段时间，等待I2S中断结束 */
 	wm8978_Reset();		/* 复位WM8978到复位状态 */
 
-	/* 配置WM8978芯片，输入为DAC，输出为耳机 */
-	wm8978_CfgAudioPath(DAC_ON, EAR_LEFT_ON | EAR_RIGHT_ON);
+	 WCHAR wbuf1[3];
+   HWND  wnd = GetDlgItem(hwnd, ID_BUTTON_BUGLE);
+   
+   GetWindowText(wnd, wbuf1, 3);
+   if (wbuf1[0] == L'P')    // 判断当前
+   {
+      wm8978_CfgAudioPath(DAC_ON, SPK_ON);                        // 配置为扬声器输出
+   }
+   else
+   {
+      wm8978_CfgAudioPath(DAC_ON, EAR_LEFT_ON | EAR_RIGHT_ON);    // 配置为耳机输出
+   }
 
 	/* 调节音量，左右相同音量 */
 	wm8978_SetOUT1Volume(mp3player.ucVolume);
 
+  wm8978_SetOUT1Volume(vol_horn);
 	/* 配置WM8978音频接口为飞利浦标准I2S接口，16bit */
 	wm8978_CfgAudioIF(SAI_I2S_STANDARD, 16);
 	
@@ -350,12 +361,9 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
 				if(mp3player.ucFreq >= SAI_AUDIOFREQ_DEFAULT)
 				{
 					//根据采样率修改I2S速率
-//					I2Sx_Mode_Config(I2S_Standard_Phillips,I2S_DataFormat_16b,mp3player.ucFreq);
-//					I2Sx_TX_DMA_Init((uint16_t *)outbuffer[0],(uint16_t *)outbuffer[1],outputSamps);
           SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
           SAIA_TX_DMA_Init((uint32_t )&outbuffer[0],(uint32_t )&outbuffer[1],outputSamps);
 				}
-				//I2S_Play_Start();
 				SAI_Play_Start();
 			}
 		}//else 解码正常
@@ -376,9 +384,9 @@ void mp3PlayerDemo(const char *mp3file, uint8_t vol, HDC hdc)
          //清除歌词记数
          lyriccount=0;
          //I2S_Stop();   
-			   //SAI_Play_Stop();
+			   SAI_Play_Stop();
          MP3FreeDecoder(Mp3Decoder);
-         //f_close(&file);	
+         f_close(&file);	
 			break;
 		}	
 

@@ -496,11 +496,16 @@ void TCPIP_Init(void)
   
   err = dhcp_start(&gnetif);      //开启dhcp
   if(err == ERR_OK)
+	{
+		network_start_flag = 0;
     printf("lwip dhcp init success...\n\n");
+	}
   else
+	{
 		network_start_flag = 1;
     printf("lwip dhcp init fail...\n\n");
-  while(ip_addr_cmp(&(gnetif.ip_addr),&ipaddr))   //等待dhcp分配的ip有效
+	}//&& network_start_flag == 0
+  while(ip_addr_cmp(&(gnetif.ip_addr),&ipaddr) )   //等待dhcp分配的ip有效
   {
     vTaskDelay(1);
   } 
@@ -510,6 +515,10 @@ void TCPIP_Init(void)
         (((gnetif.ip_addr.addr)&0x0000ff00)>>8),  \
         (((gnetif.ip_addr.addr)&0x00ff0000)>>16), \
         ((gnetif.ip_addr.addr)&0xff000000)>>24);
+	IP_ADDRESS[0] = ((gnetif.ip_addr.addr)&0x000000ff);
+	IP_ADDRESS[1] = (((gnetif.ip_addr.addr)&0x0000ff00)>>8);
+	IP_ADDRESS[2] = (((gnetif.ip_addr.addr)&0x00ff0000)>>16);
+	IP_ADDRESS[3] = (((gnetif.ip_addr.addr)&0xff000000)>>24);
 }
 
 

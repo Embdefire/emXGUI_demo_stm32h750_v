@@ -21,7 +21,39 @@
 
 #define GUI_RGB_BACKGROUNG_PIC      "musicdesktop.jpg"
 
-#define ID_BUTTON_BUGLE      0x1008   //喇叭按钮
+/******************按钮控件ID值***********************/
+enum
+{
+	ID_BUTTON_Power = 0x1000,  //音量 
+	ID_BUTTON_List   ,       //音乐List
+	ID_BUTTON_Equa   ,       //均衡器
+	ID_BUTTON_Folder ,       //文件夹
+	ID_BUTTON_BACK   ,       //上一首
+	ID_BUTTON_START  ,       //暂停键
+	ID_BUTTON_NEXT   ,       //下一首
+	ID_BUTTON_MINISTOP  ,    //迷你版暂停键
+	ID_BUTTON_BUGLE     ,    //喇叭按钮
+};
+/*****************滑动条控件ID值*********************/
+enum
+{
+ ID_SCROLLBAR_HORN =  0x1103,  //音量条
+ ID_SCROLLBAR_POWER   ,   //音量条
+ ID_SCROLLBAR_TIMER   ,   //进度条
+};
+
+/*****************文本框控件ID值*********************/
+//本例程显示五行歌词
+enum
+{
+ ID_TEXTBOX_LRC1   =   0x1201 ,  //歌词第一行
+ ID_TEXTBOX_LRC2      ,          //歌词第二行
+ ID_TEXTBOX_LRC3      ,          //歌词第三行（当前行）
+ ID_TEXTBOX_LRC4      ,          //歌词第四行
+ ID_TEXTBOX_LRC5      ,          //歌词第五行
+};
+
+#define ID_EXIT        0x3000
 
 typedef struct{
    char *icon_name;//图标名

@@ -7,28 +7,6 @@
 #include "GUI_AppDef.h"
 #include "emXGUI_JPEG.h"
 #include "./sai/bsp_sai.h"
-/******************按钮控件ID值***********************/
-#define ID_BUTTON_Power      0x1000   //音量 
-#define ID_BUTTON_List       0x1001   //音乐List
-#define ID_BUTTON_Equa       0x1002   //均衡器
-#define ID_BUTTON_Folder     0x1003   //文件夹
-#define ID_BUTTON_BACK       0x1004   //上一首
-#define ID_BUTTON_START      0x1005   //暂停键
-#define ID_BUTTON_NEXT       0x1006   //下一首
-#define ID_BUTTON_MINISTOP   0x1007   //迷你版暂停键
-/*****************滑动条控件ID值*********************/
-#define ID_SCROLLBAR_HORN    0x1103   //音量条
-#define ID_SCROLLBAR_POWER   0x1104   //音量条
-#define ID_SCROLLBAR_TIMER   0x1105   //进度条
-/*****************文本框控件ID值*********************/
-//本例程显示五行歌词
-#define ID_TEXTBOX_LRC1      0x1201   //歌词第一行
-#define ID_TEXTBOX_LRC2      0x1202   //歌词第二行
-#define ID_TEXTBOX_LRC3      0x1203   //歌词第三行（当前行）
-#define ID_TEXTBOX_LRC4      0x1204   //歌词第四行
-#define ID_TEXTBOX_LRC5      0x1205   //歌词第五行
-
-#define ID_EXIT        0x3000
 
 /* 外部资源名 */
 #define ROTATE_DISK_NAME "rotate_disk_ARGB8888.bmp"
@@ -47,7 +25,7 @@ icon_S music_icon[] = {
    {"shangyishou",      {9, 410, 64, 64},   FALSE},//上一首
    {"zanting/bofang",   {68, 406, 72, 72},   FALSE},//播放
    {"xiayishou",        {140, 410, 64, 64},   FALSE},//下一首
-   {"Q",               {373, 234, 32, 32},   FALSE},     // 8. 喇叭按钮
+   {"Q",                {620, 415,48, 48},   FALSE},     // 8. 喇叭按钮
 };
 extern HWND music_list_hwnd;
 static char path[100] = "0:";   // 文件根目录
@@ -852,7 +830,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
          sif.TrackSize = 30;//滑块值
          sif.ArrowSize = 0;//两端宽度为0        
          music_wnd_time = CreateWindow(SCROLLBAR, L"SCROLLBAR_Time",  WS_OWNERDRAW| WS_VISIBLE, 
-                         270, 424, 340, 30, hwnd, ID_SCROLLBAR_TIMER, NULL, NULL);
+                         270, 424, 277, 30, hwnd, ID_SCROLLBAR_TIMER, NULL, NULL);
          SendMessage(music_wnd_time, SBM_SETSCROLLINFO, TRUE, (LPARAM)&sif);         
 
          
@@ -880,7 +858,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                       417,67,373,25,hwnd,ID_TB5,NULL,NULL);
 
          CreateWindow(BUTTON,L"00:00",WS_TRANSPARENT|WS_OWNERDRAW|WS_VISIBLE,
-                      616,424,65,30,hwnd,ID_TB1,NULL,NULL);
+                      554,424,65,30,hwnd,ID_TB1,NULL,NULL);
      
 
          CreateWindow(BUTTON,L"00:00",WS_TRANSPARENT|WS_OWNERDRAW|WS_VISIBLE,
@@ -893,7 +871,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
         xTaskCreate((TaskFunction_t )(void(*)(void*))App_PlayMusic,  /* 任务入口函数 */
                             (const char*    )"App_PlayMusic",/* 任务名字 */
                             (uint16_t       )5*1024,  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
-                            (void*          )NULL,/* 任务入口函数参数 */
+                            (void*          )hwnd,/* 任务入口函数参数 */
                             (UBaseType_t    )6, /* 任务的优先级 */
                             (TaskHandle_t  )&h_music);/* 任务控制块指针 */
          
@@ -1378,7 +1356,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
             scrollbar_owner_draw(ds);
             return TRUE;
          }
-         if (ds->ID >= ID_BUTTON_Power && ds->ID<= ID_BUTTON_MINISTOP)
+         if (ds->ID >= ID_BUTTON_Power && ds->ID<= ID_BUTTON_BUGLE)
          {
             button_owner_draw(ds);
             return TRUE;
@@ -1399,7 +1377,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
             return TRUE;
          }
 
-
+        return FALSE;
       }     
       //绘制窗口界面消息
       case WM_PAINT:
@@ -1407,13 +1385,14 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
          PAINTSTRUCT ps;
          HDC hdc;//屏幕hdc
 //         HDC hdc_mem;//缓冲区
-//         RECT rc_top = {0 ,0, 800, 80};//上边栏
+         RECT rc = {0 ,0, 800, 480};//上边栏
 //         RECT rc_bot = {0 ,400, 800, 80};//下边栏
          //RECT test={0,90,100,100};
          
          
          //开始绘制
          hdc = BeginPaint(hwnd, &ps); 
+//				 BitBlt(hdc, rc.x, rc.y, rc.w, rc.h, hdc_bk, rc.x, rc.y, SRCCOPY); 
          // if(tt == 0)
          // {
          //    tt = 1;

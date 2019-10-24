@@ -441,7 +441,8 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       GetClientRect(hwnd, &rc);
       
       /* ³õÊ¼»¯ GSM Ä£¿é */
-      if(gsm_init()!= GSM_TRUE)
+
+			if(gsm_init()!= GSM_TRUE)
       {  
         SetTimer(hwnd, 0, 0, TMR_START|TMR_SINGLE, NULL);        
       }

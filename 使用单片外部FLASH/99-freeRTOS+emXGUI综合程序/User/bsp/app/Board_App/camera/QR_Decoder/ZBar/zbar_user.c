@@ -21,9 +21,9 @@ uint8_t qr_recongized = 0;
 uint8_t qr_init_finish=1;
 uint8_t data_ready;//提取待识别图像状态，1：提取成功  0：未提取
 
-unsigned short  dcmi_buf[img_width * img_height] __attribute((at(IMG_SDRAM_ADDR))) = {0};
-unsigned char   img_now[img_width * img_height]  __attribute((at(IMG_SDRAM_ADDR +0x100000)));
-unsigned char   img_bin[img_width * img_height]  __attribute((at(IMG_SDRAM_ADDR +0x200000)));
+unsigned short  dcmi_buf[img_width * img_height] ;//__attribute((at(IMG_SDRAM_ADDR))) = {0};
+unsigned char   img_now[img_width * img_height]  ;//__attribute((at(IMG_SDRAM_ADDR +0x100000)));
+unsigned char   img_bin[img_width * img_height]  ;//__attribute((at(IMG_SDRAM_ADDR +0x200000)));
 
 
 zbar_image_scanner_t *scanner;

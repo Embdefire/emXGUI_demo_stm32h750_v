@@ -672,7 +672,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
               x_wcstombs_cp936(cNumber, wNumber, 99);
               x_wcstombs_cp936(cContent, wContent, 2000);
               
-              Add = gsm_save_sms(cNumber, cContent);
+              Add = gsm_sms(cNumber, cContent);
               if (Add)
               {
                 //在Listbox中增加一个Item项，记录文件名和文件属性.

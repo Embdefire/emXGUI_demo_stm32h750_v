@@ -216,6 +216,7 @@ static void Cam_scrollbar_ownerdraw(DRAWITEM_HDR *ds)
 }
 static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
+#if 0
 	HWND hwnd;
 	HDC hdc;
 	RECT rc;
@@ -256,6 +257,42 @@ static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
   /* 恢复默认字体 */
 	SetFont(hdc, defaultFont);
+#endif
+  HDC hdc;
+  RECT rc, rc_tmp;
+  HWND hwnd;
+
+	hdc = ds->hDC;   
+	rc = ds->rc; 
+  hwnd = ds->hwnd;
+
+  GetClientRect(hwnd, &rc_tmp);//得到控件的位置
+  WindowToScreen(hwnd, (POINT *)&rc_tmp, 1);//坐标转换
+
+//  BitBlt(hdc, rc.x, rc.y, rc.w, rc.h, hdc_clock_bk, rc_tmp.x, rc_tmp.y, SRCCOPY);
+
+  if (ds->State & BST_PUSHED)
+	{ //按钮是按下状态
+		SetPenColor(hdc, MapRGB(hdc, 120, 120, 120));      //设置文字色
+	}
+	else
+	{ //按钮是弹起状态
+
+		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));
+	}
+  
+  // SetBrushColor(hdc, MapRGB(hdc, 242, 242, 242));
+  // FillRect(hdc, &rc);
+
+  SetPenSize(hdc, 2);
+
+  InflateRect(&rc, 0, -23);
+  
+  for(int i=0; i<4; i++)
+  {
+    HLine(hdc, rc.x, rc.y, rc.w);
+    rc.y += 9;
+  }
 
 }
 
@@ -1574,7 +1611,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       OV5640_ReadID(&OV5640_Camera_ID);
 
       //退出按键
-      CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_TRANSPARENT|WS_VISIBLE,730, 0, 70, 70, hwnd, eID_EXIT, NULL, NULL);       
+      CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_TRANSPARENT|WS_VISIBLE,730, 5, 36, 72, hwnd, eID_EXIT, NULL, NULL);       
       if(OV5640_Camera_ID.PIDH  == 0x56)
       {
         GUI_DEBUG("OV5640 ID:%x %x",OV5640_Camera_ID.PIDH ,OV5640_Camera_ID.PIDL);

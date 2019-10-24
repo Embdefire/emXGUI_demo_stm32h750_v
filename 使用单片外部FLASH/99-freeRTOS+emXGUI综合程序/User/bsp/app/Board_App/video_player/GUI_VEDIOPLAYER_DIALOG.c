@@ -169,6 +169,7 @@ static void vedio_text_ownerdraw(DRAWITEM_HDR *ds)
 }
 static void vedio_exit_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
+	#if 0
 	HWND hwnd;
 	HDC hdc;
 	RECT rc,rc_tmp;
@@ -212,6 +213,37 @@ static void vedio_exit_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
   /* 恢复默认字体 */
 	SetFont(hdc, defaultFont);
+#endif
+ HDC hdc;
+  RECT rc;
+  HWND hwnd;
+
+	hdc = ds->hDC;   
+	rc = ds->rc; 
+  hwnd = ds->hwnd;
+
+  if (ds->State & BST_PUSHED)
+	{ //按钮是按下状态
+		SetPenColor(hdc, MapRGB(hdc, 120, 120, 120));      //设置文字色
+	}
+	else
+	{ //按钮是弹起状态
+
+		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));
+	}
+  
+  // SetBrushColor(hdc, MapRGB(hdc, 242, 242, 242));
+  // FillRect(hdc, &rc);
+
+  SetPenSize(hdc, 2);
+
+  InflateRect(&rc, 0, -23);
+  
+  for(int i=0; i<4; i++)
+  {
+    HLine(hdc, rc.x, rc.y, rc.w);
+    rc.y += 9;
+  }
 
 }
 /**
@@ -767,8 +799,8 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
        SendMessage(GetDlgItem(hwnd, eID_SBN_POWER), SBM_SETSCROLLINFO, TRUE, (LPARAM)&video_sif_power);         
        
        
-       CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_VISIBLE,
-                      730, 0, 70, 70, hwnd, eID_VIDEO_EXIT, NULL, NULL);            
+       CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_VISIBLE|WS_TRANSPARENT,
+                      730, 5, 36, 72, hwnd, eID_VIDEO_EXIT, NULL, NULL);            
        
        #endif
        u8 *jpeg_buf;

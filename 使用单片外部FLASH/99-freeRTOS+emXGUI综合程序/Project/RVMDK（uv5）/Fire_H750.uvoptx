@@ -667,7 +667,7 @@
       <GroupNumber>3</GroupNumber>
       <FileNumber>15</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\STM32H7xx_HAL_Driver\Src\stm32h7xx_hal_dcmi.c</PathWithFileName>
@@ -1515,7 +1515,7 @@
 
   <Group>
     <GroupName>BSP</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2955,7 +2955,7 @@
 
   <Group>
     <GroupName>tutorial/mp3</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -4676,6 +4676,254 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</PathWithFileName>
       <FilenameWithoutPath>udp_echoserver.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>tutorial/QR_Code</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>323</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\symbol.c</PathWithFileName>
+      <FilenameWithoutPath>symbol.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>324</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\binarize.c</PathWithFileName>
+      <FilenameWithoutPath>binarize.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>325</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\scanner.c</PathWithFileName>
+      <FilenameWithoutPath>scanner.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>326</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\refcnt.c</PathWithFileName>
+      <FilenameWithoutPath>refcnt.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>327</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\img_scanner.c</PathWithFileName>
+      <FilenameWithoutPath>img_scanner.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>328</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\image.c</PathWithFileName>
+      <FilenameWithoutPath>image.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>329</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\error.c</PathWithFileName>
+      <FilenameWithoutPath>error.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>330</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder.c</PathWithFileName>
+      <FilenameWithoutPath>decoder.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>331</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\convert.c</PathWithFileName>
+      <FilenameWithoutPath>convert.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>332</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\config.c</PathWithFileName>
+      <FilenameWithoutPath>config.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>333</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\qr_finder.c</PathWithFileName>
+      <FilenameWithoutPath>qr_finder.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>334</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\ean.c</PathWithFileName>
+      <FilenameWithoutPath>ean.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>335</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\Iconv\iconv.c</PathWithFileName>
+      <FilenameWithoutPath>iconv.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>336</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\util.c</PathWithFileName>
+      <FilenameWithoutPath>util.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>337</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\rs.c</PathWithFileName>
+      <FilenameWithoutPath>rs.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>338</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\qrdec.c</PathWithFileName>
+      <FilenameWithoutPath>qrdec.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>339</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\isaac.c</PathWithFileName>
+      <FilenameWithoutPath>isaac.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>340</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\bch15_5.c</PathWithFileName>
+      <FilenameWithoutPath>bch15_5.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>341</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\zbar_user.c</PathWithFileName>
+      <FilenameWithoutPath>zbar_user.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>44</GroupNumber>
+      <FileNumber>342</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\qrdectxt.c</PathWithFileName>
+      <FilenameWithoutPath>qrdectxt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

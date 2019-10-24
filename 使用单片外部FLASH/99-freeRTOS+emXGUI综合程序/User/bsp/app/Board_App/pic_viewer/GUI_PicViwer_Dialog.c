@@ -32,6 +32,7 @@ ICON_Typedef GUI_PicViewer_Icon[12] =
 //退出按钮重绘制
 static void PicViewer_ExitButton_OwnerDraw(DRAWITEM_HDR *ds)
 {
+#if 0
 	HWND hwnd;
   HDC hdc;
 	RECT rc;
@@ -73,7 +74,37 @@ static void PicViewer_ExitButton_OwnerDraw(DRAWITEM_HDR *ds)
 
   /* 恢复默认字体 */
 	SetFont(hdc, defaultFont);
+#endif
+  HDC hdc;
+  RECT rc, rc_tmp;
+  HWND hwnd;
 
+	hdc = ds->hDC;   
+	rc = ds->rc; 
+  hwnd = ds->hwnd;
+
+  if (ds->State & BST_PUSHED)
+	{ //按钮是按下状态
+		SetPenColor(hdc, MapRGB(hdc, 120, 120, 120));      //设置文字色
+	}
+	else
+	{ //按钮是弹起状态
+
+		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));
+	}
+  
+  // SetBrushColor(hdc, MapRGB(hdc, 242, 242, 242));
+  // FillRect(hdc, &rc);
+
+  SetPenSize(hdc, 2);
+
+  InflateRect(&rc, 0, -23);
+  
+  for(int i=0; i<4; i++)
+  {
+    HLine(hdc, rc.x, rc.y, rc.w);
+    rc.y += 9;
+  }
 }
 //透明文本
 static void PicViewer_TBOX_OwnerDraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
@@ -391,7 +422,7 @@ static LRESULT	PicViewer_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       SetWindowFont(GetDlgItem(hwnd,eID_Pic_NEXT), ctrlFont64);
             
       CreateWindow(BUTTON, L"O", WS_TRANSPARENT|BS_FLAT | BS_NOTIFY |WS_OWNERDRAW|WS_VISIBLE,
-                 730, 0, 70, 70, hwnd, eID_Pic_EXIT, NULL, NULL); 
+                 730, 0, 36, 72, hwnd, eID_Pic_EXIT, NULL, NULL); 
 
       CreateWindow(BUTTON, L"分辨率：", WS_OWNERDRAW|WS_VISIBLE|WS_TRANSPARENT, 
                    GUI_PicViewer_Icon[2].rc.x, GUI_PicViewer_Icon[2].rc.y, 

@@ -501,9 +501,15 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //                focus_status = 1;
             }
             //使能DCMI采集数据
+#if 0
             DCMI_Cmd(ENABLE); 
+						
+						HAL_DCMI_Start_DMA(DCMI_HandleTypeDef* hdcmi);
+						
             DCMI_CaptureCmd(ENABLE); 
-
+#endif
+						OV5640_Capture_Control(ENABLE);
+						
             state = 1;
             InvalidateRect(hwnd, NULL, TRUE);
             break;
@@ -569,7 +575,7 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       else if (state==1)
       {   
 
-        pSurf =CreateSurface(SURF_RGB565,cam_mode.cam_out_width, cam_mode.cam_out_height, 0, (U16*)cam_buff01);     
+        pSurf =CreateSurface(SURF_RGB565,cam_mode.cam_out_width, cam_mode.cam_out_height, 0, (U16*)cam_buff0);     
         
         hdc_mem =CreateDC(pSurf,NULL);
         
@@ -594,16 +600,19 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       }
       
       EndPaint(hwnd,&ps);
-      
         
       OV5640_Capture_Control(ENABLE);//关闭摄像头采集图像
-      DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,ENABLE); //关闭DMA中断
-      DCMI_Cmd(ENABLE);                               //DCMI失能
+#if 0
+			DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,ENABLE); //关闭DMA中断
+			DCMI_Cmd(ENABLE);                               //DCMI失能
       DCMI_CaptureCmd(ENABLE); 
       DCMI_Stop();
-      HAL_DCMI_Start_DMA((uint32_t)cam_buff01,
-                        cam_mode.cam_out_height*cam_mode.cam_out_width/2);
-      DCMI_Start();
+			DCMI_Start();
+      HAL_DCMI_Start_DMA((uint32_t)cam_buff0,
+                        cam_mode.cam_out_height*cam_mode.cam_out_width/2);			
+#endif
+
+      
       break;
     }
     
@@ -635,8 +644,11 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       DeleteDC(hdc_mem_temp);
       OV5640_Reset();//复位摄像头
       OV5640_Capture_Control(DISABLE);//关闭摄像头采集图像
-      DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,DISABLE); //关闭DMA中断
-      DCMI_Cmd(DISABLE); //DCMI失能
+			OV5640_Capture_Control(DISABLE);
+			
+//      DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,DISABLE); //关闭DMA中断
+//      DCMI_Cmd(DISABLE); //DCMI失能
+			
       DCMI_CaptureCmd(DISABLE); 
       if (QR_Task)
       {
@@ -647,7 +659,7 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       GUI_VMEM_Free(cam_buff0);
       //复位摄像头配置参数
       Camera_ReConfig();
-      cur_index = 0;
+//      cur_index = 0;
       LCD_LayerCamInit((uint32_t)LCD_FRAME_BUFFER,800, 480);
       return PostQuitMessage(hwnd);	
     }    

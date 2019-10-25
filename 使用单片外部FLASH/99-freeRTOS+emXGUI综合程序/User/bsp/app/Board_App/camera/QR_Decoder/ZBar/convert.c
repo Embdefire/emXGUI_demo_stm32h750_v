@@ -1137,7 +1137,7 @@ int _zbar_best_format (uint32_t src,
     dsts = (win) ? win->formats : y800;
 
     for(fmt = _zbar_formats; *fmt; fmt++) {
-        *//* only consider formats supported by video device */
+        /* only consider formats supported by video device */
         /*uint32_t win_fmt = 0;
         int cost;
         if(!has_format(*fmt, srcs))

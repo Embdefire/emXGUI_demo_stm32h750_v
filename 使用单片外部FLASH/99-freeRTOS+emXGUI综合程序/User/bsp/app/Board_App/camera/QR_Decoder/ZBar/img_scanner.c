@@ -495,7 +495,7 @@ zbar_image_scanner_t *zbar_image_scanner_create ()
     zbar_image_scanner_set_config(iscn, ZBAR_CODE39, ZBAR_CFG_UNCERTAINTY, 0);
     zbar_image_scanner_set_config(iscn, ZBAR_CODABAR, ZBAR_CFG_UNCERTAINTY, 1);
     zbar_image_scanner_set_config(iscn, ZBAR_COMPOSITE, ZBAR_CFG_UNCERTAINTY, 0);
-    return(iscn);
+    return (iscn);
 }
 
 #ifndef NO_STATS

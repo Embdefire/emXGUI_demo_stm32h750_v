@@ -167,7 +167,7 @@ void AVI_play(char *filename)
 //  WCHAR buff[128];
 //  //char *str = NULL;
 // // RECT rc0 = {0, 367,120,30};//当前时间
-  x_wsprintf(buff, L"分辨率：%d*%d", img_w, img_h);
+  x_wsprintf(buff, L"分辨率：%d*%d", videoplayer_img_w, videoplayer_img_h);
   SetWindowText(GetDlgItem(VideoDialog.Video_Hwnd, eID_TEXTBOX_RES), buff);
 
 //  char *ss;

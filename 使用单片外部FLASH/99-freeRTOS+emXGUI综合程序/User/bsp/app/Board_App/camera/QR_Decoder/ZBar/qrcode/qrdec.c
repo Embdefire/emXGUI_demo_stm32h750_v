@@ -3968,25 +3968,15 @@ int _zbar_qr_found_line (qr_reader *reader,
                          const qr_finder_line *line)
 {
     /* minimally intrusive brute force version */
-	void *newline;
     qr_finder_lines *lines = &reader->finder_lines[dir];
 
-    if(lines->nlines >= lines->clines) 
-	{
+    if(lines->nlines >= lines->clines) {
         lines->clines *= 2;
-        newline = realloc(lines->lines,
+        lines->lines = realloc(lines->lines,
                                ++lines->clines * sizeof(*lines->lines));
-		if(newline == 0)
-		{
-			free(lines->lines);
-			lines->nlines = lines->clines = 0;
-		}
-		
-		lines->lines = newline;
     }
 
-	if(lines->lines != 0)
-		memcpy(lines->lines + lines->nlines++, line, sizeof(*line));
+    memcpy(lines->lines + lines->nlines++, line, sizeof(*line));
 
     return(0);
 }
@@ -4010,9 +4000,6 @@ static void qr_svg_centers (const qr_finder_center *centers,
     svg_path_end();
 }
 
-#include "zbar_user.h"
-
-
 int _zbar_qr_decode (qr_reader *reader,
                      zbar_image_scanner_t *iscn,
                      zbar_image_t *img)
@@ -4023,10 +4010,6 @@ int _zbar_qr_decode (qr_reader *reader,
 
     if(reader->finder_lines[0].nlines < 9 ||
        reader->finder_lines[1].nlines < 9)
-        return(0);
-
-    if(reader->finder_lines[0].lines == 0 ||
-       reader->finder_lines[1].lines == 0)
         return(0);
 
     svg_group_start("finder", 0, 1. / (1 << QR_FINDER_SUBPREC), 0, 0, 0);
@@ -4040,43 +4023,19 @@ int _zbar_qr_decode (qr_reader *reader,
     qr_svg_centers(centers, ncenters);
 
     if(ncenters >= 3) {
-        unsigned char *bin = (unsigned char *)img->data;//qr_binarize(img->data, img->width, img->height);
-		
-		int max = 0, min = 255, avg;
-		
-		for(int y = 0; y < img->height; y += 8)
-		{
-			for(int x = 0; x < img->width; x += 8)
-			{
-				if(max < bin[y * img->width + x])
-					max = bin[y * img->width + x];
-				else if(min > bin[y * img->width + x])
-					min = bin[y * img->width + x];
-			}
-		}
-		avg = (min + max) / 2;
-		
-		for(int y = 0; y < img->height; y++)
-		{
-			for(int x = 0; x < img->width; x++)
-			{
-				img_bin[y * img->width + x] = bin[y * img->width + x] <= avg ? 255 : 0;
-			}
-		}
-		
+        void *bin = qr_binarize(img->data, img->width, img->height);
+
         qr_code_data_list qrlist;
         qr_code_data_list_init(&qrlist);
 
         qr_reader_match_centers(reader, &qrlist, centers, ncenters,
-                                img_bin, img->width, img->height);
+                                bin, img->width, img->height);
 
-#if 1
         if(qrlist.nqrdata > 0)
             nqrdata = qr_code_data_list_extract_text(&qrlist, iscn, img);
-#endif
+
         qr_code_data_list_clear(&qrlist);
-		
-        //free(bin);
+        free(bin);
     }
     svg_group_end();
 

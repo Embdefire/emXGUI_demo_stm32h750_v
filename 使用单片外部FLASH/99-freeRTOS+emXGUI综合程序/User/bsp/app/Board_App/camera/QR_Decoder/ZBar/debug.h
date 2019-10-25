@@ -57,7 +57,7 @@
  * only the message is inhibited
  * FIXME don't we need varargs hacks here?
  */
-#ifdef NDEBUG
+#ifndef NDEBUG
 
 # include <stdio.h>
 

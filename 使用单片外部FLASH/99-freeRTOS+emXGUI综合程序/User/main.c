@@ -67,23 +67,19 @@
 */
 static void GUI_Thread_Entry(void* pvParameters);/* Test_Task任务实现 */
 
-static void SystemClock_Config(void);
-static void BSP_Init(void);/* 用于初始化板载相关资源 */
 
+void BSP_Init(void);/* 用于初始化板载相关资源 */
 /***********************************************************************
   * @ 函数名  ： BSP_Init
   * @ 功能说明： 板级外设初始化，所有板子上的初始化均可放在这个函数里面
   * @ 参数    ：   
   * @ 返回值  ： 无
   *********************************************************************/
-static void BSP_Init(void)
+void BSP_Init(void)
 {
-
-
-  //SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
+	  //SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
 
   /* 系统时钟初始化成400MHz */
-	SystemClock_Config();
 #if 0	
   /* 设置SDRAM为Normal类型,禁用共享, 直写模式*/  
 	Board_MPU_Config(0,MPU_Normal_WT,0xD0000000,MPU_32MB);
@@ -113,7 +109,7 @@ static void BSP_Init(void)
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
 	/* 硬件BSP初始化统统放在这里，比如LED，串口，LCD等 */
-  SDRAM_Init();
+//  SDRAM_Init();
 	/* LED 端口初始化 */
 	LED_GPIO_Config();	
 	
@@ -125,7 +121,7 @@ static void BSP_Init(void)
 	if (wm8978_Init()==0)
   {
     printf("检测不到WM8978芯片!!!\n");
-    while (1);	/* 停机 */
+    //while (1);	/* 停机 */
   }
 	
 	RTC_CLK_Config();
@@ -159,7 +155,7 @@ static void BSP_Init(void)
 
 	
   /*hardfault 跟踪器初始化*/ 
-  cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
+//  cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
   
 
 }
@@ -187,63 +183,7 @@ static void BSP_Init(void)
   * @param  None
   * @retval None
   */
-static void SystemClock_Config(void)
-{
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  HAL_StatusTypeDef ret = HAL_OK;
-  
-  /*使能供电配置更新 */
-  MODIFY_REG(PWR->CR3, PWR_CR3_SCUEN, 0);
 
-  /* 当器件的时钟频率低于最大系统频率时，电压调节可以优化功耗，
-		 关于系统频率的电压调节值的更新可以参考产品数据手册。  */
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-
-  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
- 
-  /* 启用HSE振荡器并使用HSE作为源激活PLL */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
-  RCC_OscInitStruct.CSIState = RCC_CSI_OFF;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-
-  RCC_OscInitStruct.PLL.PLLM = 5;
-  RCC_OscInitStruct.PLL.PLLN = 160;
-  RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
- 
-  RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
-  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
-  ret = HAL_RCC_OscConfig(&RCC_OscInitStruct);
-  if(ret != HAL_OK)
-  {
-    while(1) { ; }
-  }
-  
-	/* 选择PLL作为系统时钟源并配置总线时钟分频器 */
-  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK  | \
-																 RCC_CLOCKTYPE_HCLK    | \
-																 RCC_CLOCKTYPE_D1PCLK1 | \
-																 RCC_CLOCKTYPE_PCLK1   | \
-                                 RCC_CLOCKTYPE_PCLK2   | \
-																 RCC_CLOCKTYPE_D3PCLK1);
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;  
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2; 
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2; 
-  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2; 
-  ret = HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4);
-  if(ret != HAL_OK)
-  {
-    while(1) { ; }
-  }
-}
 
 
 

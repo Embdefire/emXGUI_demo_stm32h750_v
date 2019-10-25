@@ -1,48 +1,48 @@
 /* manually customized for iPhone platform */
 
-#define HAVE_LANGINFO_CODESET 0
+//#define HAVE_LANGINFO_CODESET 0
 
 /* whether to build support for Code 128 symbology */
-#undef ENABLE_CODE128 
+#define ENABLE_CODE128 1
 
 /* whether to build support for Code 93 symbology */
-#undef ENABLE_CODE93 
+//#define ENABLE_CODE93 1
 
 /* whether to build support for Code 39 symbology */
-#undef ENABLE_CODE39 
+//#define ENABLE_CODE39 1
 
 /* whether to build support for Codabar symbology */
-#undef ENABLE_CODABAR 
+//#define ENABLE_CODABAR 1
 
 /* whether to build support for DataBar symbology */
-#undef ENABLE_DATABAR 
+//#define ENABLE_DATABAR 1
 
 /* whether to build support for EAN symbologies */
 #define ENABLE_EAN 1
 
 /* whether to build support for Interleaved 2 of 5 symbology */
-#undef ENABLE_I25 
+//#define ENABLE_I25 1
 
 /* whether to build support for PDF417 symbology */
-#undef ENABLE_PDF417
+//#undef ENABLE_PDF417
 
 /* whether to build support for QR Code */
 #define ENABLE_QRCODE 1
 
 /* Define to 1 if you have the `atexit' function. */
-#undef HAVE_ATEXIT
+#define HAVE_ATEXIT 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#undef HAVE_DLFCN_H
+#define HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the <fcntl.h> header file. */
-#undef HAVE_FCNTL_H
+#define HAVE_FCNTL_H 1
 
 /* Define to 1 if you have the <features.h> header file. */
-#undef HAVE_FEATURES_H
+#define HAVE_FEATURES_H 1
 
 /* Define to 1 if you have the `getpagesize' function. */
-#undef HAVE_GETPAGESIZE
+#define HAVE_GETPAGESIZE 1
 
 /* Define if you have the iconv() function and it works. */
 #undef HAVE_ICONV
@@ -72,16 +72,16 @@
 #define HAVE_MEMSET 1
 
 /* Define to 1 if you have a working `mmap' system call. */
-#undef HAVE_MMAP
+#define HAVE_MMAP 1
 
 /* Define to 1 if you have the <poll.h> header file. */
-#undef HAVE_POLL_H
+#define HAVE_POLL_H 1
 
 /* Define to 1 if you have the <pthread.h> header file. */
 #undef HAVE_PTHREAD_H
 
 /* Define to 1 if you have the `setenv' function. */
-#undef HAVE_SETENV
+#define HAVE_SETENV 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -99,13 +99,13 @@
 #undef HAVE_SYS_IOCTL_H
 
 /* Define to 1 if you have the <sys/ipc.h> header file. */
-#undef HAVE_SYS_IPC_H
+#define HAVE_SYS_IPC_H 1
 
 /* Define to 1 if you have the <sys/mman.h> header file. */
-#undef HAVE_SYS_MMAN_H
+#define HAVE_SYS_MMAN_H 1
 
 /* Define to 1 if you have the <sys/shm.h> header file. */
-#undef HAVE_SYS_SHM_H
+#define HAVE_SYS_SHM_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
@@ -203,7 +203,7 @@
 #undef _WIN32_WINNT
 
 /* used only for pthread debug attributes */
-#undef __USE_UNIX98
+#define __USE_UNIX98 1
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

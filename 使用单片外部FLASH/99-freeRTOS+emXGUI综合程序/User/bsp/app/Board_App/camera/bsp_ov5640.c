@@ -21,8 +21,11 @@
 #include "./i2c/i2c.h"
 #include "GUI_CAMERA_DIALOG.h"
 #include "./delay/core_delay.h"  
+#include "qr_decoder_user.h"
+
 DCMI_HandleTypeDef DCMI_Handle;
 DMA_HandleTypeDef DMA_Handle_dcmi;
+extern uint8_t QR_Task;
 void TransferComplete(DMA2D_HandleTypeDef *hdma2d)
 {
   //SCB_InvalidateDCache();
@@ -1513,7 +1516,7 @@ void OV5640_Capture_Control(FunctionalState state)
 //  HAL_DMA2D_IRQHandler(&h_dma2d);
 //}
 /**
-  * @brief  Line event callback.
+  * @brief  DCMI帧同步中断回调函数 Line event callback.
   * @param  None
   * @retval None
   */
@@ -1524,44 +1527,45 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 
     GUI_SemPostISR(cam_sem);  
 
-    if(cur_index == 0)//0--配置第二块内存，使用第一块内存
-    {
-      cur_index = 1;
-      OV5640_DMA_Config((uint32_t)CamDialog.cam_buff1,
-                        cam_mode.cam_out_height*cam_mode.cam_out_width/2);  
-    }
-    else//1--配置第一块内存，使用第二块内存
-    {      
-      cur_index = 0;
-      OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
-                        cam_mode.cam_out_height*cam_mode.cam_out_width/2);       
-    }
+	if(cur_index == 0)//0--准备配置第二块内存，当前使用的是第一块内存
+	 {
+		  cur_index = 1;
+			if (QR_Task)
+			{
+				cur_index = 0;
+		    HAL_DCMI_Suspend(&DCMI_Handle);
+        __HAL_DCMI_DISABLE(hdcmi);
+				
+        get_image((uint32_t)CamDialog.cam_buff0,cam_mode.cam_out_width , cam_mode.cam_out_height);//从缓存好的第一块内存中获取图像数据
+//				get_image((uint32_t)CamDialog.cam_buff0,cam_mode.cam_out_width,cam_mode.cam_out_height);
+				/*重新开始采集*/
+				 HAL_DCMI_Resume(&DCMI_Handle);
+//				 __HAL_DCMI_ENABLE(hdcmi);
+       
+//		  	OV5640_Capture_Control(DISABLE);//关闭摄像头采集图像
+//				GUI_SemPostISR(cam_sem);
+//        DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,DISABLE); //关闭DMA中断
+//				DCMI_Cmd(DISABLE); //DCMI失能
+//				DCMI_CaptureCmd(DISABLE); 
+				OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
+													cam_mode.cam_out_height*cam_mode.cam_out_width/2); 
+			}
+			else
+			{
+				cur_index = 1;
+				OV5640_DMA_Config((uint32_t)CamDialog.cam_buff1,
+													cam_mode.cam_out_height*cam_mode.cam_out_width/2);  
+			}
+		}
+	else//1--配置第一块内存，使用第二块内存
+		{      
+			cur_index = 0;
+			OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
+												cam_mode.cam_out_height*cam_mode.cam_out_width/2);       
+		}
 
 }
 
 
 
-
-
-/**
-  * @brief  DMA中断服务函数
-  * @param  None
-  * @retval None
-  */
-void DMA2_Stream1_IRQHandler(void)
-{
-  HAL_DMA_IRQHandler(&DMA_Handle_dcmi);
-  
-}
-
-/**
-  * @brief  DCMI中断服务函数
-  * @param  None
-  * @retval None
-  */
-void DCMI_IRQHandler(void)
-{
-  HAL_DCMI_IRQHandler(&DCMI_Handle);
-  
-}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

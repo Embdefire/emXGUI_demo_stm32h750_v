@@ -41,12 +41,12 @@ __initial_sp
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size       EQU     0x00000400
+Heap_Size       EQU     0x00020000
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
-__heap_base
+__heap_base     		
 Heap_Mem        SPACE   Heap_Size
-__heap_limit
+__heap_limit 	EQU     (0xd13bb800 + 0x00100000)
 
                 PRESERVE8
                 THUMB
@@ -238,10 +238,13 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 Reset_Handler    PROC
                  EXPORT  Reset_Handler                    [WEAK]
         IMPORT  SystemInit
+		IMPORT  SDRAM_Init	
         IMPORT  __main
 
                  LDR     R0, =SystemInit
-                 BLX     R0
+                 BLX     R0	 
+                 LDR     R0, =SDRAM_Init
+                 BLX     R0				 
                  LDR     R0, =__main
                  BX      R0
                  ENDP

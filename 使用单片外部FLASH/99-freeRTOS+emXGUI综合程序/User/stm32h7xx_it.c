@@ -39,12 +39,14 @@
 #include "task.h"
 #include "./sai/bsp_sai.h" 
 #include "bsp_mpu_exti.h"
-
+#include "emXGUI.h"
 extern RTC_HandleTypeDef hrtc;
 extern SD_HandleTypeDef uSdHandle;
 extern volatile uint8_t video_timeout;//视频播放引入
 extern __IO uint32_t LocalTime;//以太网提供tick
 extern void gyro_data_ready_cb(void);
+//extern DCMI_HandleTypeDef DCMI_Handle;
+//extern DMA_HandleTypeDef DMA_Handle_dcmi;
 /* External variables --------------------------------------------------------*/
 
 /******************************************************************************/
@@ -67,18 +69,19 @@ void NMI_Handler(void)
 /**
 * @brief This function handles Hard fault interrupt.
 */
-//void HardFault_Handler(void)
-//{
-//  /* USER CODE BEGIN HardFault_IRQn 0 */
+void HardFault_Handler(void)
+{
+  /* USER CODE BEGIN HardFault_IRQn 0 */
 
-//  /* USER CODE END HardFault_IRQn 0 */
-//  while (1)
-//  {
-//  }
-//  /* USER CODE BEGIN HardFault_IRQn 1 */
+  /* USER CODE END HardFault_IRQn 0 */
+  while (1)
+  {
+		GUI_ERROR("****************Hard Fault!***************\r\n");
+  }
+  /* USER CODE BEGIN HardFault_IRQn 1 */
 
-//  /* USER CODE END HardFault_IRQn 1 */
-//}
+  /* USER CODE END HardFault_IRQn 1 */
+}
 
 /**
 * @brief This function handles Memory management fault.
@@ -231,3 +234,26 @@ void EXTI3_IRQHandler(void)
 		__HAL_GPIO_EXTI_CLEAR_IT(MPU_INT_GPIO_PIN);     //清除中断标志位
 	}
 }
+
+/**
+  * @brief  DMA中断服务函数
+  * @param  None
+  * @retval None
+  */
+void DMA2_Stream1_IRQHandler(void)
+{
+//  HAL_DMA_IRQHandler(&DMA_Handle_dcmi);
+  
+}
+
+/**
+  * @brief  DCMI中断服务函数
+  * @param  None
+  * @retval None
+  */
+void DCMI_IRQHandler(void)
+{
+//  HAL_DCMI_IRQHandler(&DCMI_Handle);
+  
+}
+

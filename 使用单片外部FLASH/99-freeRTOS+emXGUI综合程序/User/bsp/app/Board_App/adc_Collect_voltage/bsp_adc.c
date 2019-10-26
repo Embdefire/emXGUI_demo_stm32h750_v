@@ -22,7 +22,7 @@ extern double ADC_vol;
 ADC_HandleTypeDef Init_ADC_Handle;
 DMA_HandleTypeDef hdma_adc;
 //__attribute__ ((at(0x30000000))) 
-__IO uint16_t ADC_ConvertedValue = 0x75BE;
+__IO uint16_t ADC_ConvertedValue;
 
 
 /**
@@ -64,17 +64,22 @@ static void ADC_Mode_Config(void)
     /*         PLL_R                = 2     */
     /*     ADC_ker_clk         = 32000000   */
 		RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-    RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
-    RCC_PeriphClkInit.PLL2.PLL2M = 5;
-    RCC_PeriphClkInit.PLL2.PLL2N = 160;
-    RCC_PeriphClkInit.PLL2.PLL2P = 25;
-    RCC_PeriphClkInit.PLL2.PLL2Q = 2;
-    RCC_PeriphClkInit.PLL2.PLL2R = 2;
-    RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
-    RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
-    RCC_PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2; 
+//    RCC_PeriphClkInit.PLL3.PLL3FRACN = 0;
+//    RCC_PeriphClkInit.PLL2.PLL2M = 5;
+//    RCC_PeriphClkInit.PLL3.PLL3N = 144;
+//    RCC_PeriphClkInit.PLL3.PLL3P = 2;
+//    RCC_PeriphClkInit.PLL2.PLL2Q = 2;
+//    RCC_PeriphClkInit.PLL2.PLL2R = 2;
+//    RCC_PeriphClkInit.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_2;
+//    RCC_PeriphClkInit.PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE;
+//    RCC_PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2; 
+		RCC_PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_CLKP; 
+		
 		HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit);  
-  
+ while (HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit) != HAL_OK)
+  {
+		
+  }
     /* 使能ADC时钟 */
     RHEOSTAT_ADC_CLK_ENABLE();
     /* 使能DMA时钟 */
@@ -108,7 +113,7 @@ static void ADC_Mode_Config(void)
     
     Init_ADC_Handle.Instance = RHEOSTAT_ADC;
     //ADC时钟1分频
-    Init_ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+//    Init_ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
     //使能连续转换模式
     Init_ADC_Handle.Init.ContinuousConvMode = ENABLE;
     //数据存放在数据寄存器中
@@ -146,7 +151,7 @@ static void ADC_Mode_Config(void)
     //使能ADC1、2
     ADC_Enable(&Init_ADC_Handle);
     
-    HAL_ADC_Start_DMA(&Init_ADC_Handle, (uint32_t*)&ADC_ConvertedValue, 1);
+    HAL_ADC_Start_DMA(&Init_ADC_Handle, (uint32_t*)&ADC_ConvertedValue, sizeof(ADC_ConvertedValue));
     
 }
 /**
@@ -156,8 +161,8 @@ static void ADC_Mode_Config(void)
   */  
 void Rheostat_ADC_NVIC_Config(void)
 {
-    HAL_NVIC_SetPriority(Rheostat_ADC12_IRQ, 0, 0);
-    HAL_NVIC_EnableIRQ(Rheostat_ADC12_IRQ);
+    HAL_NVIC_SetPriority(Rheostat_ADC1_DMA_IRQ, 1, 0);
+    HAL_NVIC_EnableIRQ(Rheostat_ADC1_DMA_IRQ);
 }
 
 /**
@@ -172,6 +177,8 @@ void ADC_Init(void)
   
     ADC_Mode_Config();
   
+		Rheostat_ADC_NVIC_Config();
+	
     HAL_ADC_Start(&Init_ADC_Handle);
 }
 
@@ -195,6 +202,10 @@ void Rheostat_DISABLE(void)
 	
 	HAL_ADC_Stop_DMA(&Init_ADC_Handle);
 	
+}
+void DMA1_Stream1_IRQHandler()
+{
+	HAL_DMA_IRQHandler(&hdma_adc);
 }
 
 /*********************************************END OF FILE**********************/

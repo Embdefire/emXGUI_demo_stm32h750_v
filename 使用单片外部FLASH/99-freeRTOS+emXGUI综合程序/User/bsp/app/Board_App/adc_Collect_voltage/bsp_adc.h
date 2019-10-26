@@ -22,6 +22,8 @@
 
 #define Rheostat_ADC12_IRQ                          ADC_IRQn
 
+#define Rheostat_ADC1_DMA_IRQ                       DMA1_Stream1_IRQn
+
 void ADC_Init(void);
 void Rheostat_DISABLE(void);
 uint16_t ADC_GetValue(void);

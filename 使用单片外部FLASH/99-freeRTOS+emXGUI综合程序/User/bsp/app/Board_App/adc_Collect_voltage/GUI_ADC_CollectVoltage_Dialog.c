@@ -382,7 +382,7 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       HWND hwnd_scrolbar;
       SCROLLINFO sif;/*设置滑动条的参数*/
       GetClientRect(hwnd, &rc);
-//      ADC_Init();    // 初始化 ADC
+      ADC_Init();    // 初始化 ADC
 //			GUI_msleep(500);
 //			SDRAM_Init();
       /*********************亮度调节滑动条******************/
@@ -510,7 +510,7 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       /* 创建圆形区域的最终 DC */
       hdc_mem = CreateMemoryDC((SURF_FORMAT)COLOR_FORMAT_ARGB8888, CircleSize, CircleSize);
       ClrDisplay(hdc_mem, NULL, 0);
-      //SetTimer(hwnd, 2, 50, TMR_START, NULL);
+      SetTimer(hwnd, 2, 50, TMR_START, NULL);
       
       x_wsprintf(Backlightwbuf, L"%d", 50);
       res_prep = 1;    // 标记资源加载完成
@@ -571,7 +571,7 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         static uint8_t xC = 0;
         static double ADC_Vol_Old;
 
-        vol_buff =(double) ADC_ConvertedValue/4096*(double)3.3; // 读取转换的AD值
+        vol_buff =(double) ADC_ConvertedValue/65536*(double)3.3; // 读取转换的AD值
 //        GUI_DEBUG("电压值前为：%f", ADC_Vol);
         #if 1
 

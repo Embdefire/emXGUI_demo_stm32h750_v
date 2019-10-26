@@ -45,8 +45,8 @@ extern SD_HandleTypeDef uSdHandle;
 extern volatile uint8_t video_timeout;//视频播放引入
 extern __IO uint32_t LocalTime;//以太网提供tick
 extern void gyro_data_ready_cb(void);
-//extern DCMI_HandleTypeDef DCMI_Handle;
-//extern DMA_HandleTypeDef DMA_Handle_dcmi;
+extern DCMI_HandleTypeDef DCMI_Handle;
+extern DMA_HandleTypeDef DMA_Handle_dcmi;
 /* External variables --------------------------------------------------------*/
 
 /******************************************************************************/
@@ -242,7 +242,7 @@ void EXTI3_IRQHandler(void)
   */
 void DMA2_Stream1_IRQHandler(void)
 {
-//  HAL_DMA_IRQHandler(&DMA_Handle_dcmi);
+  HAL_DMA_IRQHandler(&DMA_Handle_dcmi);
   
 }
 
@@ -253,7 +253,7 @@ void DMA2_Stream1_IRQHandler(void)
   */
 void DCMI_IRQHandler(void)
 {
-//  HAL_DCMI_IRQHandler(&DCMI_Handle);
+  HAL_DCMI_IRQHandler(&DCMI_Handle);
   
 }
 

@@ -77,7 +77,7 @@ static void QR_decoder_Task(void *p)
     qr_num = QR_decoder();
     if(qr_num)
     { 
-//      BEEP_ON;
+      BEEP_ON;
       GUI_msleep(50);
       //解码的数据是按照识别条码的个数封装好的二维数组，这些数据需要
       //根据识别条码的个数，按组解包并通过串口发送到上位机串口终端

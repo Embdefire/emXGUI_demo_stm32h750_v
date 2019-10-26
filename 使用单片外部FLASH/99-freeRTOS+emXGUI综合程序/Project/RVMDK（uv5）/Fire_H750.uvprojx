@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,X_GUI_USE_FREERTOS,APPLICATION_ADDRESS=0x8000000,Fire_H7_InFlash,USE_DMP,MPL_LOG_NDEBUG=1,EMPL,MPU6050,EMPL_TARGET_STM32F7,NDEBUG,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\User\bsp;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\User\bsp\cm_backtrace;..\..\emXGUI_Lib\inc;..\..\emXGUI_Lib\drv;..\..\emXGUI_Lib\arch\Inc;..\..\emXGUI_Lib\app\base;..\..\User\bsp\FATFS;..\..\emXGUI_Lib\app\base\res_writer;..\..\emXGUI_Lib\app\tutorial\rgb_led;..\..\User\OwnerDraw;..\..\emXGUI_Lib\app\tutorial\music_player;..\..\User\bsp\mp3\real;..\..\User\bsp\mp3\pub;..\..\emXGUI_Lib\app\tutorial\pic_view;..\..\emXGUI_Lib\app\tutorial\camera;..\..\emXGUI_Lib\app\base\boot_interface;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\include;..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite;..\..\User\bsp\app\Board_App\gyro\i2c;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL;..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl;..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\GUI_Demo;..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\LAN8720A;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include;..\..\User\bsp\app\Board_App\NetworkDLG;..\..\User\bsp\app\Board_App\NetworkDLG\arch;..\..\emXGUI_Lib\;..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar;..\..\User\bsp\app\Board_App\camera\QR_Decoder\Iconv;..\..\User\bsp\app\Board_App\camera\QR_Decoder\Iconv\srclib;..\..\User\bsp\app\Board_App\camera\QR_Decoder\Iconv\lib;..\..\User\bsp\app\Board_App\camera</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\User\bsp;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\User\bsp\cm_backtrace;..\..\emXGUI_Lib\inc;..\..\emXGUI_Lib\drv;..\..\emXGUI_Lib\arch\Inc;..\..\emXGUI_Lib\app\base;..\..\User\bsp\FATFS;..\..\emXGUI_Lib\app\base\res_writer;..\..\emXGUI_Lib\app\tutorial\rgb_led;..\..\User\OwnerDraw;..\..\emXGUI_Lib\app\tutorial\music_player;..\..\User\bsp\mp3\real;..\..\User\bsp\mp3\pub;..\..\emXGUI_Lib\app\tutorial\pic_view;..\..\emXGUI_Lib\app\tutorial\camera;..\..\emXGUI_Lib\app\base\boot_interface;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\include;..\..\User\bsp\app\Board_App\gyro\mpu6050\mllite;..\..\User\bsp\app\Board_App\gyro\i2c;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\eMPL;..\..\User\bsp\app\Board_App\gyro\mpu6050\mpl;..\..\User\bsp\app\Board_App\gyro\mpu6050\eMPL-hal;..\..\User\bsp\app\Board_App\gyro\mpu6050\driver\stm32L;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\GUI_Demo;..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\;..\..\User\bsp\app\Board_App\NetworkDLG\bsp\LAN8720A;..\..\User\bsp\app\Board_App\gyro\mpu6050;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include\lwip;..\..\User\bsp\app\Board_App\NetworkDLG\LwIP\include;..\..\User\bsp\app\Board_App\NetworkDLG;..\..\User\bsp\app\Board_App\NetworkDLG\arch;..\..\emXGUI_Lib\;..\..\User\bsp\app\Board_App\camera;..\..\User\bsp\app\Board_App\camera\QR_Decoder</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1908,6 +1908,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\camera\ov5640_AF.c</FilePath>
             </File>
+            <File>
+              <FileName>QR_Core.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\QR_Core.lib</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2441,111 +2446,6 @@
               <FileName>udp_echoserver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>QR_CODER</GroupName>
-          <Files>
-            <File>
-              <FileName>code128.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\code128.c</FilePath>
-            </File>
-            <File>
-              <FileName>binarize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\binarize.c</FilePath>
-            </File>
-            <File>
-              <FileName>scanner.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\scanner.c</FilePath>
-            </File>
-            <File>
-              <FileName>symbol.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\symbol.c</FilePath>
-            </File>
-            <File>
-              <FileName>refcnt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\refcnt.c</FilePath>
-            </File>
-            <File>
-              <FileName>img_scanner.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\img_scanner.c</FilePath>
-            </File>
-            <File>
-              <FileName>image.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\image.c</FilePath>
-            </File>
-            <File>
-              <FileName>error.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\error.c</FilePath>
-            </File>
-            <File>
-              <FileName>decoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>convert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\convert.c</FilePath>
-            </File>
-            <File>
-              <FileName>config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\config.c</FilePath>
-            </File>
-            <File>
-              <FileName>qr_finder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\qr_finder.c</FilePath>
-            </File>
-            <File>
-              <FileName>ean.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\ean.c</FilePath>
-            </File>
-            <File>
-              <FileName>util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\util.c</FilePath>
-            </File>
-            <File>
-              <FileName>rs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\rs.c</FilePath>
-            </File>
-            <File>
-              <FileName>qrdec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\qrdec.c</FilePath>
-            </File>
-            <File>
-              <FileName>qrdectxt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\qrdectxt.c</FilePath>
-            </File>
-            <File>
-              <FileName>qr_decoder_user.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qr_decoder_user.c</FilePath>
-            </File>
-            <File>
-              <FileName>isaac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\isaac.c</FilePath>
-            </File>
-            <File>
-              <FileName>bch15_5.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\bch15_5.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4729,6 +4629,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\camera\ov5640_AF.c</FilePath>
             </File>
+            <File>
+              <FileName>QR_Core.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\QR_Core.lib</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5211,111 +5116,6 @@
               <FileName>udp_echoserver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>QR_CODER</GroupName>
-          <Files>
-            <File>
-              <FileName>code128.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\code128.c</FilePath>
-            </File>
-            <File>
-              <FileName>binarize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\binarize.c</FilePath>
-            </File>
-            <File>
-              <FileName>scanner.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\scanner.c</FilePath>
-            </File>
-            <File>
-              <FileName>symbol.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\symbol.c</FilePath>
-            </File>
-            <File>
-              <FileName>refcnt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\refcnt.c</FilePath>
-            </File>
-            <File>
-              <FileName>img_scanner.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\img_scanner.c</FilePath>
-            </File>
-            <File>
-              <FileName>image.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\image.c</FilePath>
-            </File>
-            <File>
-              <FileName>error.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\error.c</FilePath>
-            </File>
-            <File>
-              <FileName>decoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>convert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\convert.c</FilePath>
-            </File>
-            <File>
-              <FileName>config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\config.c</FilePath>
-            </File>
-            <File>
-              <FileName>qr_finder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\qr_finder.c</FilePath>
-            </File>
-            <File>
-              <FileName>ean.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\decoder\ean.c</FilePath>
-            </File>
-            <File>
-              <FileName>util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\util.c</FilePath>
-            </File>
-            <File>
-              <FileName>rs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\rs.c</FilePath>
-            </File>
-            <File>
-              <FileName>qrdec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\qrdec.c</FilePath>
-            </File>
-            <File>
-              <FileName>qrdectxt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\qrdectxt.c</FilePath>
-            </File>
-            <File>
-              <FileName>qr_decoder_user.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qr_decoder_user.c</FilePath>
-            </File>
-            <File>
-              <FileName>isaac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\isaac.c</FilePath>
-            </File>
-            <File>
-              <FileName>bch15_5.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\camera\QR_Decoder\ZBar\qrcode\bch15_5.c</FilePath>
             </File>
           </Files>
         </Group>

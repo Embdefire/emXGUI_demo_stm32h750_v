@@ -1542,11 +1542,6 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 				 HAL_DCMI_Resume(&DCMI_Handle);
 //				 __HAL_DCMI_ENABLE(hdcmi);
        
-//		  	OV5640_Capture_Control(DISABLE);//关闭摄像头采集图像
-//				GUI_SemPostISR(cam_sem);
-//        DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,DISABLE); //关闭DMA中断
-//				DCMI_Cmd(DISABLE); //DCMI失能
-//				DCMI_CaptureCmd(DISABLE); 
 				OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
 													cam_mode.cam_out_height*cam_mode.cam_out_width/2); 
 			}

@@ -69,19 +69,20 @@ void NMI_Handler(void)
 /**
 * @brief This function handles Hard fault interrupt.
 */
-void HardFault_Handler(void)
-{
-  /* USER CODE BEGIN HardFault_IRQn 0 */
+//void HardFault_Handler(void)
+//{
+//  /* USER CODE BEGIN HardFault_IRQn 0 */
 
-  /* USER CODE END HardFault_IRQn 0 */
-  while (1)
-  {
-		GUI_ERROR("****************Hard Fault!***************\r\n");
-  }
-  /* USER CODE BEGIN HardFault_IRQn 1 */
+//  /* USER CODE END HardFault_IRQn 0 */
+//	GUI_ERROR("****************Hard Fault!***************\r\n");
+//  while (1)
+//  {
+//		
+//  }
+//  /* USER CODE BEGIN HardFault_IRQn 1 */
 
-  /* USER CODE END HardFault_IRQn 1 */
-}
+//  /* USER CODE END HardFault_IRQn 1 */
+//}
 
 /**
 * @brief This function handles Memory management fault.

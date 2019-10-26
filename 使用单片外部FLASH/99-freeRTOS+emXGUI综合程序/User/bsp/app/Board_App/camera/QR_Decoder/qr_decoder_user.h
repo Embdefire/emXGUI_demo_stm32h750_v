@@ -1,12 +1,12 @@
 #ifndef __QR_DECODER_USER_H
 #define	__QR_DECODER_USER_H
 
-#include "qr_decoder.h"
 #include <stdio.h>
+#include <stdint.h>
 
 // 开辟SDRAM的3M字节作为数据缓存，这里使用显存以外的空间，
 // 0xD0800000-0x300000 = 0xD0500000
-#define  QR_FRAME_BUFFER  ((uint32_t)0xD0500000) 
+#define  QR_FRAME_BUFFER  ((uint32_t)(0xd13bb800 + 0x00100000))
 
 /*扫描窗口参数*/
 #define  Frame_width           ((uint16_t)320)//扫描窗口边长（正方形）
@@ -29,6 +29,6 @@ extern char decoded_buf[QR_SYMBOL_NUM][QR_SYMBOL_SIZE];
 char QR_decoder(void);
 
 //获取一帧图像
-void get_image(uint32_t src_addr,uint16_t img_width,uint16_t img_height);
+void get_image(uint32_t qr_src_addr,uint16_t qr_img_width,uint16_t qr_img_height);
 
 #endif /* __QR_DECODER_USER_H */

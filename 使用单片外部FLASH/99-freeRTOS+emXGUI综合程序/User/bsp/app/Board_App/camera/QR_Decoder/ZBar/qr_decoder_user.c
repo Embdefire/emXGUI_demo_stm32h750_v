@@ -29,11 +29,11 @@ uint8_t data_ready;//提取待识别图像状态，1：提取成功  0：未提取
 
 //数据缓冲数组
 //1M字节
-unsigned short  dcmi_buf[1];//dcmi_buf[204800]    ;__attribute((at(QR_FRAME_BUFFER)));
+unsigned short  dcmi_buf[1];//dcmi_buf[204800]    __attribute((at(QR_FRAME_BUFFER)));//
 //1M字节
-unsigned short  qr_img_buf[1];//qr_img_buf[102400]  ;__attribute((at(QR_FRAME_BUFFER +0x100000)));
+unsigned short  qr_img_buf[1];//qr_img_buf[102400]  __attribute((at(QR_FRAME_BUFFER +0x100000)));
 //512k字节
-unsigned char   img_now[1];//img_now[102400]     ;__attribute((at(QR_FRAME_BUFFER +0x200000)));
+unsigned char   img_now[1];//img_now[102400]     __attribute((at(QR_FRAME_BUFFER +0x200000)));
 //512k字节
 //unsigned char   img_bin[524288]     __attribute((at(QR_FRAME_BUFFER +0x280000)));
 //zbar_image_scanner_t *scanner = NULL;

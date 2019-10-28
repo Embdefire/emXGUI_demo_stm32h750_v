@@ -369,7 +369,7 @@
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>..\..\..\..\..\..\..\demo_code_stm32h750_v\使用单片外部FLASH\99-freeRTOS+emXGUI综合程序\Output\Fire_emxgui.sct</ScatterFile>
+            <ScatterFile>..\..\Output\Fire_emxgui.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -1804,14 +1804,14 @@
           <GroupName>tutorial/pic_viwer</GroupName>
           <Files>
             <File>
-              <FileName>GUI_PICVIEWR_DIALOG.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PICVIEWR_DIALOG.h</FilePath>
+              <FileName>GUI_PicViewr_Dialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PicViewr_Dialog.c</FilePath>
             </File>
             <File>
-              <FileName>GUI_PicViwer_Dialog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PicViwer_Dialog.c</FilePath>
+              <FileName>GUI_PicViewr_Dialog.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PicViewr_Dialog.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -4387,14 +4387,14 @@
           </GroupOption>
           <Files>
             <File>
-              <FileName>GUI_PICVIEWR_DIALOG.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PICVIEWR_DIALOG.h</FilePath>
+              <FileName>GUI_PicViewr_Dialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PicViewr_Dialog.c</FilePath>
             </File>
             <File>
-              <FileName>GUI_PicViwer_Dialog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PicViwer_Dialog.c</FilePath>
+              <FileName>GUI_PicViewr_Dialog.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\pic_viewer\GUI_PicViewr_Dialog.h</FilePath>
             </File>
           </Files>
         </Group>

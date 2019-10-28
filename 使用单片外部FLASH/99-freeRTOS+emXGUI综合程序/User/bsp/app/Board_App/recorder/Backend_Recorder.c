@@ -236,7 +236,7 @@ void StartRecord(const char *filename)
 	Recorder.ucStatus=STA_IDLE;    /* 开始设置为空闲状态  */
 	Recorder.ucInput=0;            /* 缺省MIC输入  */
 	Recorder.ucFmtIdx=3;           /* 缺省飞利浦I2S标准，16bit数据长度，44K采样率  */
-	Recorder.ucVolume=35;          /* 缺省耳机音量  */
+	Recorder.ucVolume=50;          /* 缺省耳机音量  */
 	if(Recorder.ucInput==0) //MIC 
 	{
 		Recorder.ucGain=50;          /* 缺省MIC增益  */

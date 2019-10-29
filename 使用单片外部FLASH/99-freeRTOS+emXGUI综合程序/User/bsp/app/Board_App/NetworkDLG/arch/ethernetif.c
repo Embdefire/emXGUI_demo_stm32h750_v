@@ -54,8 +54,6 @@
 #include "ethernetif.h"
 #include "LAN8720a.h" 
 #include <string.h>
-#include "FreeRTOS.h"
-#include "sys.h"
 #include "emXGUI.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -176,10 +174,10 @@ static void low_level_init(struct netif *netif)
   s_xSemaphore = xSemaphoreCreateCounting(40,0);
   
   if(sys_sem_new(&tx_sem , 0) == ERR_OK)
-    GUI_ERROR("sys_sem_new ok\n");
+    GUI_DEBUG("sys_sem_new ok\n");
   
   if(sys_mbox_new(&eth_tx_mb , 50) == ERR_OK)
-    GUI_ERROR("sys_mbox_new ok\n");
+    GUI_DEBUG("sys_mbox_new ok\n");
 
   /* create the task that handles the ETH_MAC */
 	sys_thread_new("ETHIN",
@@ -200,7 +198,7 @@ static void low_level_init(struct netif *netif)
   //≥ı ºªØLAN8720A
   if(LAN8720_Init(&EthHandle) == HAL_OK) 
   {    
-      GUI_ERROR("LAN8720_Init ok\n");
+      GUI_DEBUG("LAN8720_Init ok\n");
       ethernet_link_check_state(netif);
   }
 
@@ -324,7 +322,7 @@ void ethernetif_input(void *pParams) {
 	struct pbuf *p = NULL;
 	netif = (struct netif*) pParams;
   LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
-  GUI_ERROR("ethernetif_input running\n");
+  GUI_DEBUG("ethernetif_input running\n");
 	while(1) 
   {
     if(xSemaphoreTake( s_xSemaphore, portMAX_DELAY ) == pdTRUE)

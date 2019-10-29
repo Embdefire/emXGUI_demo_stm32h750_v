@@ -40,18 +40,19 @@ static BOOL GUI_LowLevelInit(void)
   * @param  无
   * @retval 无
   */
+
 void	GUI_Startup(void)
 {
 	SURFACE *pSurf=NULL;
 	HFONT hFont=NULL;
-  
+
 /***********************第3部分*************************/
 	if(!GUI_LowLevelInit()) //GUI低级初始化.
 	{
     GUI_ERROR("GUI_LowLevelInit Failed.");
 		return;
 	}
-  
+
 /***********************第4部分*************************/
 	if(!GUI_Arch_Init())   //GUI架构适配层初始化.
 	{

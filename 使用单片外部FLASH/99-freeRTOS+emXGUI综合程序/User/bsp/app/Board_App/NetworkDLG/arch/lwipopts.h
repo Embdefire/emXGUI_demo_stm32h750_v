@@ -141,7 +141,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* Define LWIP_DHCP to 1 if you want DHCP configuration of
    interfaces. DHCP is not implemented in lwIP 0.5.1, however, so
    turning this on does currently not work. */
-#define LWIP_DHCP               0
+#define LWIP_DHCP               1
 
 
 /* ---------- UDP options ---------- */
@@ -255,7 +255,7 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
    ---------- Lwip Debug options ----------
    ----------------------------------------
 */
-#define LWIP_DEBUG                      1
+//#define LWIP_DEBUG                      1
 
 #endif /* __LWIPOPTS_H__ */
 
@@ -321,7 +321,7 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 //#define ICMP_DEBUG                      LWIP_DBG_OFF
 //#define IGMP_DEBUG                      LWIP_DBG_OFF
 //#define INET_DEBUG                      LWIP_DBG_OFF
-#define IP_DEBUG                        LWIP_DBG_ON
+//#define IP_DEBUG                        LWIP_DBG_OFF
 //#define IP_REASS_DEBUG                  LWIP_DBG_OFF
 //#define RAW_DEBUG                       LWIP_DBG_OFF
 //#define MEM_DEBUG                       LWIP_DBG_OFF
@@ -340,7 +340,7 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 //#define TCPIP_DEBUG                     LWIP_DBG_OFF
 //#define PPP_DEBUG                       LWIP_DBG_OFF
 //#define SLIP_DEBUG                      LWIP_DBG_OFF
-#define DHCP_DEBUG                      LWIP_DBG_ON
+//#define DHCP_DEBUG                      LWIP_DBG_OFF
 //#define AUTOIP_DEBUG                    LWIP_DBG_OFF
 //#define SNMP_MSG_DEBUG                  LWIP_DBG_OFF
 //#define SNMP_MIB_DEBUG                  LWIP_DBG_OFF

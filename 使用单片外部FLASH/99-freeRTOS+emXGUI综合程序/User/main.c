@@ -28,7 +28,6 @@
 #include "string.h"
 #include <cm_backtrace.h>
 #include "./bsp/mpu/bsp_mpu.h" 
-
 //#include "Backend_RGBLED.h" 
 
 /* hardfault跟踪器需要的定义 */
@@ -66,7 +65,7 @@
 *************************************************************************
 */
 static void GUI_Thread_Entry(void* pvParameters);/* Test_Task任务实现 */
-
+static void MPU_Config(void);
 
 void BSP_Init(void);/* 用于初始化板载相关资源 */
 /***********************************************************************
@@ -97,10 +96,15 @@ void BSP_Init(void)
   Board_MPU_Config(4,MPU_Normal_WT,0x24000000,MPU_512KB);
   Board_MPU_Config(5,MPU_Normal_WT,0x08000000,MPU_2MB);
 	
+	MPU_Config();	
+	
   /* Enable I-Cache */
   SCB_EnableICache(); 
   /* Enable D-Cache */
   SCB_EnableDCache();
+	
+	SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
+	
   /*
 	 * STM32中断优先级分组为4，即4bit都用来表示抢占优先级，范围为：0~15
 	 * 优先级分组只需要分组一次即可，以后如果有其他的任务需要用到中断，
@@ -217,7 +221,7 @@ int main(void)
   while(1);   /* 正常不会执行到这里 */    
 }
 
-
+extern void TCPIP_Init(void);
 extern void GUI_Startup(void);
 
 /**********************************************************************
@@ -231,7 +235,9 @@ static void GUI_Thread_Entry(void* parameter)
 //  uint8_t CPU_RunInfo[400];		//保存任务运行时间信息
   printf("野火emXGUI演示例程\n\n");
   /* 执行本函数不会返回 */
-	GUI_Startup();
+	
+	TCPIP_Init();
+//GUI_Startup();
 //  
   while (1)
   {
@@ -241,9 +247,51 @@ static void GUI_Thread_Entry(void* parameter)
 //    
 //    LED1_OFF;     
 //    printf("Test_Task Running,LED1_OFF\r\n");
-//    vTaskDelay(500);   /* 延时500个tick */
+    vTaskDelay(500);   /* 延时500个tick */
 //    
   }
 }
 
+static void MPU_Config(void)
+{
+  MPU_Region_InitTypeDef MPU_InitStruct;
+
+  /* Disable the MPU */
+  HAL_MPU_Disable();
+
+  /* Configure the MPU attributes as Device not cacheable 
+     for ETH DMA descriptors */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress = 0x30040000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_256B;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER6;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* Configure the MPU attributes as Cacheable write through 
+     for LwIP RAM heap which contains the Tx buffers */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress = 0x30044000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_16KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER7;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* Enable the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+}
 /********************************END OF FILE****************************/

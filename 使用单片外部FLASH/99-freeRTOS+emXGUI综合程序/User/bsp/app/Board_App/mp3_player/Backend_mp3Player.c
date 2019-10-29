@@ -556,14 +556,8 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
   DWORD pos;//记录文字变量
   static uint8_t lyriccount=0;//歌词index记录   
    
-	/*  初始化并配置I2S  */
-//	I2S_Stop();
-//	I2S_GPIO_Config();
-//	I2Sx_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
-//	I2Sxext_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
-//	
-//	I2S_DMA_TX_Callback=MP3Player_I2S_DMA_TX_Callback;
-//	I2S_Play_Stop();.
+	/*  初始化并配置SAI  */
+
 	  SAI_Play_Stop();
 	  SAI_GPIO_Config();
     //SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;  
@@ -586,26 +580,17 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
       result = f_read(&file,&rec_wav,sizeof(rec_wav),&bw);
       
       //如果进入音乐列表就不显示时长
-      if(enter_flag == 0){
-         //获取屏幕（385，404）的颜色             
-        
+      if(enter_flag == 0)
+			{
          mp3player.ucFreq =  rec_wav.dwSamplesPerSec;
          mp3player.ucbps =  mp3player.ucFreq*32;   
          alltime=file.fsize*8/mp3player.ucbps;
-        
-//         x_wsprintf(wbuf, L"00:00 / %02d:%02d",alltime/60,alltime%60);
-//         //清除rc_MusicTimes矩形的内容
-///         ClrDisplay(hdc, &rc_MusicTimes, color);
-//         //绘制文本
-//         DrawText(hdc, wbuf, -1, &rc_MusicTimes, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
       }   
       //先读取音频数据到缓冲区
       result = f_read(&file,(uint16_t *)buffer0,RECBUFFER_SIZE*2,&bw);
       result = f_read(&file,(uint16_t *)buffer1,RECBUFFER_SIZE*2,&bw);
       
-      Delay_ms(10);	/* 延迟一段时间，等待I2S中断结束 */
-      //I2S_Stop();			/* 停止I2S录音和放音 */
-			
+      Delay_ms(10);	/* 延迟一段时间，等待I2S中断结束 */			
 			SAI_Play_Stop();
       wm8978_Reset();		/* 复位WM8978到复位状态 */	
       wm8978_CtrlGPIO1(1);
@@ -629,13 +614,8 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
       /* 调节音量，左右相同音量 */
       wm8978_SetOUT1Volume(Recorder.ucVolume);
       /* 配置WM8978音频接口为飞利浦标准I2S接口，16bit */
-      //wm8978_CfgAudioIF(I2S_Standard_Phillips, 16);
 			wm8978_CfgAudioIF(SAI_I2S_STANDARD, 16);  
       
-
-//			SAIxA_Tx_Config(SAI_I2S_STANDARD,SAI_PROTOCOL_DATASIZE_16BIT,mp3player.ucFreq);						//根据采样率修改iis速率
-//			SAIA_TX_DMA_Init((uint32_t )&buffer0,(uint32_t)&buffer1,RECBUFFER_SIZE);
-//      SAI_Play_Start();
 			SAIxA_Tx_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
       SAIA_TX_DMA_Init((uint32_t)buffer0,(uint32_t)buffer1,RECBUFFER_SIZE);		
 	    SAI_Play_Start();

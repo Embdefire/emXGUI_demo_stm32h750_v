@@ -53,6 +53,14 @@ BOOL FileSystem_Init(void)
 //	rt_hw_interrupt_enable(level);	
 
   /* 禁用WiFi模块 */
+#if defined(STM32F429_439xx)
+  BL8782_PDN_INIT();
+#elif defined(STM32H743xx)
+  WIFI_PDN_INIT();
+#endif  
+	
+
+
 	//链接驱动器，创建盘符
 	FATFS_LinkDriver(&SD_Driver, SDPath);
 	//f_mkfs(SDPath, FM_ANY, 0, SDworkBuffer, sizeof(SDworkBuffer));		
@@ -90,7 +98,7 @@ BOOL FileSystem_Init(void)
   {
     printf("》文件系统挂载成功\r\n");
     
-#if 0
+#if 1
     /* 文件系统测试 */
     FileSystem_Test();
 #endif 
@@ -110,9 +118,9 @@ BOOL FileSystem_Init(void)
 #if 1
 FIL fnew;													/* 文件对象 */
 UINT fnum;            					  /* 文件成功读写数量 */
-BYTE ReadBuffer[1024]={0};        /* 读缓冲区 */
-BYTE WriteBuffer[] =              /* 写缓冲区*/
-"欢迎使用野火STM32 F429开发板 今天是个好日子，新建文件系统测试文件\r\n";  
+
+uint8_t WriteBuffer[] = "你好啊！野火";
+uint8_t ReadBuffer[128];
 
 /**
   * @brief  文件系统读写测试
@@ -127,12 +135,12 @@ void FileSystem_Test(void)
 	/*----------------------- 文件系统测试：写测试 -----------------------------*/
 	/* 打开文件，如果文件不存在则创建它 */
 	printf("\r\n****** 即将进行文件写入测试... ******\r\n");	
-	res_sd = f_open(&fnew, "0:/mp3/张国荣-玻璃之情.mp3",FA_OPEN_EXISTING | FA_READ );
+	res_sd = f_open(&fnew, "0:FatFs读写测试文件.txt",FA_CREATE_ALWAYS | FA_WRITE );
 	if ( res_sd == FR_OK )
 	{
 		printf("》打开/创建FatFs读写测试文件.txt文件成功，向文件写入数据。\r\n");
     /* 将指定存储区内容写入到文件内 */
-		//res_sd=f_write(&fnew,WriteBuffer,sizeof(WriteBuffer),&fnum);
+		res_sd=f_write(&fnew,WriteBuffer,sizeof(WriteBuffer),&fnum);
     if(res_sd==FR_OK)
     {
       printf("》文件写入成功，写入字节数据：%d\n",fnum);
@@ -153,7 +161,7 @@ void FileSystem_Test(void)
 	
 /*------------------- 文件系统测试：读测试 ------------------------------------*/
 	printf("****** 即将进行文件读取测试... ******\r\n");
-		res_sd = f_open(&fnew, "0:/mp3/张国荣-玻璃之情.mp3",FA_OPEN_EXISTING | FA_READ ); 	 
+	res_sd = f_open(&fnew, "0:FatFs读写测试文件.txt", FA_OPEN_EXISTING | FA_READ); 	 
 	if(res_sd == FR_OK)
 	{
 //		LED_GREEN;

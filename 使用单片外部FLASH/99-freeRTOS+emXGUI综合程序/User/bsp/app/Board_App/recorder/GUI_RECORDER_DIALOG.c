@@ -140,7 +140,7 @@ static void App_Record(void *p)
   vTaskSuspend(h_record);    // 挂起线程
   
 	while(1) //线程已创建了
-	{     
+	{
 		/* DMA传输完成 */
 		if(Isread==1)
 		{

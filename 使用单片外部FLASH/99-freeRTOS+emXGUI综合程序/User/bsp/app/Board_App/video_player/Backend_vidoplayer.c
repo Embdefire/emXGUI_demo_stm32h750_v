@@ -72,7 +72,7 @@ void AVI_play(char *filename)
   hdc1 =CreateDC(pSurf1,NULL);
   
   pbuffer=Frame_buf;
-  GUI_DEBUG("%s", filename);
+//  GUI_DEBUG("%s", filename);
   res=f_open(&fileR,filename,FA_READ);
   if(res!=FR_OK)
   {

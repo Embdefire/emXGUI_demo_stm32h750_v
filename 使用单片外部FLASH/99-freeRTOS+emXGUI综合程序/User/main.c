@@ -77,7 +77,7 @@ void BSP_Init(void);/* 用于初始化板载相关资源 */
   *********************************************************************/
 void BSP_Init(void)
 {
-	  //SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
+	  SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
 
   /* 系统时钟初始化成400MHz */
 #if 0	
@@ -155,9 +155,8 @@ void BSP_Init(void)
 
 	
   /*hardfault 跟踪器初始化*/ 
-//  cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
+  cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
   
-
 }
 
 
@@ -233,7 +232,7 @@ static void GUI_Thread_Entry(void* parameter)
   printf("野火emXGUI演示例程\n\n");
   /* 执行本函数不会返回 */
 	GUI_Startup();
-  
+//  
   while (1)
   {
 //    LED1_ON;

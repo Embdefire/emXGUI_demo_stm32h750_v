@@ -21,6 +21,8 @@ int		number_input_box(int x, int y, int w, int h,
 #define ID_RB3    (0x1102 | (1<<16))
 
 TaskHandle_t Network_Task_Handle;
+TaskHandle_t TCPIP_Init_Task_Handle;
+SemaphoreHandle_t Wait_TCPIP_Init_Sem;
 
 int8_t NetworkTypeSelection = 0;
 
@@ -33,7 +35,7 @@ uint8_t network_start_flag=0;
 //extern __IO uint8_t EthLinkStatus;
 __IO uint8_t EthLinkStatus;//用不到的变量
 __IO uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 10ms */
-DRV_NETWORK drv_network;
+DRV_NETWORK drv_network,drv_network_server;
 
 extern uint8_t IP_ADDRESS[4];
 
@@ -45,58 +47,32 @@ extern TIM_HandleTypeDef TIM3_Handle;
 /* 从 sys_arch.c 引入 */
 extern void TCPIP_Init(void);
 
-/**
-  * @brief  通用定时器3中断初始化
-  * @param  period : 自动重装值。
-  * @param  prescaler : 时钟预分频数
-  * @retval 无
-  * @note   定时器溢出时间计算方法:Tout=((period+1)*(prescaler+1))/Ft us.
-  *          Ft=定时器工作频率,为SystemCoreClock/2=90,单位:Mhz
-  */
-	#if 0
-static void TIM3_Config(uint16_t period,uint16_t prescaler)
+/* LWIP协议栈初始化,初始化成功即删除任务,否则会阻塞在函数内。 */
+static void TCPIP_Init_Task(void *p)
 {
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
-	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);  ///使能TIM3时钟
-	
-	TIM_TimeBaseInitStructure.TIM_Prescaler=prescaler;  //定时器分频
-	TIM_TimeBaseInitStructure.TIM_CounterMode=TIM_CounterMode_Up; //向上计数模式
-	TIM_TimeBaseInitStructure.TIM_Period=period;   //自动重装载值
-	TIM_TimeBaseInitStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
-	
-	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStructure);
-	
-	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE); //允许定时器3更新中断
-	TIM_Cmd(TIM3,ENABLE); //使能定时器3
-	
-	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03; //子优先级3
-	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
+	if(network_start_flag == 0)//如果成功过一次,重新打开程序,不会再初始化。
+	{
+		TCPIP_Init();
+	}
+	while(1)
+	{
+		vTaskDelay(5000);
+	}
 }
-#endif
 
 void Network_Dispose_Task(void *p) 
 {
-  if(network_start_flag==0)
-  {
-    /* Configure ethernet (GPIOs, clocks, MAC, DMA) 
-		
-		TCPIP_Init -> 初始化lwip栈的参数, 
-		
-		netif_add -> ethernetif_init,初始化硬件 -> low_level_init ->具体初始化
-		*/
-		TCPIP_Init();
-		
-    if(network_start_flag == 1)
-    {
+	EnableWindow(GetDlgItem(Network_Main_Handle, eID_LINK_STATE), DISABLE);
+	
+	if(network_start_flag == 0)
+	{
+	if(xSemaphoreTake( Wait_TCPIP_Init_Sem,5000) != pdTRUE)
+		{
       network_start_flag=0;
       bsp_result |=1;
       /* 初始化出错 */
       SetTimer(Network_Main_Handle, 10, 100, TMR_SINGLE|TMR_START, NULL);
+			GUI_Thread_Delete(TCPIP_Init_Task_Handle);//初始化失败,删除初始化任务
       vTaskSuspend(Network_Task_Handle);    // 挂起自己 不在执行 
     }
     else
@@ -104,20 +80,27 @@ void Network_Dispose_Task(void *p)
       network_start_flag=1;
       bsp_result &=~ 1;  
     }
-
-  }
-#if 0
+	}
+	EnableWindow(GetDlgItem(Network_Main_Handle, eID_LINK_STATE), ENABLE);
+	
+#if 1
   if((drv_network.net_init==0)&&((bsp_result&1)==0))
-  {     
+  {
     /* Initilaize the LwIP stack */
-    LwIP_Init(); 
-
-    drv_network.net_local_ip1  = (uint8_t)(gnetif.ip_addr.addr&0xFF);
-    drv_network.net_local_ip2  = (uint8_t)((gnetif.ip_addr.addr>>8)&0xFF);
-    drv_network.net_local_ip3  = (uint8_t)((gnetif.ip_addr.addr>>16)&0xFF);
-    drv_network.net_local_ip4  = (uint8_t)((gnetif.ip_addr.addr>>24)&0xFF);
+		/* Config TCP Server IP and Local IP*/
+    drv_network.net_local_ip1  = IP_ADDRESS[0];
+    drv_network.net_local_ip2  = IP_ADDRESS[1];
+    drv_network.net_local_ip3  = IP_ADDRESS[2];
+    drv_network.net_local_ip4  = IP_ADDRESS[3];
     drv_network.net_local_port = LOCAL_PORT;
     
+	  drv_network_server.net_local_ip1  = IP_ADDRESS[0];
+    drv_network_server.net_local_ip2  = IP_ADDRESS[1];
+    drv_network_server.net_local_ip3  = IP_ADDRESS[2];
+    drv_network_server.net_local_ip4  = IP_ADDRESS[3];
+    drv_network_server.net_local_port = LOCAL_PORT;
+		drv_network_server.net_type = 1;//TCP_SERVER
+		
     drv_network.net_remote_ip1  = DEST_IP_ADDR0;
     drv_network.net_remote_ip2  = DEST_IP_ADDR1;
     drv_network.net_remote_ip3  = DEST_IP_ADDR2;
@@ -128,55 +111,20 @@ void Network_Dispose_Task(void *p)
   }
  #endif 
 //  PostCloseMessage(GetDlgItem(Network_Main_Handle, ID_Hint_Win));
-#if 0
-  if(bsp_result&1)
-  {		
-    char str[30];
-    if(network_start_flag==2)
-    {
-      /* Configure ethernet (GPIOs, clocks, MAC, DMA) */
-      if(ETH_BSP_Config()==1)
-      {
-        bsp_result |= 1;
-        sprintf(str," ");  
-      }
-      else
-      {
-        bsp_result &=~ 1;    
-        sprintf(str,"< must be restart Safari >"); 
-      }
-    }
-    else
-    {
-      sprintf(str," ");  
-    }
-    network_start_flag=2;
-  }
-#endif
+
   InvalidateRect(Network_Main_Handle, NULL, TRUE);
   drv_network.net_connect=0;
   drv_network.net_type=0; 
-  TIM3_Config(999,899);//10ms定时器 
+//  TIM3_Config(999,899);//10ms定时器 
   LocalTime=0;
 //  TIM_SetCounter(TIM3,0);
-  HAL_TIM_Base_Start_IT(&TIM3_Handle); 
+//  HAL_TIM_Base_Start_IT(&TIM3_Handle); 
   EthLinkStatus=0;
+	vTaskDelay(5000);
+	GUI_Thread_Delete(TCPIP_Init_Task_Handle);//初始化成功,删除初始化任务
   while(1)
   {
-		vTaskDelay(500);
-		#if 0
-    /* check if any packet received */
-    if (ETH_CheckFrameReceived())
-    { 
-      /* process received ethernet packet */
-      LwIP_Pkt_Handle();
-    }
-    /* handle periodic timers for LwIP */
-    LwIP_Periodic_Handle(LocalTime);
-
-    GUI_msleep(3);//WM_Exec();//
-  }
-		#endif
+		vTaskDelay(5000);
 		/* 由中断处理接受到的数据 ---> HAL_ETH_RxCpltCallback */
 	}
 }
@@ -313,14 +261,26 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       RECT rc;
       GetClientRect(hwnd, &rc); 
       HWND Temp_Handle;
-      
+			
+			Wait_TCPIP_Init_Sem = xSemaphoreCreateBinary();
 			BaseType_t xReturn = pdPASS;
+      xReturn = xTaskCreate((TaskFunction_t )TCPIP_Init_Task,      /* 任务入口函数 */
+														(const char*    )"TCPIP Init Task",    /* 任务名字 */
+														(uint16_t       )2*1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+														(void*          )NULL,                      /* 任务入口函数参数 */
+														(UBaseType_t    )6,                         /* 任务的优先级 */
+														(TaskHandle_t*  )&TCPIP_Init_Task_Handle);     /* 任务控制块指针 */
+														
+		 if(xReturn != pdPASS)  
+			{
+				GUI_ERROR("Fail to create Network_Dispose_Task!\r\n");
+			}			
 			
       xReturn = xTaskCreate((TaskFunction_t )Network_Dispose_Task,      /* 任务入口函数 */
 														(const char*    )"Network Dispose Task",    /* 任务名字 */
 														(uint16_t       )2*1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
 														(void*          )NULL,                      /* 任务入口函数参数 */
-														(UBaseType_t    )14,                         /* 任务的优先级 */
+														(UBaseType_t    )6,                         /* 任务的优先级 */
 														(TaskHandle_t*  )&Network_Task_Handle);     /* 任务控制块指针 */
       if(xReturn != pdPASS)  
 			{
@@ -349,7 +309,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       CreateWindow(BUTTON,L"UDP",BS_RADIOBOX|WS_VISIBLE,
       rc.x,rc.y,rc.w,rc.h,hwnd,ID_RB3,NULL,NULL);
       
-      CreateWindow(BUTTON, L"未连接", WS_TRANSPARENT | BS_NOTIFY|WS_VISIBLE|WS_OWNERDRAW,
+      CreateWindow(BUTTON, L"未连接", WS_TRANSPARENT | BS_NOTIFY|WS_VISIBLE|WS_OWNERDRAW|WS_DISABLED,
                   717, 218, 79, 30, hwnd, eID_LINK_STATE, NULL, NULL);
       
       /* 数据发送文本窗口 */
@@ -427,8 +387,8 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         RC.w = 300;
         RC.h = 200;
         RC.x = (GUI_XSIZE - RC.w) >> 1;
-        RC.y = (GUI_YSIZE - RC.h) >> 1;
-        SelectDialogBox(hwnd, RC, L"以太网初始化失败\n请重新检查连接。", L"错误", &ops);    // 显示错误提示框
+        RC.y = (GUI_YSIZE - RC.h - 36) >> 1;
+        SelectDialogBox(hwnd, RC, L"以太网初始化失败\n请重新检查连接\r\n并复位开发板。", L"错误", &ops);    // 显示错误提示框
         PostCloseMessage(hwnd);                                                          // 发送关闭窗口的消息
       }
       
@@ -588,6 +548,18 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       code=HIWORD(wParam);//获取消息的类型    
       if(code == BN_CLICKED && id == eID_Network_EXIT)    // 退出按钮按下
       {
+				switch(NetworkTypeSelection)
+				{
+					case 0:
+						tcp_echoserver_close();
+						break;
+					case 1:
+						tcp_echoclient_disconnect();
+						break;
+					case 2:
+						udp_echoclient_disconnect();	
+						break;   
+				}
         PostCloseMessage(hwnd);    // 发送关闭窗口的消息
         break;
       }
@@ -644,24 +616,29 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             GetWindowText(GetDlgItem(hwnd, ID_TEXTBOX_RemoteIP1), wbuf, 128);    // 获取文本框的文本
             x_wcstombs_cp936(buf, wbuf, 128);                                    // 将宽字符串转为单字符串
             drv_network.net_remote_ip1 = x_atoi(buf);                            // 字符串转整型
+//						drv_network.net_local_ip1 = x_atoi(buf);
             GetWindowText(GetDlgItem(hwnd, ID_TEXTBOX_RemoteIP2), wbuf, 128);
             x_wcstombs_cp936(buf, wbuf, 128);
             drv_network.net_remote_ip2 = x_atoi(buf);
+//						drv_network.net_local_ip2 = x_atoi(buf);
             GetWindowText(GetDlgItem(hwnd, ID_TEXTBOX_RemoteIP3), wbuf, 128);
             x_wcstombs_cp936(buf, wbuf, 128);
             drv_network.net_remote_ip3 = x_atoi(buf);
+//						drv_network.net_local_ip3 = x_atoi(buf);
             GetWindowText(GetDlgItem(hwnd, ID_TEXTBOX_RemoteIP4), wbuf, 128);
             x_wcstombs_cp936(buf, wbuf, 128);
             drv_network.net_remote_ip4 = x_atoi(buf);
+//						drv_network.net_local_ip4 = x_atoi(buf);
             GetWindowText(GetDlgItem(hwnd, ID_TEXTBOX_RemotePort), wbuf, 128);
             x_wcstombs_cp936(buf, wbuf, 128);
             drv_network.net_remote_port = x_atoi(buf);
+//						drv_network.net_local_port = x_atoi(buf);
             drv_network.net_type=NetworkTypeSelection;
             switch(drv_network.net_type)
             {
               case 0:
                 /*create tcp server */ 
-                connectflag=tcp_echoserver_init(drv_network);
+                connectflag=tcp_echoserver_init(drv_network_server);
                 break;
               case 1:
                 /*connect to tcp server */
@@ -675,8 +652,11 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if(connectflag==0)    // 连接成功
             {
               drv_network.net_connect=1; 
-              SetWindowText(GetDlgItem(hwnd, eID_LINK_STATE), L"已连接");
-            }      
+              SetWindowText(GetDlgItem(hwnd, eID_LINK_STATE), L"点击断开");
+            }else
+						{
+						
+						}
           }
           else
           {

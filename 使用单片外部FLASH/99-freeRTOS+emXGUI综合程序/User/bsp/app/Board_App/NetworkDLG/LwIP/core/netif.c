@@ -368,6 +368,7 @@ netif_add(struct netif *netif,
 #endif /* LWIP_IPV4 */
 
   /* call user specified initialization function for netif */
+	/* if hardware init failed , it will break next operare */
   if (init(netif) != ERR_OK) {
     return NULL;
   }

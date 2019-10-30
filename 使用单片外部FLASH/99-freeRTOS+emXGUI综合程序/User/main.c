@@ -119,19 +119,20 @@ void BSP_Init(void)
 	
 	/* usart 端口初始化 */
   UARTx_Config();
+	
   /* 基本定时器初始化	*/
 	TIM_Basic_Init();  
+	
 	/* wm8978 播放器初始化	*/
 	if (wm8978_Init()==0)
   {
     printf("检测不到WM8978芯片!!!\n");
-    //while (1);	/* 停机 */
   }
 	
 	RTC_CLK_Config();
 	
 	if (HAL_RTCEx_BKUPRead(&Rtc_Handle,RTC_BKP_DRX) != 0X32F3)
-	{				
+	{
 		/* 设置时间和日期 */
 		RTC_TimeAndDate_Set();
 	}
@@ -155,8 +156,6 @@ void BSP_Init(void)
 		/* 等待 RTC APB 寄存器同步 */
 		HAL_RTC_WaitForSynchro(&Rtc_Handle);
 	} 
-	
-
 	
   /*hardfault 跟踪器初始化*/ 
   cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
@@ -187,9 +186,6 @@ void BSP_Init(void)
   * @retval None
   */
 
-
-
-static void TCP_Thread_Entry(void* parameter);
 /*****************************************************************
   * @brief  主函数
   * @param  无
@@ -210,14 +206,9 @@ int main(void)
                         (const char*    )"gui",/* 任务名字 */
                         (uint16_t       )2*1024,  /* 任务栈大小 */
                         (void*          )NULL,/* 任务入口函数参数 */
-                        (UBaseType_t    )8, /* 任务的优先级 */
-                        (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
-	xReturn = xTaskCreate((TaskFunction_t )TCP_Thread_Entry,  /* 任务入口函数 */
-                        (const char*    )"TCP",/* 任务名字 */
-                        (uint16_t       )2*1024,  /* 任务栈大小 */
-                        (void*          )NULL,/* 任务入口函数参数 */
                         (UBaseType_t    )10, /* 任务的优先级 */
                         (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
+
   /* 启动任务调度 */           
   if(pdPASS == xReturn)
     vTaskStartScheduler();   /* 启动任务，开启调度 */
@@ -227,7 +218,6 @@ int main(void)
   while(1);   /* 正常不会执行到这里 */    
 }
 
-extern void TCPIP_Init(void);
 extern void GUI_Startup(void);
 
 /**********************************************************************
@@ -243,33 +233,16 @@ static void GUI_Thread_Entry(void* parameter)
   /* 执行本函数不会返回 */
 	
 	GUI_Startup();
-//  
-  while (1)
-  {
-//    LED1_ON;
-//    printf("Test_Task Running,LED1_ON\r\n");
-//    vTaskDelay(500);   /* 延时500个tick */
-//    
-//    LED1_OFF;     
-//    printf("Test_Task Running,LED1_OFF\r\n");
-    vTaskDelay(500);   /* 延时500个tick */
-//    
-  }
-}
 
-static void TCP_Thread_Entry(void* parameter)
-{	
-//	TCPIP_Init();
   while (1)
   {
-//    LED1_ON;
-//    printf("Test_Task Running,LED1_ON\r\n");
-//    vTaskDelay(500);   /* 延时500个tick */
-//    
-//    LED1_OFF;     
-//    printf("Test_Task Running,LED1_OFF\r\n");
+    LED1_ON;
+    printf("Test_Task Running,LED1_ON\r\n");
     vTaskDelay(500);   /* 延时500个tick */
-//    
+    
+    LED1_OFF;     
+    printf("Test_Task Running,LED1_OFF\r\n");
+    vTaskDelay(500);   /* 延时500个tick */
   }
 }
 

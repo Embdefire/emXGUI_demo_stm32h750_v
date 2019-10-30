@@ -198,7 +198,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(htim->Instance == TIM3)
     {
         video_timeout = 1;
-			  LocalTime+=10;
+//			  LocalTime+=10;
 //      LED1_TOGGLE;
     }
 }

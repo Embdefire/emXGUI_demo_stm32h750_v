@@ -115,6 +115,7 @@ void pbuf_free_custom(struct pbuf *p);
 
 
 /* Private functions ---------------------------------------------------------*/
+extern uint8_t network_start_flag;
 /*******************************************************************************
                        LL Driver Interface ( LwIP stack --> ETH) 
 *******************************************************************************/
@@ -197,11 +198,10 @@ static void low_level_init(struct netif *netif)
   TxConfig.CRCPadCtrl = ETH_CRC_PAD_INSERT;
   //³õÊ¼»¯LAN8720A
   if(LAN8720_Init(&EthHandle) == HAL_OK) 
-  {    
+  {
       GUI_DEBUG("LAN8720_Init ok\n");
       ethernet_link_check_state(netif);
   }
-
 }
 
 /**
@@ -403,7 +403,7 @@ err_t ethernetif_init(struct netif *netif)
   
 //  ethernetif->ethaddr = (struct eth_addr *) &(netif->hwaddr[0]);
   
-  return ERR_OK;
+	return ERR_OK;
 }
 
 /**

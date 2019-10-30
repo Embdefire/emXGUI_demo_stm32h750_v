@@ -439,7 +439,8 @@ ip4_addr_t gw;
 uint8_t IP_ADDRESS[4];
 uint8_t NETMASK_ADDRESS[4];
 uint8_t GATEWAY_ADDRESS[4];
-
+static uint16_t out_tim = 0;//超时
+extern SemaphoreHandle_t Wait_TCPIP_Init_Sem;
 void TCPIP_Init(void)
 {
   tcpip_init(NULL, NULL);
@@ -459,7 +460,7 @@ void TCPIP_Init(void)
   /* Initilialize the LwIP stack without RTOS */
   /* add the network interface (IPv4/IPv6) without RTOS */
   netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
-
+	
   /* Registers the default network interface */
   netif_set_default(&gnetif);
 
@@ -488,16 +489,23 @@ void TCPIP_Init(void)
     printf("lwip dhcp init success...\n\n");
   else
     printf("lwip dhcp init fail...\n\n");
+
   while(ip_addr_cmp(&(gnetif.ip_addr),&ipaddr))   //等待dhcp分配的ip有效
   {
     vTaskDelay(1);
-  } 
+  }
+	xSemaphoreGive(Wait_TCPIP_Init_Sem);//初始化完成,释放信号量
 #endif
-  printf("本地IP地址是:%d.%d.%d.%d\n\n",  \
-        ((gnetif.ip_addr.addr)&0x000000ff),       \
-        (((gnetif.ip_addr.addr)&0x0000ff00)>>8),  \
-        (((gnetif.ip_addr.addr)&0x00ff0000)>>16), \
-        ((gnetif.ip_addr.addr)&0xff000000)>>24);
+		printf("本地IP地址是:%d.%d.%d.%d\n\n",  \
+					((gnetif.ip_addr.addr)&0x000000ff),       \
+					(((gnetif.ip_addr.addr)&0x0000ff00)>>8),  \
+					(((gnetif.ip_addr.addr)&0x00ff0000)>>16), \
+					((gnetif.ip_addr.addr)&0xff000000)>>24);
+		
+				IP_ADDRESS[0] = ((gnetif.ip_addr.addr)&0x000000ff);
+				IP_ADDRESS[1] = (((gnetif.ip_addr.addr)&0x0000ff00)>>8);
+				IP_ADDRESS[2] = (((gnetif.ip_addr.addr)&0x00ff0000)>>16);
+				IP_ADDRESS[3] = (((gnetif.ip_addr.addr)&0xff000000)>>24);
 }
 
 

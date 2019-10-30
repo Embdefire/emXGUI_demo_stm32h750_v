@@ -21,8 +21,7 @@ extern double ADC_vol;
 
 ADC_HandleTypeDef Init_ADC_Handle;
 DMA_HandleTypeDef hdma_adc;
-//__attribute__ ((at(0x30000000))) 
-__IO uint16_t ADC_ConvertedValue;
+uint16_t ADC_ConvertedValue;
 
 
 /**
@@ -55,6 +54,8 @@ static void ADC_Mode_Config(void)
     ADC_ChannelConfTypeDef ADC_Config;
   
     RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;  
+	
+	HAL_ADC_DeInit(&Init_ADC_Handle);
     /*            配置ADC3时钟源             */
     /*    HSE Frequency(Hz)    = 25000000   */                                             
     /*         PLL_M                = 5     */
@@ -111,6 +112,7 @@ static void ADC_Mode_Config(void)
     __HAL_LINKDMA(&Init_ADC_Handle,DMA_Handle,hdma_adc);    
       
     
+		
     Init_ADC_Handle.Instance = RHEOSTAT_ADC;
     //ADC时钟1分频
 //    Init_ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;

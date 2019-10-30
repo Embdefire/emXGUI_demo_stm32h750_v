@@ -72,7 +72,7 @@ static uint8_t res_prep = 1;    // 资源准备标志(提前加载到SDRAM这里设置为1表示加
 
 // 局部变量，用于保存转换计算后的电压值 	 
 double ADC_Vol; 
-extern __IO uint16_t ADC_ConvertedValue;
+extern uint16_t ADC_ConvertedValue;
 extern void ADC_Init(void);
 
 static void	X_MeterPointer(HDC hdc, int cx, int cy, int r, u32 color, double dat_val)

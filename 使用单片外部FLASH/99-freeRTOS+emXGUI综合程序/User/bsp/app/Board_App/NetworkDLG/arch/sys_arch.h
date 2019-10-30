@@ -84,7 +84,4 @@ typedef TaskHandle_t sys_thread_t;
 
 typedef int sys_prot_t;
 
-
-
-void TCPIP_Init(void);
-
+void My_TCPIP_initialization(uint8_t *ipaddr_test);

@@ -23,7 +23,7 @@ int		number_input_box(int x, int y, int w, int h,
 TaskHandle_t Network_Task_Handle;
 TaskHandle_t TCPIP_Init_Task_Handle;
 SemaphoreHandle_t Wait_TCPIP_Init_Sem;
-
+extern void My_TCPIP_initialization(uint8_t *ipaddr_test);
 int8_t NetworkTypeSelection = 0;
 
 HWND Send_Handle;
@@ -45,14 +45,14 @@ uint16_t bsp_result=0;
 extern void TIM3_Config(uint16_t period,uint16_t prescaler);
 extern TIM_HandleTypeDef TIM3_Handle;
 /* 从 sys_arch.c 引入 */
-extern void TCPIP_Init(void);
+
 
 /* LWIP协议栈初始化,初始化成功即删除任务,否则会阻塞在函数内。 */
 static void TCPIP_Init_Task(void *p)
 {
 	if(network_start_flag == 0)//如果成功过一次,重新打开程序,不会再初始化。
 	{
-		TCPIP_Init();
+		My_TCPIP_initialization(IP_ADDRESS);
 	}
 	while(1)
 	{

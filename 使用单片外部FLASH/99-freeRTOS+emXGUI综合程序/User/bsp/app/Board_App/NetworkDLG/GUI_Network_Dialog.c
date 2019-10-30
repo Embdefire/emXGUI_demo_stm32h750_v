@@ -163,6 +163,7 @@ void Network_Dispose_Task(void *p)
   EthLinkStatus=0;
   while(1)
   {
+		vTaskDelay(500);
 		#if 0
     /* check if any packet received */
     if (ETH_CheckFrameReceived())
@@ -317,9 +318,9 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			
       xReturn = xTaskCreate((TaskFunction_t )Network_Dispose_Task,      /* 任务入口函数 */
 														(const char*    )"Network Dispose Task",    /* 任务名字 */
-														(uint16_t       )3*1024/4,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+														(uint16_t       )2*1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
 														(void*          )NULL,                      /* 任务入口函数参数 */
-														(UBaseType_t    )5,                         /* 任务的优先级 */
+														(UBaseType_t    )14,                         /* 任务的优先级 */
 														(TaskHandle_t*  )&Network_Task_Handle);     /* 任务控制块指针 */
       if(xReturn != pdPASS)  
 			{

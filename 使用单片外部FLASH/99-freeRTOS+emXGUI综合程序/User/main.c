@@ -189,7 +189,7 @@ void BSP_Init(void)
 
 
 
-
+static void TCP_Thread_Entry(void* parameter);
 /*****************************************************************
   * @brief  主函数
   * @param  无
@@ -208,6 +208,12 @@ int main(void)
    /* 创建AppTaskCreate任务 */
   xReturn = xTaskCreate((TaskFunction_t )GUI_Thread_Entry,  /* 任务入口函数 */
                         (const char*    )"gui",/* 任务名字 */
+                        (uint16_t       )2*1024,  /* 任务栈大小 */
+                        (void*          )NULL,/* 任务入口函数参数 */
+                        (UBaseType_t    )8, /* 任务的优先级 */
+                        (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
+	xReturn = xTaskCreate((TaskFunction_t )TCP_Thread_Entry,  /* 任务入口函数 */
+                        (const char*    )"TCP",/* 任务名字 */
                         (uint16_t       )2*1024,  /* 任务栈大小 */
                         (void*          )NULL,/* 任务入口函数参数 */
                         (UBaseType_t    )10, /* 任务的优先级 */
@@ -236,9 +242,24 @@ static void GUI_Thread_Entry(void* parameter)
   printf("野火emXGUI演示例程\n\n");
   /* 执行本函数不会返回 */
 	
-	TCPIP_Init();
-//GUI_Startup();
+	GUI_Startup();
 //  
+  while (1)
+  {
+//    LED1_ON;
+//    printf("Test_Task Running,LED1_ON\r\n");
+//    vTaskDelay(500);   /* 延时500个tick */
+//    
+//    LED1_OFF;     
+//    printf("Test_Task Running,LED1_OFF\r\n");
+    vTaskDelay(500);   /* 延时500个tick */
+//    
+  }
+}
+
+static void TCP_Thread_Entry(void* parameter)
+{	
+//	TCPIP_Init();
   while (1)
   {
 //    LED1_ON;

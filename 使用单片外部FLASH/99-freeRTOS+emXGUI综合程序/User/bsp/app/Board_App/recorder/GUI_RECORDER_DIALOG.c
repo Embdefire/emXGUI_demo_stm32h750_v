@@ -132,8 +132,8 @@ extern WavHead rec_wav;             /* WAV设备  */
 extern FRESULT result; 
 extern UINT bw;            					/* File R/W count */
 extern REC_TYPE Recorder;           /* 录音设备 */
-extern uint16_t record_buffer0[RECBUFFER_SIZE] __EXRAM;  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 */
-extern uint16_t record_buffer1[RECBUFFER_SIZE] __EXRAM;  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
+extern __align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__attribute__((at(0x24008000)));  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 */
+extern __align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__attribute__((at(0x24004000)));  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
 
 static void App_Record(void *p)
 {

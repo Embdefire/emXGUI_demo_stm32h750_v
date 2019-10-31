@@ -56,7 +56,7 @@ BOOL FileSystem_Init(void)
 #if defined(STM32F429_439xx)
   BL8782_PDN_INIT();
 #elif defined(STM32H743xx)
-  WIFI_PDN_INIT();
+//  WIFI_PDN_INIT();已在SD卡初始化中禁用
 #endif  
 	
 

@@ -32,8 +32,8 @@ WavHead rec_wav;            /* WAV设备  */
 uint8_t Isread=0;           /* DMA传输完成标志 */
 uint8_t bufflag=0;          /* 数据缓存区选择标志 */
 uint32_t wavsize=0;         /* wav音频数据大小 */
-__align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__attribute__((at(0xd0005000)));//__EXRAM;  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 BUF不放在外部会有不能读取SD卡的BUG*/
-__align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__attribute__((at(0xd0010000)));//__EXRAM;  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
+__align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__attribute__((at(0x24008000)));//__EXRAM;  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 BUF不放在外部会有不能读取SD卡的BUG*/
+__align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__attribute__((at(0x24004000)));//__EXRAM;  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
 
 FIL record_file	__EXRAM;			/* file objects */
 extern FRESULT result; 
@@ -50,7 +50,7 @@ uint32_t g_FmtList[FMT_COUNT][3] =
 };
 
 //extern const uint16_t recplaybuf[4];//2个16位数据,用于录音时I2S Master发送.循环发送0.
-uint16_t recplaybuf[4]={0X0000,0X0000};
+__EXRAM uint16_t recplaybuf[4]={0X0000,0X0000};
 /* 仅允许本文件内调用的函数声明 */
 
 void MusicPlayer_SAI_DMA_TX_Callback(void);

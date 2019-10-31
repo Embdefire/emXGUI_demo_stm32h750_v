@@ -1294,11 +1294,11 @@ static void CollectVoltage_ExitButton_OwnerDraw(DRAWITEM_HDR *ds)
 
   SetPenSize(hdc, 2);
 
-  InflateRect(&rc, 0, -1);
-  
+  OffsetRect(&rc,20,5);
+	
   for(int i=0; i<4; i++)
-  {
-    HLine(hdc, rc.x, rc.y, rc.w);
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
   }
 }
@@ -1320,7 +1320,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                   (TaskHandle_t*  )&Gyro_Task_Handle);     /* 任务控制块指针 */
                       
       CreateWindow(BUTTON, L"O", WS_TRANSPARENT|BS_FLAT | BS_NOTIFY |WS_OWNERDRAW|WS_VISIBLE,
-                  740, 12, 36, 36, hwnd, eID_Gyro_EXIT, NULL, NULL); 
+                  720, 5, 80, 80, hwnd, eID_Gyro_EXIT, NULL, NULL); 
       
       BOOL res;
       u8 *jpeg_buf;

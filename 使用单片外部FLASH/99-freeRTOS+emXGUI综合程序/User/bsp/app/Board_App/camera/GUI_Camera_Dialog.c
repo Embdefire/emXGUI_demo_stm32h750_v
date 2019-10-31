@@ -286,11 +286,11 @@ static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
   SetPenSize(hdc, 2);
 
-  InflateRect(&rc, 0, -23);
-  
+  OffsetRect(&rc,15,20);
+	
   for(int i=0; i<4; i++)
-  {
-    HLine(hdc, rc.x, rc.y, rc.w);
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
   }
 
@@ -1611,7 +1611,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       OV5640_ReadID(&OV5640_Camera_ID);
 
       //退出按键
-      CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_TRANSPARENT|WS_VISIBLE,730, 5, 36, 72, hwnd, eID_EXIT, NULL, NULL);       
+      CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_TRANSPARENT|WS_VISIBLE,720, 5, 80, 80, hwnd, eID_EXIT, NULL, NULL);       
       if(OV5640_Camera_ID.PIDH  == 0x56)
       {
         GUI_DEBUG("OV5640 ID:%x %x",OV5640_Camera_ID.PIDH ,OV5640_Camera_ID.PIDL);
@@ -1630,6 +1630,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         x =(GUI_XSIZE-w)>>1;
         y =(GUI_YSIZE-h)>>1;
         MessageBox(hwnd,x,y,w,h,L"没有检测到OV5640摄像头，\n请重新检查连接。",L"消息",&ops); 
+				PostCloseMessage(hwnd);
         break;  
       }
       cam_sem = GUI_SemCreate(0,1);//同步摄像头图像

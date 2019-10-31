@@ -237,11 +237,11 @@ static void vedio_exit_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
   SetPenSize(hdc, 2);
 
-  InflateRect(&rc, 0, -23);
-  
+  OffsetRect(&rc,15,20);
+	
   for(int i=0; i<4; i++)
-  {
-    HLine(hdc, rc.x, rc.y, rc.w);
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
   }
 
@@ -800,7 +800,7 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
        
        
        CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_VISIBLE|WS_TRANSPARENT,
-                      730, 5, 36, 72, hwnd, eID_VIDEO_EXIT, NULL, NULL);            
+                      720, 5, 80, 80, hwnd, eID_VIDEO_EXIT, NULL, NULL);            
        
        #endif
        u8 *jpeg_buf;
@@ -823,7 +823,7 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
        RES_Release_Content((char **)&jpeg_buf);         
        vbuf =GUI_GRAM_Alloc(800*480*2);
        pSurf1 =CreateSurface(SURF_SCREEN,800,480,800*2,vbuf);
-
+			 pSurf1->GL->FillArea(pSurf1,0,0,LCD_XSIZE,LCD_YSIZE,pSurf1->CC->MapRGB(0,0,0)); 
        App_PlayVideo(NULL);
        //GUI_Thread_Create(App_PlayVideo,"App_PlayVideo",16*1024,NULL,6,5);
        break;

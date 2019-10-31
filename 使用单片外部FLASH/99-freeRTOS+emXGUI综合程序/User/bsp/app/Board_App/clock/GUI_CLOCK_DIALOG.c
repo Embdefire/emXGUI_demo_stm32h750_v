@@ -34,7 +34,7 @@ const clock_icon_t clock_icon[] = {
 
   /* 按钮 */
   {L"设置",           {318, 390, 166,  70},  ID_CLOCK_SET},             // 0. 设置
-  {L"O",              {740,   5,  36,  72},  ID_CLOCK_EXIT},            // 1. 退出
+  {L"O",              {720,   5,  80,  80},  ID_CLOCK_EXIT},            // 1. 退出
 
   /* 文本 */
   {L"1",              {551, 210, 102,  93},  ID_CLOCK_DAY},             // 2. 日
@@ -137,11 +137,12 @@ static void exit_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
   SetPenSize(hdc, 2);
 
-  InflateRect(&rc, 0, -23);
-  
+//  InflateRect(&rc, 0, -23);
+	
+  OffsetRect(&rc,15,20);
   for(int i=0; i<4; i++)
-  {
-    HLine(hdc, rc.x, rc.y, rc.w);
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
   }
 

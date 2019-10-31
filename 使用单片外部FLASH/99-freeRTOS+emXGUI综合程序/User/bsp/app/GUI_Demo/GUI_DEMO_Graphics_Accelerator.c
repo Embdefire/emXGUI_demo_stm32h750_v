@@ -185,24 +185,24 @@ static void exit_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 //    GUI_DEBUG("ds->ID=%d,BST_PUSHED",ds->ID);
 //		SetBrushColor(hdc,MapRGB(hdc,150,200,250)); //设置填充色(BrushColor用于所有Fill类型的绘图函数)
 //		SetPenColor(hdc,MapRGB(hdc,250,0,0));        //设置绘制色(PenColor用于所有Draw类型的绘图函数)
-		SetTextColor(hdc, MapRGB(hdc, 250, 250, 250));      //设置文字色
+		SetPenColor(hdc, MapRGB(hdc, 1, 191, 255));      //设置文字色
 	}
 	else
 	{ //按钮是弹起状态
 //		SetBrushColor(hdc,MapRGB(hdc,255,255,255));
 //		SetPenColor(hdc,MapRGB(hdc,0,250,0));
-		SetPenColor(hdc, MapRGB(hdc, 1, 191, 255));
+		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));
 	}
 
   SetPenSize(hdc, 2);
 
-  InflateRect(&rc, 0, -1);
-  
+  OffsetRect(&rc,15,20);
+	
   for(int i=0; i<4; i++)
-  {
-    HLine(hdc, rc.x, rc.y, rc.w);
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
-  }  
+  }
 }
 static void GA_BUTTON_OwnerDraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
@@ -457,7 +457,7 @@ static LRESULT	WinProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 
       /* Home按钮 */    
 			//wnd=CreateWindow(BUTTON,L"O",	WS_TRANSPARENT|WS_OWNERDRAW|WS_VISIBLE,730,0,70,70,hwnd,ID_EXIT,NULL,NULL); //创建一个按钮.
-			wnd=CreateWindow(BUTTON,L"O",	WS_TRANSPARENT|WS_OWNERDRAW|WS_VISIBLE,740,12,36,36,hwnd,ID_EXIT,NULL,NULL); //创建一个按钮.
+			wnd=CreateWindow(BUTTON,L"O",	WS_TRANSPARENT|WS_OWNERDRAW|WS_VISIBLE,720,5,80,80,hwnd,ID_EXIT,NULL,NULL); //创建一个按钮.
 			SetWindowFont(wnd,controlFont_64); //设置控件窗口字体.
 
 //      SetFont(hdc, defaultFont);

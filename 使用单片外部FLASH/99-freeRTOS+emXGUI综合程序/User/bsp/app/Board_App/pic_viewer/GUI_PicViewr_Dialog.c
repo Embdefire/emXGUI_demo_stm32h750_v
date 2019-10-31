@@ -45,21 +45,20 @@ static void PicViewer_ExitButton_OwnerDraw(DRAWITEM_HDR *ds)
 
   if (ds->State & BST_PUSHED)
 	{ //按钮是按下状态
-		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));
+		SetPenColor(hdc, MapRGB(hdc, 1, 191, 255));
 	}
 	else
 	{ //按钮是弹起状态
-
-		SetPenColor(hdc, MapRGB(hdc, 1, 191, 255));      //设置画笔色
+		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));     //设置画笔色
 	}
 
   SetPenSize(hdc, 2);
 
-  InflateRect(&rc, 0, -1);
-  
+  OffsetRect(&rc,15,20);
+	
   for(int i=0; i<4; i++)
-  {
-    HLine(hdc, rc.x, rc.y, rc.w);
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
   }
 
@@ -402,7 +401,7 @@ static LRESULT	PicViewer_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       SetWindowFont(GetDlgItem(hwnd,eID_Pic_NEXT), controlFont_64);
             
       CreateWindow(BUTTON, L"O", WS_TRANSPARENT|BS_FLAT | BS_NOTIFY |WS_OWNERDRAW|WS_VISIBLE,
-                 740, 18, 36, 36, hwnd, eID_Pic_EXIT, NULL, NULL); 
+                 720, 5, 80, 80, hwnd, eID_Pic_EXIT, NULL, NULL); 
 
       CreateWindow(BUTTON, L"分辨率：", WS_OWNERDRAW|WS_VISIBLE|WS_TRANSPARENT, 
                    GUI_PicViewer_Icon[2].rc.x, GUI_PicViewer_Icon[2].rc.y, 

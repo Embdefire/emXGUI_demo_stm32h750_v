@@ -277,15 +277,15 @@ static void T_RH_ExitButton_OwnerDraw(DRAWITEM_HDR *ds)
       SetPenColor(hdc, MapRGB(hdc, 255,255,255));      //иХжцндвжи╚
    }
 
-   InflateRect(&rc, 0, -2);
-
-   for(int i=0; i<4; i++)
-   {
-      HLine(hdc, rc.x-20, rc.y, rc.w+50);
-		 HLine(hdc, rc.x-20, rc.y+1, rc.w+50);
-		 HLine(hdc, rc.x-20, rc.y+2, rc.w+50);
-      rc.y += 9;
-   }
+	 SetPenSize(hdc, 2);
+	 
+  OffsetRect(&rc,15,20);
+	
+  for(int i=0; i<4; i++)
+  {	
+    HLine(hdc, rc.x, rc.y ,58);//rc.w
+    rc.y += 9;
+  }
 }
 
 /*
@@ -328,7 +328,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	    DHT11_GPIO_Config();
             
       CreateWindow(BUTTON, L"O", WS_TRANSPARENT|BS_FLAT | BS_NOTIFY |WS_OWNERDRAW|WS_VISIBLE,
-                  740,12,36,36, hwnd, eID_T_RH_EXIT, NULL, NULL); 
+                  720,5,80,80, hwnd, eID_T_RH_EXIT, NULL, NULL); 
 
       rc.w = GUI_XSIZE / 2;
       rc.h = TitleHeight-2;

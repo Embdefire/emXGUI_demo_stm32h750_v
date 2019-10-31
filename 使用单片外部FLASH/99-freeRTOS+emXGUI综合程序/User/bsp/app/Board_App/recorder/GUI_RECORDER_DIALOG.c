@@ -862,9 +862,17 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
               {
                 sprintf(recfilename,"0:/recorder/rec%03d.wav",i);
                 result=f_open(&record_file,(const TCHAR *)recfilename,FA_READ);
-                if(result==FR_NO_FILE)break;					
+                if(result==FR_NO_FILE)
+								{
+									f_close(&record_file);//文件不存在,关闭文件,退出
+									break;					
+								}
+								else
+								{
+									f_close(&record_file);//文件存在,关闭文件,继续
+								}
               }
-              f_close(&record_file);
+              
               
               if(i==0xff)
               {

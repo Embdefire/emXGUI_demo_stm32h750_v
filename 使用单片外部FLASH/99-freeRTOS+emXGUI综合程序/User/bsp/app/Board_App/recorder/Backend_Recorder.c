@@ -32,8 +32,8 @@ WavHead rec_wav;            /* WAV设备  */
 uint8_t Isread=0;           /* DMA传输完成标志 */
 uint8_t bufflag=0;          /* 数据缓存区选择标志 */
 uint32_t wavsize=0;         /* wav音频数据大小 */
-__align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__EXRAM;  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 BUF不放在外部会有不能读取SD卡的BUG*/
-__align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__EXRAM;  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
+__align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__attribute__((at(0xd0005000)));//__EXRAM;  /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 BUF不放在外部会有不能读取SD卡的BUG*/
+__align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__attribute__((at(0xd0010000)));//__EXRAM;  /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
 
 FIL record_file	__EXRAM;			/* file objects */
 extern FRESULT result; 
@@ -293,8 +293,7 @@ void StartRecord(const char *filename)
 	result=f_write(&record_file,(const void *)&rec_wav,sizeof(rec_wav),&bw);
 	
 	GUI_msleep(10);		/* 延迟一段时间，等待I2S中断结束 */
-	//I2S_Stop();			/* 停止I2S录音和放音 */
-	SAI_Rec_Stop();
+	SAI_Rec_Stop();			/* 停止I2S录音和放音 */	
 	SAI_Play_Stop();
 	wm8978_Reset();		/* 复位WM8978到复位状态 */
   wm8978_CtrlGPIO1(0);
@@ -321,25 +320,11 @@ void StartRecord(const char *filename)
 	/* 配置WM8978音频接口为飞利浦标准I2S接口，16bit */
 	//wm8978_CfgAudioIF(I2S_Standard_Phillips, 16);
 	wm8978_CfgAudioIF(SAI_I2S_STANDARD, 16);
-#if 0
-	I2Sx_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
-	I2Sxext_Mode_Config(g_FmtList[Recorder.ucFmtIdx][0],g_FmtList[Recorder.ucFmtIdx][1],g_FmtList[Recorder.ucFmtIdx][2]);
-	
-	I2Sx_TX_DMA_Init(&recplaybuf[0],&recplaybuf[1],1);
-	DMA_ITConfig(I2Sx_TX_DMA_STREAM,DMA_IT_TC,DISABLE);//开启传输完成中断
-	
-	I2S_DMA_RX_Callback=Recorder_I2S_DMA_RX_Callback;
-	I2Sxext_RX_DMA_Init(record_buffer0,record_buffer1,RECBUFFER_SIZE);
-  	
-	I2S_Play_Start();
-	I2Sxext_Recorde_Start();
-#endif
+
 	 SAIA_TX_DMA_Init((uint32_t)&recplaybuf[0],(uint32_t)&recplaybuf[1],1);
    __HAL_DMA_DISABLE_IT(&h_txdma,DMA_IT_TC);
    SAIB_RX_DMA_Init((uint32_t)record_buffer0,(uint32_t)record_buffer1,RECBUFFER_SIZE);
-//  
 
-// 
   SAI_Rec_Start();
   SAI_Play_Start();
 }

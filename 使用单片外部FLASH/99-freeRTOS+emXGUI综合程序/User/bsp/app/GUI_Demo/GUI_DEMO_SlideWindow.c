@@ -8,6 +8,7 @@
 #include <emXGUI.h>
 #include "emXGUI_JPEG.h"
 #include "GUI_AppDef.h"
+#include "emxgui_png.h"
 //#include "cpuusage.h"
 
 /* 为0时显示GUI的广告，为1时显示开发板的广告 */
@@ -39,7 +40,7 @@ extern const char res_slogan[];
 extern unsigned int res_slogan_size(void);
 extern uint8_t Theme_Flag;   // 主题标志
 
-#define GUI_DEMO_PIC  "explain_desktop.png"
+#define GUI_DEMO_PIC  "gui_demo_pic.png"
 #define GUI_EXPLAINDESKTOP_PIC   "explain_desktop.jpg"
 /*============================================================================*/
 /**
@@ -52,72 +53,137 @@ extern uint8_t Theme_Flag;   // 主题标志
   */
 static void CreateSlogan(HDC hdc, const RECT *lprc, HWND hwnd)
 {
+	#if 0
 	RECT rc;
 	JPG_DEC *dec;
 
-//	const wchar_t *p_header;
-//	const wchar_t *p_string;
+	const wchar_t *p_header;
+	const wchar_t *p_string;
 
-//	if (slogan_flag)
-//	{
-//		p_header = header_slogan_board;
-//		p_string = string_slogan_board;
-//	}
-//	else
-//	{
-//		p_header = header_slogan_gui;
-//		p_string = string_slogan_gui;
-//	}
+	if (slogan_flag)
+	{
+		p_header = header_slogan_board;
+		p_string = string_slogan_board;
+	}
+	else
+	{
+		p_header = header_slogan_gui;
+		p_string = string_slogan_gui;
+	}
 
-//	if (lprc == NULL)
-//	{
-//		GetClientRect(hwnd, &rc);
-//	}
-//	else
-//	{
-//		CopyRect(&rc, lprc);
-//	}
+	if (lprc == NULL)
+	{
+		GetClientRect(hwnd, &rc);
+	}
+	else
+	{
+		CopyRect(&rc, lprc);
+	}
 
-//	/* 背景 */
-//	GetClientRect(hwnd, &rc);
-//	rc.y = 0;
-//	rc.h = 0 + HEAD_INFO_HEIGHT;
-//	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-//	FillRect(hdc, &rc);
+	/* 背景 */
+	GetClientRect(hwnd, &rc);
+	rc.y = 0;
+	rc.h = 0 + HEAD_INFO_HEIGHT;
+	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+	FillRect(hdc, &rc);
 
-//	SetBrushColor(hdc, MapRGB(hdc, 82, 85, 82));
-//	rc.y = rc.y + rc.h;
-//	rc.h = GUI_YSIZE + 0 - rc.y;
-//	FillRect(hdc, &rc);
+	SetBrushColor(hdc, MapRGB(hdc, 82, 85, 82));
+	rc.y = rc.y + rc.h;
+	rc.h = GUI_YSIZE + 0 - rc.y;
+	FillRect(hdc, &rc);
 
-//	/* 首栏 */
+	/* 首栏 */
 
-//	SetFont(hdc, GB2312_32_Font);
-//	SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
-//	GetClientRect(hwnd, &rc);
-//	rc.h = HEAD_INFO_HEIGHT;
+	SetFont(hdc, GB2312_32_Font);
+	SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
+	GetClientRect(hwnd, &rc);
+	rc.h = HEAD_INFO_HEIGHT;
 
-//	DrawText(hdc, p_header, -1, &rc, DT_CENTER | DT_VCENTER);	
+	DrawText(hdc, p_header, -1, &rc, DT_CENTER | DT_VCENTER);	
 
-//	GetClientRect(hwnd, &rc);
-//	rc.y += HEAD_INFO_HEIGHT + 40;
+	GetClientRect(hwnd, &rc);
+	rc.y += HEAD_INFO_HEIGHT + 40;
 
-//	/* 广告语 */
-//	SetFont(hdc, defaultFont);
-//	//      DrawText(hdc, SLOGAN, -1,&rc0,DT_LEFT);       
+	/* 广告语 */
+	SetFont(hdc, defaultFont);
+	//      DrawText(hdc, SLOGAN, -1,&rc0,DT_LEFT);       
 
-//	DrawText(hdc, p_string, -1, &rc, DT_LEFT);
+	DrawText(hdc, p_string, -1, &rc, DT_LEFT);
 
-//	SetTextColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-//  
-//	SetTextColor(hdc, MapRGB(hdc, 250,250,250));
-//	rc.y = GUI_YSIZE - 60;
-//  rc.x = 180;
-//  rc.h = 50;
-//	DrawText(hdc, L"copyright @ 东莞野火电子技术有限公司", -1, &rc, DT_LEFT|DT_VCENTER);
+	SetTextColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+  
+	SetTextColor(hdc, MapRGB(hdc, 250,250,250));
+	rc.y = GUI_YSIZE - 60;
+  rc.x = 180;
+  rc.h = 50;
+	DrawText(hdc, L"copyright @ 东莞野火电子技术有限公司", -1, &rc, DT_LEFT|DT_VCENTER);
+#endif
+	RECT rc;
+	JPG_DEC *dec;
+
+	const wchar_t *p_header;
+	const wchar_t *p_string;
+
+	if (slogan_flag)
+	{
+		p_header = header_slogan_board;
+		p_string = string_slogan_board;
+	}
+	else
+	{
+		p_header = header_slogan_gui;
+		p_string = string_slogan_gui;
+	}
+
+	if (lprc == NULL)
+	{
+		GetClientRect(hwnd, &rc);
+	}
+	else
+	{
+		CopyRect(&rc, lprc);
+	}
+
+	/* 背景 */
+	GetClientRect(hwnd, &rc);
+	rc.y = 0;
+	rc.h = 0 + HEAD_INFO_HEIGHT;
+	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+	FillRect(hdc, &rc);
+
+	SetBrushColor(hdc, MapRGB(hdc, 82, 85, 82));
+	rc.y = rc.y + rc.h;
+	rc.h = GUI_YSIZE + 0 - rc.y;
+	FillRect(hdc, &rc);
+
+	/* 首栏 */
+
+	SetFont(hdc, GB2312_32_Font);
+	SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
+	GetClientRect(hwnd, &rc);
+	rc.h = HEAD_INFO_HEIGHT;
+
+	DrawText(hdc, p_header, -1, &rc, DT_CENTER | DT_VCENTER);	
+
+	GetClientRect(hwnd, &rc);
+	rc.y += HEAD_INFO_HEIGHT + 40;
+
+	/* 广告语 */
+	SetFont(hdc, defaultFont);
+	//      DrawText(hdc, SLOGAN, -1,&rc0,DT_LEFT);       
+
+	DrawText(hdc, p_string, -1, &rc, DT_LEFT);
+
+	SetTextColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
+  
+	SetTextColor(hdc, MapRGB(hdc, 250,250,250));
+	rc.y = GUI_YSIZE - 60;
+  rc.x = 180;
+  rc.h = 50;
+	DrawText(hdc, L"copyright @ 东莞野火电子技术有限公司", -1, &rc, DT_LEFT|DT_VCENTER);
 
 	/* 右侧图片 */
-#if 1
+#if 0
   /* 使用资源设备中的文件 */
   {
     BOOL res;
@@ -143,16 +209,35 @@ static void CreateSlogan(HDC hdc, const RECT *lprc, HWND hwnd)
     RES_Release_Content((char **)&jpeg_buf);
   }
 #else
-	/* 根据图片数据创建JPG_DEC句柄 */
-	dec = JPG_Open(res_slogan, res_slogan_size());
+//	/* 根据图片数据创建JPG_DEC句柄 */
+//	dec = JPG_Open(res_slogan, res_slogan_size());
 
-	/* 绘制至内存对象 */
-	JPG_Draw(hdc, 480, HEAD_INFO_HEIGHT + 40, dec);
+//	/* 绘制至内存对象 */
+//	JPG_Draw(hdc, 480, HEAD_INFO_HEIGHT + 40, dec);
 
-	/* 关闭JPG_DEC句柄 */
-	JPG_Close(dec);
+//	/* 关闭JPG_DEC句柄 */
+//	JPG_Close(dec);
   
 #endif
+  {
+		BOOL res;
+		u8 *pic_buf;
+		u32 pic_size;
+		PNG_DEC *png_dec;
+		BITMAP png_bm;
+
+		//res = FS_Load_Content(GUI_DEMO_PIC, (char**)&pic_buf, &pic_size);    // 资源在 SD 卡
+		res = RES_Load_Content(GUI_DEMO_PIC, (char**)&pic_buf, &pic_size);     // 资源在外部 FLASH
+		if(res)
+		{
+			png_dec = PNG_Open(pic_buf);
+			PNG_GetBitmap(png_dec, &png_bm);
+			DrawBitmap(hdc, 473, 105, &png_bm, NULL);
+			PNG_Close(png_dec);
+		}
+		/* 释放图片内容空间 */
+		RES_Release_Content((char **)&pic_buf);
+  }
 }
 
 

@@ -998,6 +998,7 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       DeleteDC(VideoDialog.hdc_bk);
       GUI_GRAM_Free(vbuf);
       DeleteSurface(pSurf1);
+			GUI_MutexDelete(AVI_JPEG_MUTEX);
       return PostQuitMessage(hwnd);	
     }  
     default:

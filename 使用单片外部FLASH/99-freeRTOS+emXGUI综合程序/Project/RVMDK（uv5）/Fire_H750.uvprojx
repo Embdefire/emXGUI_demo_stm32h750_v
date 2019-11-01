@@ -2067,7 +2067,14 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/bsp_lwip</GroupName>
+          <GroupName>tutorial/beep</GroupName>
+          <Files>
+            <File>
+              <FileName>GUI_Beeper_Dialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\beeper_control\GUI_Beeper_Dialog.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>MPU_eMPL</GroupName>
@@ -4737,7 +4744,14 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>tutorial/bsp_lwip</GroupName>
+          <GroupName>tutorial/beep</GroupName>
+          <Files>
+            <File>
+              <FileName>GUI_Beeper_Dialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\app\Board_App\beeper_control\GUI_Beeper_Dialog.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>MPU_eMPL</GroupName>

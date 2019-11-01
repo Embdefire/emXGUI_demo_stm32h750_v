@@ -310,7 +310,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       rc.x,rc.y,rc.w,rc.h,hwnd,ID_RB3,NULL,NULL);
       
       CreateWindow(BUTTON, L"未连接", WS_TRANSPARENT | BS_NOTIFY|WS_VISIBLE|WS_OWNERDRAW|WS_DISABLED,
-                  717, 218, 79, 30, hwnd, eID_LINK_STATE, NULL, NULL);
+                  702, 218, 95, 30, hwnd, eID_LINK_STATE, NULL, NULL);
       
       /* 数据发送文本窗口 */
       rc.w = 384;
@@ -362,7 +362,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
       OffsetRect(&rc, rc.w+9 , 0);
       rc.w = 69;
-      Temp_Handle = CreateWindow(TEXTBOX, L"8080", WS_VISIBLE|WS_BORDER, rc.x, rc.y, rc.w, rc.h, hwnd, ID_TEXTBOX_RemotePort, NULL, NULL);//
+      Temp_Handle = CreateWindow(TEXTBOX, L"8080", WS_VISIBLE|WS_BORDER, rc.x, rc.y, rc.w-12, rc.h, hwnd, ID_TEXTBOX_RemotePort, NULL, NULL);//
       SendMessage(Temp_Handle, TBM_SET_TEXTFLAG, 0, DT_VCENTER | DT_CENTER | DT_BKGND);
 
 

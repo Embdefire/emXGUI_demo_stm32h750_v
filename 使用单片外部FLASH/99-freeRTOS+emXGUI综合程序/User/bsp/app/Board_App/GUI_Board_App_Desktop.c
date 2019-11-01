@@ -72,6 +72,7 @@ extern void GUI_NetworkDLG_Dialog(void);//以太网
 extern void	GUI_DEMO_RadiaMenu(void);//基础控件
 extern void GUI_Phone_Dialog(void);//电话
 extern void GUI_SMS_Dialog(void);//短信
+extern void GUI_Beeper_Dialog(void);//蜂鸣器
 
 //
 extern BOOL player_state;
@@ -169,6 +170,7 @@ static const struct __obj_list menu_list_1[] = {
       L"二维码",       	NULL,	  L"V",   RGB_WHITE,				(void(*)(void *))GUI_Camera_QRCode_DIALOG,//dummy,
       L"录音机",	      NULL,	  L"Y", 	RGB_WHITE,			  (void(*)(void *))GUI_RECORDER_DIALOG,//dummy,        
       L"基础控件",	    NULL, 	L"D",   RGB_WHITE,				(void(*)(void *))GUI_DEMO_RadiaMenu,
+      L"蜂鸣器",	      NULL, 	L"i",   RGB_WHITE,				(void(*)(void *))GUI_Beeper_Dialog,
 				
 //        L"Radiobox",	NULL,   L"E", RGB_WHITE,				dummy,
 //        L"Textbox",	NULL,	  L"F", RGB_WHITE,				dummy,

@@ -18,7 +18,7 @@ UINT      BytesRD;
 uint8_t   *Frame_buf;
 
 static volatile uint8_t audiobufflag=0;
-__align(4) uint8_t   Sound_buf[4][1024*5];
+__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(0xd13bb800 + 0x80000)));
 
 static uint8_t   *pbuffer;
 
@@ -34,14 +34,7 @@ extern avih_TypeDef* avihChunk;
 //extern HWND avi_wnd_time;
 //extern int avi_chl;
 void MUSIC_SAI_DMA_TX_Callback(void);
-//extern void mjpegdraw(uint8_t *mjpegbuffer,uint32_t size);
-//static void TIM3_Config(uint16_t period,uint16_t prescaler);
-//extern void App_DecodeMusic(HWND hwnd, const void *dat, int cbSize, JPG_DEC *dec);
-//extern char tiimg[];
-//extern unsigned int timgsize(void);
-////extern HDC hdc_AVI;
-//extern HWND hwnd_AVI;
-//extern volatile int win_fps;
+extern GUI_MUTEX*	AVI_JPEG_MUTEX;    // 用于确保一帧图像用后被释放完在退出线程
 
 static volatile int frame=0;
 static volatile int t0=0;
@@ -245,7 +238,7 @@ void AVI_play(char *filename)
 				
 				//hdc =BeginPaint(hwnd,&ps);
         
-
+        GUI_MutexLock(AVI_JPEG_MUTEX,0xFFFFFFFF);    // 获取互斥量
 				//  JPEG_Out(hdc,160,89,Frame_buf,BytesRD);
 				JPEG_Out(hdc1,0,0,Frame_buf,BytesRD);
 //            ClrDisplay(hdc, &rc0, MapRGB(hdc, 0,0,0));
@@ -264,6 +257,7 @@ void AVI_play(char *filename)
 
 //			  ReleaseDC(VideoDialog.Video_Hwnd,hdc);
 			 // EndPaint(hwnd,&ps);
+        GUI_MutexUnlock(AVI_JPEG_MUTEX);              // 解锁互斥量				
 #endif
 
 			}

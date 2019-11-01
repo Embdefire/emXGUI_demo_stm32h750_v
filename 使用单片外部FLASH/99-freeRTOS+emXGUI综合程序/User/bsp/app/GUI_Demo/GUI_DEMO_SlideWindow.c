@@ -39,7 +39,7 @@ extern const char res_slogan[];
 extern unsigned int res_slogan_size(void);
 extern uint8_t Theme_Flag;   // 主题标志
 
-#define GUI_DEMO_PIC  "explain_desktop.jpg"
+#define GUI_DEMO_PIC  "explain_desktop.png"
 #define GUI_EXPLAINDESKTOP_PIC   "explain_desktop.jpg"
 /*============================================================================*/
 /**

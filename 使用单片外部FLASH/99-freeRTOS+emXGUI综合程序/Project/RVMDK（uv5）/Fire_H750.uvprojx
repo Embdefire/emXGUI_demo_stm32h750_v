@@ -2162,16 +2162,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>DOC</GroupName>
-          <Files>
-            <File>
-              <FileName>必读说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\必读说明.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>LwIP/api</GroupName>
           <Files>
             <File>
@@ -2453,6 +2443,16 @@
               <FileName>udp_echoserver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DOC</GroupName>
+          <Files>
+            <File>
+              <FileName>必读说明.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\必读说明.txt</FilePath>
             </File>
           </Files>
         </Group>
@@ -4839,16 +4839,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>DOC</GroupName>
-          <Files>
-            <File>
-              <FileName>必读说明.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\必读说明.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>LwIP/api</GroupName>
           <Files>
             <File>
@@ -5130,6 +5120,16 @@
               <FileName>udp_echoserver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\app\Board_App\NetworkDLG\lwipapp\udp_echoserver.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DOC</GroupName>
+          <Files>
+            <File>
+              <FileName>必读说明.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\必读说明.txt</FilePath>
             </File>
           </Files>
         </Group>

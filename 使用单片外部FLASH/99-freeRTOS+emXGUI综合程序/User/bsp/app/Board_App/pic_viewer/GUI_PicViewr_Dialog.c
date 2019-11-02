@@ -363,6 +363,7 @@ static uint32_t Get_FlieNames(char *file_path)
   uint32_t i = 0;
   uint32_t count = 0;
   char *p = file_path;
+	memset(pos,0,sizeof(pos));
   do
   {
     i++;
@@ -385,6 +386,7 @@ static LRESULT	PicViewer_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_CREATE:
     {
       RECT rc;
+			memset(&s_PicViewer_Dialog,0,sizeof(s_PicViewer_Dialog));
       GetClientRect(hwnd, &rc); 
       CreateWindow(BUTTON, L"图片浏览器", WS_TRANSPARENT|WS_OWNERDRAW|WS_VISIBLE, 100,0,600,35,          
                    hwnd, eID_Pic_Name, NULL, NULL);
@@ -664,7 +666,7 @@ static LRESULT	PicViewer_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       PicTypeDef pic_info = (PicTypeDef)wParam;
       float load_time = (float)lParam/1000;
       char* file_name = s_PicViewer_Dialog.mp_file_list[s_PicViewer_Dialog.m_file_index];
-      file_name += Get_FlieNames(file_name); 
+      file_name +=  Get_FlieNames(file_name); ;
       GetWindowText(GetDlgItem(hwnd, eID_Pic_Name), wbuf, 128);
       x_wcstombs_cp936(cbuf, wbuf, PICFILE_NAME_MAXLEN);
       if (strstr(file_name, cbuf) == NULL)     // 为空时不是一张图片更新信息，否则不更新

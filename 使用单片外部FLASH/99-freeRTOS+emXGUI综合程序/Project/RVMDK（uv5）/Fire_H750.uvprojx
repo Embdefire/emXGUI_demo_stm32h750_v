@@ -2456,6 +2456,21 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>JPEG</GroupName>
+          <Files>
+            <File>
+              <FileName>decode_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\JPEG\decode_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>JPEG_LIB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\JPEG\JPEG_LIB.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -5130,6 +5145,21 @@
               <FileName>必读说明.txt</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\必读说明.txt</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>JPEG</GroupName>
+          <Files>
+            <File>
+              <FileName>decode_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\JPEG\decode_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>JPEG_LIB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp\JPEG\JPEG_LIB.c</FilePath>
             </File>
           </Files>
         </Group>

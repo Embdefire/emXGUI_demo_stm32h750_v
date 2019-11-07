@@ -393,7 +393,8 @@ void AVI_play(char *filename)
      }
 //  
 // 
-  GUI_VMEM_Free(Frame_buf);
+
+	GUI_VMEM_Free(Frame_buf);
   DeleteDC(hdc1);
   if(!VideoDialog.SWITCH_STATE)
   {

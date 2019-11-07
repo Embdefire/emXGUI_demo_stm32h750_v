@@ -27,7 +27,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal_def.h"
-
+#include "stm32h7xx_hal_mdma.h"
 #if defined (JPEG)
 
 /** @addtogroup STM32H7xx_HAL_Driver

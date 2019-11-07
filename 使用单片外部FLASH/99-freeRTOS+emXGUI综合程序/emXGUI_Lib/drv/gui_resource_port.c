@@ -363,17 +363,35 @@ BOOL RES_Load_Content(char *file_name, char** buf, u32* size)
     int content_offset;
     CatalogTypeDef dir;
     BOOL result = TRUE;
-  
+//{
+//	FRESULT fresult;
+//	FIL     *file;
+//	char file_name2[30];
+//	memset(file_name2,0,sizeof(file_name2));
+//	strcat(file_name2,"0:/srcdata/");
+//	strcat(file_name2,file_name);
+//	fresult = f_open(file,file_name2, FA_OPEN_EXISTING | FA_READ );
+//	if(fresult == FR_OK)
+//	{
+//		uint16_t fatsize = f_size(file);
+//		printf("fafts: %s **** Size:%d \r\n",file_name2,fatsize);
+//	}
+
+//}
     content_offset = RES_GetInfo_AbsAddr(file_name, &dir);
+
     if(content_offset > 0)
     {    
       /* 文件内容空间 */
       *buf = (char *)GUI_VMEM_Alloc(dir.size);
+#if JPEGDEBUG
+			printf("rests: %s **** Size:%d \r\n\r\n",file_name,dir.size);
+#endif
       if(*buf != NULL)
       {
         /* 加载数据*/
         RES_DevRead((u8 *)*buf,content_offset,dir.size); 
-          
+				
         *size = dir.size;
       }
       else

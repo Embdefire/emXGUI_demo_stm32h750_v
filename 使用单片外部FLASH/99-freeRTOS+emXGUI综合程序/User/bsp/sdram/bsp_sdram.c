@@ -370,7 +370,7 @@ static void SDRAM_InitSequence(void)
 int test_flag = 0;
 void SDRAM_Init(void)
 {
-		SystemClock_Config();
+	SystemClock_Config();
 
   FMC_SDRAM_TimingTypeDef SdramTiming;
 	RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;

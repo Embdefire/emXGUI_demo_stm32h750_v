@@ -608,7 +608,7 @@ static LRESULT Dlg_VideoList_WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
   return WM_NULL;
 }
 
-extern u8 Frame_buf[];
+extern uint8_t *Frame_buf;
 extern UINT BytesRD;
 extern volatile BOOL bDrawVideo;
 GUI_MUTEX*	AVI_JPEG_MUTEX = NULL;    // 用于确保一帧图像用后被释放完在退出线程
@@ -992,10 +992,12 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       GUI_MutexLock(AVI_JPEG_MUTEX,0xFFFFFFFF);    // 获取互斥量确保一帧图像的内存使用后已释放	
       thread_PlayVideo = 0;  //结束音乐播放线程
 			SAI_Play_Stop();
-      GUI_msleep(500);//等待1秒,线程结束
+      GUI_msleep(200);//等待1秒,线程结束
       VideoDialog.SWITCH_STATE = 1;
       VideoDialog.playindex = 0;
       DeleteDC(VideoDialog.hdc_bk);
+//			GUI_VMEM_Free(Frame_buf);//发现AVIplay中,至少有一次此Buf不被释放,每次任务结束主动释放
+//			Frame_buf = NULL;//指向NULL,防止重用
       GUI_GRAM_Free(vbuf);
       DeleteSurface(pSurf1);
 			GUI_MutexDelete(AVI_JPEG_MUTEX);

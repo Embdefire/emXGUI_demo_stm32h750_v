@@ -7,11 +7,12 @@
 #include "emxgui_png.h"
 #include <stdlib.h>
 #include "./pic_load/gui_pic_load.h"
-#include "CListMenu.h"
+#include	"CListMenu.h"
 
 /* 图片资源名 */
 //#define GUI_SETTINGS_BACKGROUNG_PIC      "settingsdesktop.jpg"        // 800*480
-
+static void Set_Icon_Bmp_Or_Xtf(void);//不同风格主题,不同的图标
+	
 typedef enum 
 { 
   /****************** 按钮控件 ID 值 *******************/
@@ -480,6 +481,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if (wbuf[0] == L'1')
             {
               Theme_Flag = 1;
+							Set_Icon_Bmp_Or_Xtf();
               SendMessage(GetDlgItem(hwnd_home, 0x1000), MSG_SET_BGCOLOR, COLOR_DESKTOP_BACK_GROUND_HEX, NULL);    // 0x1000 是home 的列表ID
               SetWindowText(wnd, L"2");
             }
@@ -487,6 +489,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             {
               SendMessage(GetDlgItem(hwnd_home, 0x1000), MSG_SET_BGCOLOR, 1, NULL);           // 设置为 1 时 使用图片作为背景  0x1000 是home 的列表ID
               Theme_Flag = 0;
+							Set_Icon_Bmp_Or_Xtf();
               SetWindowText(wnd, L"1");
             }
             
@@ -609,4 +612,45 @@ void GUI_Settings_DIALOG(void)
 	}
 }
 
+static void Set_Icon_Bmp_Or_Xtf(void)
+{
+#if ICON_BMP_ENABLE
+	if(Theme_Flag ==0)
+	{
+        menu_list_1[0].bmp = bmp_icon[bmp_guiuse_icon];
+        menu_list_1[1].bmp = bmp_icon[bmp_music_icon];
+        menu_list_1[2].bmp = bmp_icon[bmp_video_icon];
+        menu_list_1[3].bmp = bmp_icon[bmp_clock_icon];
+			
+        menu_list_1[4].bmp = bmp_icon[bmp_gyro_icon];
+        menu_list_1[5].bmp = bmp_icon[bmp_rgbled_icon];
+        menu_list_1[6].bmp = bmp_icon[bmp_camera_icon];
+        menu_list_1[7].bmp = bmp_icon[bmp_photo_icon];
+			
+        menu_list_1[8].bmp = bmp_icon[bmp_humiture_icon];
+        menu_list_1[9].bmp = bmp_icon[bmp_adc_icon];
+        menu_list_1[10].bmp = bmp_icon[bmp_setting_icon];
+//        menu_list_1[11].bmp = bmp_icon[bmp_sudish_icon];
+        menu_list_1[11].bmp = bmp_icon[bmp_entwork_icon];
+				
+				
+				//游戏
+        menu_list_1[13].bmp = bmp_icon[bmp_phone_icon];
+        menu_list_1[14].bmp = bmp_icon[bmp_note_icon];
+        menu_list_1[15].bmp = bmp_icon[bmp_QRcode_icon];
+				
+        menu_list_1[16].bmp = bmp_icon[bmp_record_icon];
+        menu_list_1[17].bmp = bmp_icon[bmp_widget_icon];
+        menu_list_1[18].bmp = bmp_icon[bmp_beeper_icon];
+				//LED&KEY
+//        menu_list_1[19].bmp = bmp_icon[bmp_flash_icon];
+	}else
+	{
+		for(int i =0;i<19;i++)
+		{
+			menu_list_1[i].bmp = NULL;
+		}
+	}
+#endif
+}
 

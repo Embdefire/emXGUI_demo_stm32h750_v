@@ -123,7 +123,6 @@ HDC hdc_adc_png[hdc_adc_end];
 *                                     主页面图标                                             *
 ********************************************************************************************/
 
-#if ICON_BMP_ENABLE
 const icon_info_t bmp_icon_info[bmp_icon_end] = 
 {
   {GUI_ADC_ICON_PIC,        80,  80,     bmp_adc_icon},
@@ -153,7 +152,7 @@ const icon_info_t bmp_icon_info[bmp_icon_end] =
 };
 
 u8 * bmp_icon[bmp_icon_end];
-#endif
+
 HDC hdc_home_bk;
 /********************************************************************************************
  *                             主页面图标  END                                               *
@@ -250,7 +249,6 @@ BOOL PIC_Load_To_SDRAM(void)
 ********************************************************************************************/
   hdc_home_bk = Load_jpg_to_hdc(GUI_HOME_BACKGROUNG_PIC, GUI_XSIZE, GUI_YSIZE);
   
-#if ICON_BMP_ENABLE
   uint32_t pic_size;
   for (uint8_t xC=0; xC<bmp_icon_end; xC++)
   {
@@ -269,7 +267,7 @@ BOOL PIC_Load_To_SDRAM(void)
      res_not_found_flag = TRUE;    // 标记没有找到资源文件
    }
   }
-#endif
+
 /********************************************************************************************
 *                                  主页面图标  END                                           *
 ********************************************************************************************/

@@ -156,6 +156,8 @@ void BSP_Init(void)
 		HAL_RTC_WaitForSynchro(&Rtc_Handle);
 	} 
 	
+	MODIFY_REG(FMC_Bank1_R->BTCR[0],FMC_BCRx_MBKEN,0); //关闭FMC_Bank1,不然LCD会闪.
+	
   /*hardfault 跟踪器初始化*/ 
   cm_backtrace_init("Fire_emxgui", HARDWARE_VERSION, SOFTWARE_VERSION);
   

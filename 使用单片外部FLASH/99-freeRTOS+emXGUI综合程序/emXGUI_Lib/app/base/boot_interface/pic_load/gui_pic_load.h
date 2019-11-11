@@ -218,32 +218,52 @@ extern HDC hdc_adc_png[hdc_adc_end];
 ********************************************************************************************/
 #define GUI_HOME_BACKGROUNG_PIC   "home_desktop.jpg"
 
-#define ICON_BMP_ENABLE           1    // 主页图标使能1:使用主页图标 0：使用字体的方式（以下图片从sd卡加载，源图片在 资源文件_5寸/主页图标 里面）
-
-#if ICON_BMP_ENABLE
-#define GUI_ADC_ICON_PIC          "0:/adc_icon.bmp"
-#define GUI_MUSIC_ICON_PIC        "0:/music_icon.bmp"
-#define GUI_PHOTO_ICON_PIC        "0:/photo_icon.bmp"
-#define GUI_CLOCK_ICON_PIC        "0:/clock_icon.bmp"
-#define GUI_CAMERA_ICON_PIC       "0:/camera_icon.bmp"
-#define GUI_GYRO_ICON_PIC         "0:/gyro_icon.bmp"
-#define GUI_HUMITURE_ICON_PIC     "0:/humiture_icon.bmp"
-#define GUI_VIDEO_ICON_PIC        "0:/video_icon.bmp"
-#define GUI_RGBLEN_ICON_PIC       "0:/rgbled_icon.bmp"
-#define GUI_GUIUSE_ICON_PIC       "0:/guiuse_icon.bmp"
-#define GUI_SUDISH_ICON_PIC       "0:/sudish_icon.bmp"
-#define GUI_NETWORK_ICON_PIC      "0:/entwork_icon.bmp"
+//#define GUI_ADC_ICON_PIC          "0:/adc_icon.bmp"
+//#define GUI_MUSIC_ICON_PIC        "0:/music_icon.bmp"
+//#define GUI_PHOTO_ICON_PIC        "0:/photo_icon.bmp"
+//#define GUI_CLOCK_ICON_PIC        "0:/clock_icon.bmp"
+//#define GUI_CAMERA_ICON_PIC       "0:/camera_icon.bmp"
+//#define GUI_GYRO_ICON_PIC         "0:/gyro_icon.bmp"
+//#define GUI_HUMITURE_ICON_PIC     "0:/humiture_icon.bmp"
+//#define GUI_VIDEO_ICON_PIC        "0:/video_icon.bmp"
+//#define GUI_GAME_ICON_PIC         "0:/game_icon.bmp"
+//#define GUI_KEYLED_ICON_PIC       "0:/keyled_icon.bmp"
+//#define GUI_RGBLEN_ICON_PIC       "0:/rgbled_icon.bmp"
+//#define GUI_GUIUSE_ICON_PIC       "0:/guiuse_icon.bmp"
+//#define GUI_SUDISH_ICON_PIC       "0:/sudish_icon.bmp"
+//#define GUI_NETWORK_ICON_PIC      "0:/entwork_icon.bmp"
+////#define GUI_WIFI_ICON_PIC         "0:/wifi_icon.bmp"
+//#define GUI_PHONE_ICON_PIC        "0:/phone_icon.bmp"
+//#define GUI_NOTE_ICON_PIC         "0:/note_icon.bmp"
+//#define GUI_QRCODE_ICON_PIC       "0:/QRcode_icon.bmp"
+//#define GUI_RECORD_ICON_PIC       "0:/record_icon.bmp"
+//#define GUI_WIDGET_ICON_PIC       "0:/widget_icon.bmp"
+//#define GUI_FLASH_ICON_PIC        "0:/flash_icon.bmp"
+//#define GUI_SETTING_ICON_PIC      "0:/setting_icon.bmp"
+//#define GUI_BEEPER_ICON_PIC       "0:/beeper_icon.bmp"
+#define GUI_ADC_ICON_PIC          "adc_icon.bmp"
+#define GUI_MUSIC_ICON_PIC        "music_icon.bmp"
+#define GUI_PHOTO_ICON_PIC        "photo_icon.bmp"
+#define GUI_CLOCK_ICON_PIC        "clock_icon.bmp"
+#define GUI_CAMERA_ICON_PIC       "camera_icon.bmp"
+#define GUI_GYRO_ICON_PIC         "gyro_icon.bmp"
+#define GUI_HUMITURE_ICON_PIC     "humiture_icon.bmp"
+#define GUI_VIDEO_ICON_PIC        "video_icon.bmp"
+#define GUI_GAME_ICON_PIC         "game_icon.bmp"
+#define GUI_KEYLED_ICON_PIC       "keyled_icon.bmp"
+#define GUI_RGBLEN_ICON_PIC       "rgbled_icon.bmp"
+#define GUI_GUIUSE_ICON_PIC       "guiuse_icon.bmp"
+#define GUI_SUDISH_ICON_PIC       "sudish_icon.bmp"
+#define GUI_NETWORK_ICON_PIC      "entwork_icon.bmp"
 //#define GUI_WIFI_ICON_PIC         "0:/wifi_icon.bmp"
-#define GUI_PHONE_ICON_PIC        "0:/phone_icon.bmp"
-#define GUI_NOTE_ICON_PIC         "0:/note_icon.bmp"
-#define GUI_QRCODE_ICON_PIC       "0:/QRcode_icon.bmp"
-#define GUI_RECORD_ICON_PIC       "0:/record_icon.bmp"
-#define GUI_WIDGET_ICON_PIC       "0:/widget_icon.bmp"
-#define GUI_FLASH_ICON_PIC        "0:/flash_icon.bmp"
-#define GUI_SETTING_ICON_PIC      "0:/setting_icon.bmp"
-#define GUI_BEEPER_ICON_PIC       "0:/beeper_icon.bmp"
-#define GUI_GAME_ICON_PIC         "0:/game_icon.bmp"
-#define GUI_KEYLED_ICON_PIC       "0:/keyled_icon.bmp"
+#define GUI_PHONE_ICON_PIC        "phone_icon.bmp"
+#define GUI_NOTE_ICON_PIC         "note_icon.bmp"
+#define GUI_QRCODE_ICON_PIC       "QRcode_icon.bmp"
+#define GUI_RECORD_ICON_PIC       "record_icon.bmp"
+#define GUI_WIDGET_ICON_PIC       "widget_icon.bmp"
+#define GUI_FLASH_ICON_PIC        "flash_icon.bmp"
+#define GUI_SETTING_ICON_PIC      "setting_icon.bmp"
+#define GUI_BEEPER_ICON_PIC       "beeper_icon.bmp"
 
 typedef enum
 {
@@ -282,7 +302,6 @@ typedef struct{
 }icon_info_t;
 
 extern u8 * bmp_icon[bmp_icon_end];
-#endif
 
 extern HDC hdc_home_bk;
 /********************************************************************************************

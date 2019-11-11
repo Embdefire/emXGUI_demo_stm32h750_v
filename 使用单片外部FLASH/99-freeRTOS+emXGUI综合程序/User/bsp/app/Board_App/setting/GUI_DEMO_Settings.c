@@ -480,17 +480,16 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             GetWindowText(wnd, wbuf, 3);
             if (wbuf[0] == L'1')
             {
-              Theme_Flag = 1;
-							Set_Icon_Bmp_Or_Xtf();
-              SendMessage(GetDlgItem(hwnd_home, 0x1000), MSG_SET_BGCOLOR, COLOR_DESKTOP_BACK_GROUND_HEX, NULL);    // 0x1000 是home 的列表ID
+              Theme_Flag = 1;              SendMessage(GetDlgItem(hwnd_home, 0x1000), MSG_SET_BGCOLOR, COLOR_DESKTOP_BACK_GROUND_HEX, NULL);    // 0x1000 是home 的列表ID
               SetWindowText(wnd, L"2");
+							Set_Icon_Bmp_Or_Xtf();
             }
             else
             {
               SendMessage(GetDlgItem(hwnd_home, 0x1000), MSG_SET_BGCOLOR, 1, NULL);           // 设置为 1 时 使用图片作为背景  0x1000 是home 的列表ID
               Theme_Flag = 0;
-							Set_Icon_Bmp_Or_Xtf();
               SetWindowText(wnd, L"1");
+							Set_Icon_Bmp_Or_Xtf();
             }
             
           }
@@ -614,7 +613,7 @@ void GUI_Settings_DIALOG(void)
 
 static void Set_Icon_Bmp_Or_Xtf(void)
 {
-#if ICON_BMP_ENABLE
+
 	if(Theme_Flag ==0)
 	{
         menu_list_1[0].bmp = bmp_icon[bmp_guiuse_icon];
@@ -633,8 +632,7 @@ static void Set_Icon_Bmp_Or_Xtf(void)
 //        menu_list_1[11].bmp = bmp_icon[bmp_sudish_icon];
         menu_list_1[11].bmp = bmp_icon[bmp_entwork_icon];
 				
-				
-				//游戏
+				menu_list_1[12].bmp = bmp_icon[bmp_game_icon];
         menu_list_1[13].bmp = bmp_icon[bmp_phone_icon];
         menu_list_1[14].bmp = bmp_icon[bmp_note_icon];
         menu_list_1[15].bmp = bmp_icon[bmp_QRcode_icon];
@@ -642,15 +640,15 @@ static void Set_Icon_Bmp_Or_Xtf(void)
         menu_list_1[16].bmp = bmp_icon[bmp_record_icon];
         menu_list_1[17].bmp = bmp_icon[bmp_widget_icon];
         menu_list_1[18].bmp = bmp_icon[bmp_beeper_icon];
-				//LED&KEY
+				menu_list_1[19].bmp = bmp_icon[bmp_keyled_icon];
 //        menu_list_1[19].bmp = bmp_icon[bmp_flash_icon];
 	}else
 	{
-		for(int i =0;i<19;i++)
+		for(int i =0;i<20;i++)
 		{
 			menu_list_1[i].bmp = NULL;
 		}
 	}
-#endif
+
 }
 

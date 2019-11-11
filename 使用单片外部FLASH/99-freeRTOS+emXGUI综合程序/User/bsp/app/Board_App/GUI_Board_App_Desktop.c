@@ -161,7 +161,7 @@ struct __obj_list menu_list_1[] = {
 			L"设置",        	NULL,	  L"h",   RGB_WHITE,				(void(*)(void *))GUI_Settings_DIALOG,
 			L"以太网",	     	NULL,	  L"Q",   RGB_WHITE,				(void(*)(void *))GUI_NetworkDLG_Dialog,//dummy,
 				
-			L"游戏",        	NULL,	  L"S",   RGB_WHITE,				dummy,
+			L"游戏",        	NULL,	  L"S",   RGB_WHITE,				(void(*)(void *))dummy,
       //L"模拟U盘",   	NULL,	  L"N",   RGB_WHITE,				dummy,       
       //L"WiFi",	    	NULL,	  L"P",   RGB_WHITE,				dummy,
       L"电话",	        NULL, 	L"T",   RGB_WHITE,				(void(*)(void *))GUI_Phone_Dialog,
@@ -266,7 +266,6 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         GetClientRect(hwnd, &rc);
 
-#if ICON_BMP_ENABLE
         menu_list_1[0].bmp = bmp_icon[bmp_guiuse_icon];
         menu_list_1[1].bmp = bmp_icon[bmp_music_icon];
         menu_list_1[2].bmp = bmp_icon[bmp_video_icon];
@@ -293,7 +292,6 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         menu_list_1[18].bmp = bmp_icon[bmp_beeper_icon];
 				menu_list_1[19].bmp = bmp_icon[bmp_keyled_icon];
 //        menu_list_1[19].bmp = bmp_icon[bmp_flash_icon];
-#endif
 
               //ListMenu控件，需要在创建时传入一个 list_menu_cfg_t 的结构体参数.
         cfg.list_objs = menu_list_1; //指定list列表.
@@ -397,6 +395,7 @@ static	LRESULT	WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         //			WCHAR wbuf[128];
 
         BeginPaint(hwnd, &ps);
+			
         EndPaint(hwnd, &ps);
         ////
 

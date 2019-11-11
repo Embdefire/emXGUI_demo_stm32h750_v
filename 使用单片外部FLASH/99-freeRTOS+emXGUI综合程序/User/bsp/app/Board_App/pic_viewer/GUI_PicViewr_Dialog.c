@@ -200,7 +200,7 @@ void Draw_Pic_JPG(char *file_name)
     /* 根据图片数据创建JPG_DEC句柄 */
     dec = JPG_Open(jpeg_buf, jpeg_size);
     /* 读取图片文件信息 */
-    JPG_GetImageSize(&s_PicViewer_Dialog.ms_jpg.m_jpg_wid, &s_PicViewer_Dialog.ms_jpg.m_jpg_high,dec);
+//    JPG_GetImageSize(&s_PicViewer_Dialog.ms_jpg.m_jpg_wid, &s_PicViewer_Dialog.ms_jpg.m_jpg_high,dec);
     u16 wid = s_PicViewer_Dialog.ms_jpg.m_jpg_wid, high = s_PicViewer_Dialog.ms_jpg.m_jpg_high;
     PicView_Hdc = GetDC(s_PicViewer_Dialog.PicView_Handle);
         

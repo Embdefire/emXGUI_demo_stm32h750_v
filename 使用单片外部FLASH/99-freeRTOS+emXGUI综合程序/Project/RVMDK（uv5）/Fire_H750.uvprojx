@@ -1197,6 +1197,25 @@
               <FileName>libjpeg_MDK_M7.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\emXGUI_Lib\libs\libjpeg_MDK_M7.lib</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
             </File>
             <File>
               <FileName>libpng_MDK_M7.lib</FileName>
@@ -2654,6 +2673,21 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>SD</GroupName>
+          <Files>
+            <File>
+              <FileName>Jepg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\Jepg.c</FilePath>
+            </File>
+            <File>
+              <FileName>Jepg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\Jepg.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -5361,6 +5395,21 @@
               <FileName>JPEG_LIB.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp\JPEG\JPEG_LIB.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>SD</GroupName>
+          <Files>
+            <File>
+              <FileName>Jepg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\Jepg.c</FilePath>
+            </File>
+            <File>
+              <FileName>Jepg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\User\Jepg.h</FilePath>
             </File>
           </Files>
         </Group>

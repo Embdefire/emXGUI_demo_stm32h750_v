@@ -40,7 +40,7 @@
 #include "./sai/bsp_sai.h" 
 #include "bsp_mpu_exti.h"
 #include "emXGUI.h"
-#include "./JPEG./decode_dma.h"
+//#include "./JPEG./decode_dma.h"
 extern RTC_HandleTypeDef hrtc;
 extern SD_HandleTypeDef uSdHandle;
 extern volatile uint8_t video_timeout;//视频播放引入
@@ -259,26 +259,26 @@ void DCMI_IRQHandler(void)
   
 }
 
-/**
-  * @brief  This function handles JPEG interrupt request.
-  * @param  None
-  * @retval None
-  */
+///**
+//  * @brief  This function handles JPEG interrupt request.
+//  * @param  None
+//  * @retval None
+//  */
 
-void JPEG_IRQHandler(void)
-{
-//  HAL_JPEG_IRQHandler(&JPEG_Handle);
-}
+//void JPEG_IRQHandler(void)
+//{
+////  HAL_JPEG_IRQHandler(&JPEG_Handle);
+//}
 
-/**
-  * @brief  This function handles MDMA interrupt request.
-  * @param  None
-  * @retval None
-  */
+///**
+//  * @brief  This function handles MDMA interrupt request.
+//  * @param  None
+//  * @retval None
+//  */
 
-void MDMA_IRQHandler()
-{
-  /* Check the interrupt and clear flag */
-//  HAL_MDMA_IRQHandler(JPEG_Handle.hdmain);
-//  HAL_MDMA_IRQHandler(JPEG_Handle.hdmaout);  
-}
+//void MDMA_IRQHandler()
+//{
+//  /* Check the interrupt and clear flag */
+////  HAL_MDMA_IRQHandler(JPEG_Handle.hdmain);
+////  HAL_MDMA_IRQHandler(JPEG_Handle.hdmaout);  
+//}

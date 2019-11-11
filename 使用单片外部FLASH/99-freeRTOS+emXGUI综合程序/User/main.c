@@ -130,8 +130,7 @@ void BSP_Init(void)
   }
 	
 	RTC_CLK_Config();
-	
-	if (HAL_RTCEx_BKUPRead(&Rtc_Handle,RTC_BKP_DRX) != 0X32F3)
+	if ( HAL_RTCEx_BKUPRead(&Rtc_Handle,RTC_BKP_DRX) != 0x32F2)
 	{
 		/* 设置时间和日期 */
 		RTC_TimeAndDate_Set();

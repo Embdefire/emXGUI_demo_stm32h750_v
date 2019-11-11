@@ -826,7 +826,7 @@ static LRESULT setting_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 
                 SetWindowText(GetDlgItem(clock_hwnd, ID_CLOCK_WEEK), Week_List[RTC_Date.WeekDay - 1]);    // 设置星期
               }
-
+							HAL_RTCEx_BKUPWrite(&Rtc_Handle,RTC_BKP_DRX, RTC_BKP_DATA);//写入RTC备份值
               PostCloseMessage(hwnd);    // 发送关闭窗口的消息
             }
             break;

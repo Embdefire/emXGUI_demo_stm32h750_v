@@ -32,22 +32,22 @@ __IO uint8_t Alarmflag =0;
   */
 void RTC_TimeAndDate_Set(void)
 {
-    RTC_DateTypeDef  RTC_DateStructure;
-    RTC_TimeTypeDef  RTC_TimeStructure;
+  RTC_DateTypeDef  RTC_DateStructure;
+  RTC_TimeTypeDef  RTC_TimeStructure;
 	// 初始化时间
 	RTC_TimeStructure.TimeFormat = RTC_H12_AMorPM;
 	RTC_TimeStructure.Hours = HOURS;        
 	RTC_TimeStructure.Minutes = MINUTES;      
 	RTC_TimeStructure.Seconds = SECONDS;      
-    HAL_RTC_SetTime(&Rtc_Handle,&RTC_TimeStructure, RTC_FORMAT_BIN);
+  HAL_RTC_SetTime(&Rtc_Handle,&RTC_TimeStructure, RTC_FORMAT_BIN);
     // 初始化日期	
 	RTC_DateStructure.WeekDay = WEEKDAY;       
 	RTC_DateStructure.Date = DATE;         
 	RTC_DateStructure.Month = MONTH;         
 	RTC_DateStructure.Year = YEAR;        
-    HAL_RTC_SetDate(&Rtc_Handle,&RTC_DateStructure, RTC_FORMAT_BIN);
+  HAL_RTC_SetDate(&Rtc_Handle,&RTC_DateStructure, RTC_FORMAT_BIN);
     
-    HAL_RTCEx_BKUPWrite(&Rtc_Handle,RTC_BKP_DRX, RTC_BKP_DATA);
+  HAL_RTCEx_BKUPWrite(&Rtc_Handle,RTC_BKP_DRX, RTC_BKP_DATA);
 }
 
 /**

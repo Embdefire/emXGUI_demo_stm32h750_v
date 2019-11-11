@@ -367,7 +367,6 @@ static void SDRAM_InitSequence(void)
 		while(1);
   }
 }
-int test_flag = 0;
 void SDRAM_Init(void)
 {
 	SystemClock_Config();

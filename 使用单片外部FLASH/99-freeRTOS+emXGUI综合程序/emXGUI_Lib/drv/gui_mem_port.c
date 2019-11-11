@@ -46,7 +46,7 @@ static uint8_t buff_vmem[VMEM_SIZE] __attribute__((at(VMEM_BASE)));
 //static GUI_MUTEX *mutex_core_mem = NULL;
 //static	heap_t heap_core_mem;
 //static uint8_t buff_core_mem[GUI_CORE_MEM_SIZE] __attribute__((at(GUI_CORE_MEM_BASE)));
-
+heap_t *heap_maneger;
 
 /**
   * @brief  创建一个内存堆
@@ -61,6 +61,7 @@ void GUI_VMEM_Init(void)
                 (void*)buff_vmem,
                   VMEM_SIZE,
                   VMEM_ALLOC_UNIT);	 /* 创建一个内存堆 */
+	heap_maneger = &heap_vmem;
 #endif
 }
   

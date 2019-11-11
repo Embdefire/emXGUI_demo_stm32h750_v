@@ -46,7 +46,8 @@ Heap_Size       EQU     0x00020000
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base     
 Heap_Mem        SPACE   Heap_Size
-__heap_limit 	EQU     (0xd13bb800 + 0x00100000)
+__heap_limit 	
+;EQU     (0xd13bb800 + 0x00100000 + 0x00800000)
 
                 PRESERVE8
                 THUMB

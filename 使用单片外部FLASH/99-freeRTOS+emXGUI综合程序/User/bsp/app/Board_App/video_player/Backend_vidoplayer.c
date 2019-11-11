@@ -18,7 +18,7 @@ UINT      BytesRD;
 uint8_t   *Frame_buf;
 
 static volatile uint8_t audiobufflag=0;
-__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(0xd13bb800 + 0x80000)));
+__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(VMEM_BASE + VMEM_SIZE + LCD_FRAME_SIZE + 0x100)));
 
 static uint8_t   *pbuffer;
 

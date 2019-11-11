@@ -140,9 +140,9 @@ void eMPL_send_quat(long *quat)
     out[21] = '\r';
     out[22] = '\n';
     
-    for (i=0; i<PACKET_LENGTH; i++) {
-      fputcc(out[i]);
-    }
+//    for (i=0; i<PACKET_LENGTH; i++) {
+//      fputcc(out[i]);
+//    }
 }
 
 void eMPL_send_data(unsigned char type, long *data)

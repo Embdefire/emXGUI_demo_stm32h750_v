@@ -267,7 +267,7 @@ void DCMI_IRQHandler(void)
 
 void JPEG_IRQHandler(void)
 {
-  HAL_JPEG_IRQHandler(&JPEG_Handle);
+//  HAL_JPEG_IRQHandler(&JPEG_Handle);
 }
 
 /**
@@ -279,6 +279,6 @@ void JPEG_IRQHandler(void)
 void MDMA_IRQHandler()
 {
   /* Check the interrupt and clear flag */
-  HAL_MDMA_IRQHandler(JPEG_Handle.hdmain);
-  HAL_MDMA_IRQHandler(JPEG_Handle.hdmaout);  
+//  HAL_MDMA_IRQHandler(JPEG_Handle.hdmain);
+//  HAL_MDMA_IRQHandler(JPEG_Handle.hdmaout);  
 }

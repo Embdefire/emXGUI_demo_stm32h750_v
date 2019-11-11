@@ -1,5 +1,5 @@
 #include "JPEG_LIB.h"
-
+#include "x_libc.h"
 struct	__jpg_dec
 {
 	const void	*pSrcData;
@@ -118,15 +118,16 @@ static void _Write_AllPixels_RGB(HDC hdc,const u8 *p, int x, int y, int xSize)
 }
 
 FIL JPEG_File;
-
+uint16_t curri=0;
+extern heap_t *heap_maneger;
 static	BOOL _Draw(HDC hdc, int x, int y,JPG_DEC *dec)
 {
 			uint32_t JpegProcessing_End = 0;
-			
+			HAL_JPEG_DeInit(&JPEG_Handle);
       JPEG_Handle.Instance = JPEG;
 	
       HAL_JPEG_Init(&JPEG_Handle);
-       
+      GUI_DEBUG("%d ---- BEFORE HEAP SIZE : %d k \r\n",curri,(heap_maneger->used_cur)/1024);
       uint32_t * Decode_Buffer = (uint32_t *)GUI_VMEM_Alloc(Decode_Buffer_Size);
       
 			
@@ -140,9 +141,9 @@ static	BOOL _Draw(HDC hdc, int x, int y,JPG_DEC *dec)
 			HAL_JPEG_GetInfo(&JPEG_Handle, &JPEG_Info);
 			
 			uint32_t * Output_Buffer = (uint32_t *)GUI_VMEM_Alloc(JPEG_Info.ImageWidth * JPEG_Info.ImageHeight * 3 );
-				
+#if JPEGDEBUG
 			GUI_DEBUG("ALLOC SIZE : %d",JPEG_Info.ImageWidth * JPEG_Info.ImageHeight * 3 );
-	
+#endif
 			if(Output_Buffer != NULL)
 			{
 				DMA2D_CopyBuffer((uint32_t *)Decode_Buffer, (uint32_t *)Output_Buffer, x , y, JPEG_Info.ImageWidth, JPEG_Info.ImageHeight, JPEG_Info.ChromaSubsampling);
@@ -151,14 +152,19 @@ static	BOOL _Draw(HDC hdc, int x, int y,JPG_DEC *dec)
 			{
 				return 0;
 			}
-
+			curri++;
+			GUI_DEBUG("%d ---- NOW HEAP SIZE : %d k \r\n",curri,(heap_maneger->used_cur)/1024);
 			_Write_AllPixels_RGB(hdc, (uint8_t *)Output_Buffer , 0 , 0 ,JPEG_Info.ImageWidth);
 
 //			memset(Decode_Buffer,0,Decode_Buffer_Size);
 //			memset(Output_Buffer,0,JPEG_Info.ImageWidth * JPEG_Info.ImageHeight * 2 + 100);
       GUI_VMEM_Free(Decode_Buffer);
+			GUI_DEBUG("%d ---- GUI_VMEM_Free Decode_Buffer : %d k \r\n",curri,(heap_maneger->used_cur)/1024);
       GUI_VMEM_Free(Output_Buffer);
-				GUI_DEBUG("FREE SIZE : %d %d",JPEG_Info.ImageWidth * JPEG_Info.ImageHeight * 3, JPEG_Info.ChromaSubsampling);
+			GUI_DEBUG("%d ---- GUI_VMEM_Free Output_Buffer : %d k \r\n\r\n",curri,(heap_maneger->used_cur)/1024);
+#if JPEGDEBUG
+	    GUI_DEBUG("FREE SIZE : %d %d",JPEG_Info.ImageWidth * JPEG_Info.ImageHeight * 3, JPEG_Info.ChromaSubsampling);
+#endif
 			return 1;
 }
 

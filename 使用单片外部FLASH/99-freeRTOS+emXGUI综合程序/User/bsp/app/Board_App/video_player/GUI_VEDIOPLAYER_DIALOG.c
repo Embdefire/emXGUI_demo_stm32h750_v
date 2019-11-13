@@ -171,11 +171,9 @@ static void vedio_exit_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
   HDC hdc;
   RECT rc;
-  HWND hwnd;
 
 	hdc = ds->hDC;   
 	rc = ds->rc; 
-  hwnd = ds->hwnd;
 
   if (ds->State & BST_PUSHED)
 	{ //按钮是按下状态

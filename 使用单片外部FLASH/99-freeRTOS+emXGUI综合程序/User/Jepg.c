@@ -50,8 +50,7 @@ void JPEG_Decode_free(void)
 }
 
 void JPEG_picture(uint32_t *databuf)
-{
-	FIL MyFile;    
+{ 
 	
 	PIC_JPEG_FLAG = 1;
 	Input_Is_Paused = 0;
@@ -362,7 +361,6 @@ FIL JPEG_File;
 
 static	BOOL _Draw(HDC hdc, int x, int y,JPG_DEC *dec)
 {
-			uint32_t JpegProcessing_End = 0;
 	
 			HAL_JPEG_DeInit(&JPEG_Handle);
 	
@@ -425,7 +423,6 @@ JPG_DEC*	JPG_Open(const void *dat,int cbSize)
 	return	dec;
 }
 
-#if 0
 BOOL JPG_GetImageSize(U16 *width,U16 *height,JPG_DEC* jdec)
 {
 	if(jdec==NULL)
@@ -433,42 +430,37 @@ BOOL JPG_GetImageSize(U16 *width,U16 *height,JPG_DEC* jdec)
 	  return FALSE;
 	}	
 	
-	uint32_t JpegProcessing_End = 0;
-			
   JPEG_Handle.Instance = JPEG;
 	
   HAL_JPEG_Init(&JPEG_Handle);
        
-  uint32_t * Decode_Buffer = (uint32_t *)GUI_VMEM_Alloc(Decode_Buffer_Size);
+	Decode_Buffer = (uint32_t *)GUI_VMEM_Alloc(3*512*1024);
 
-			
-	JPEG_Decode_DMA(&JPEG_Handle,(uint32_t)Decode_Buffer);
-	
-	do{
-			JpegProcessing_End = JPEG_InputHandler(&JPEG_Handle);            
-		}while(JpegProcessing_End == 0);
-	
+	JPEG_Decode_Mem();
+
+	JPEG_picture((uint32_t *)Decode_Buffer);
+
+	JPEG_Decode_free();
+
 	Jpeg_HWDecodingEnd = 0;//解码完成,恢复结束标志为初始状态
 		
-	memset(Decode_Buffer,0,Decode_Buffer_Size);
-
 	GUI_VMEM_Free(Decode_Buffer);
 	
 	HAL_JPEG_GetInfo(&JPEG_Handle, &JPEG_Info);
 	/* 恢复指针位置和大小 */
 	Decode_dec->pSrcData =jdec->pSrcData;
 	Decode_dec->DataSize =jdec->DataSize;
-	if(width!=NULL)
+	if(width!=NULL && height!=NULL)
 	{
 		*width =JPEG_Info.ImageWidth;
+	  *height =JPEG_Info.ImageHeight;
+   	return TRUE;	
 	}
-	if(height!=NULL)
+	else
 	{
-		*height =JPEG_Info.ImageHeight;
+		return FALSE;	
 	}
-	return TRUE;
 }
-#endif
 
 /**
   * @brief  从文件系统读出的图像数据中,拷贝数据
@@ -477,25 +469,35 @@ BOOL JPG_GetImageSize(U16 *width,U16 *height,JPG_DEC* jdec)
   * @param  Byte_Real_Read    : 实际读取到的字节(因为可能到达文件尾部)
   * @retval True of False
   */
+uint32_t Data_Offset = 0;
+
 FRESULT Read_Buf_From_File(void* Buffer_Dest, uint32_t Byte_Want_Read , uint32_t* Byte_Real_Read)
 {
+	uint8_t * Temp_pointer = (uint8_t *)Decode_dec->pSrcData;
   if( (Buffer_Dest != NULL) && (Decode_dec->pSrcData != NULL) && (Decode_dec->DataSize >0))
   {
     if(Decode_dec->DataSize >= Byte_Want_Read)
     {
       /* 如果数据的大小>想要读的数据,直接拷贝,并把数据源地址指针偏移读取的字节数,数据大小减去读取字节的数量 */
-			memcpy((uint8_t *)Buffer_Dest,(uint8_t *)Decode_dec->pSrcData,Byte_Want_Read);
+			taskENTER_CRITICAL();
+			memcpy((uint8_t *)Buffer_Dest,Temp_pointer + Data_Offset,Byte_Want_Read);
+			taskEXIT_CRITICAL();
+			
       *Byte_Real_Read = Byte_Want_Read;
-			(uint8_t *)Decode_dec->pSrcData += Byte_Want_Read;
+			Data_Offset += Byte_Want_Read; //数据偏移量
       Decode_dec->DataSize -= Byte_Want_Read;
       return FR_OK;
     }
     else
     {
       /* 如果数据的大小<想要读的数据,拷贝剩余的数据大小Decode_dec->DataSize,并把数据源地址指针偏移读取的字节数,数据置零 */
-      memcpy((uint8_t *)Buffer_Dest,(uint8_t *)Decode_dec->pSrcData,Decode_dec->DataSize);
+			taskENTER_CRITICAL();
+      memcpy((uint8_t *)Buffer_Dest,Temp_pointer + Data_Offset,Decode_dec->DataSize);
+			taskEXIT_CRITICAL();
+			
 			*Byte_Real_Read = Decode_dec->DataSize;
       Decode_dec->DataSize = 0;
+			Data_Offset = 0;
       return FR_OK;
     }
   }

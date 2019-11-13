@@ -258,25 +258,25 @@ static void Fillet_Textbox_OwnerDraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
  * @param  ds:	自定义绘制结构体
  * @retval NONE
 */
-static void Brigh_Textbox_OwnerDraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
-{
-	HWND hwnd;
-	HDC hdc;
-	RECT rc;
-	WCHAR wbuf[128];
+//static void Brigh_Textbox_OwnerDraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
+//{
+//	HWND hwnd;
+//	HDC hdc;
+//	RECT rc;
+//	WCHAR wbuf[128];
 
-	hwnd = ds->hwnd; //button的窗口句柄.
-	hdc = ds->hDC;   //button的绘图上下文句柄.
-	GetClientRect(hwnd, &rc);//得到控件的位置
+//	hwnd = ds->hwnd; //button的窗口句柄.
+//	hdc = ds->hDC;   //button的绘图上下文句柄.
+//	GetClientRect(hwnd, &rc);//得到控件的位置
 
-	SetBrushColor(hdc, MapRGB(hdc, 242, 242, 242));
-	FillRect(hdc, &rc);
+//	SetBrushColor(hdc, MapRGB(hdc, 242, 242, 242));
+//	FillRect(hdc, &rc);
 
-	SetTextColor(hdc, MapRGB(hdc, 50, 50, 50));
-	GetWindowText(hwnd, wbuf, 128); //获得按钮控件的文字
-	rc.w -= 45;
-	DrawText(hdc, wbuf, -1, &rc, DT_VCENTER|DT_CENTER);//绘制文字(居中对齐方式)
-}
+//	SetTextColor(hdc, MapRGB(hdc, 50, 50, 50));
+//	GetWindowText(hwnd, wbuf, 128); //获得按钮控件的文字
+//	rc.w -= 45;
+//	DrawText(hdc, wbuf, -1, &rc, DT_VCENTER|DT_CENTER);//绘制文字(居中对齐方式)
+//}
 
 /*
  * @brief  重绘列表
@@ -292,7 +292,7 @@ static void listbox_owner_draw(DRAWITEM_HDR *ds)
 	WCHAR wbuf[128];
   WCHAR Time[40];
   WCHAR *Temp;
-	POINT pt;
+//	POINT pt;
   uint16_t ListData = 0;
 
 	hwnd =ds->hwnd;
@@ -516,7 +516,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case eMSG_READ_TEXT:
 	{
 		HWND wnd;
-		int i;
+//		int i;
 
 		wnd = GetDlgItem(hwnd, eID_SMS_LIST);
 

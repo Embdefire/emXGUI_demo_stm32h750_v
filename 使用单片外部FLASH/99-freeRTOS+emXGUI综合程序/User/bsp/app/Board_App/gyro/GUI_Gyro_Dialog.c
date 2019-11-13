@@ -54,7 +54,7 @@ volatile uint32_t hal_timestamp = 0;
 /* Starting sampling rate. */
 #define DEFAULT_MPU_HZ  (10)
 
-#define FLASH_SIZE      (512)
+//#define FLASH_SIZE      (512)
 #define FLASH_MEM_START ((void*)0x1800)
 
 #define PEDO_READ_MS    (1000)

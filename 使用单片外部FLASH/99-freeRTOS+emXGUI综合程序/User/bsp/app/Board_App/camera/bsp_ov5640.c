@@ -1461,10 +1461,10 @@ void OV5640_Capture_Control(FunctionalState state)
     }
     case DISABLE:
     {
-      HAL_DCMI_DeInit(&DCMI_Handle);
-
       HAL_DCMI_Stop(&DCMI_Handle);
-      HAL_DMA_Abort(&DMA_Handle_dcmi);
+      HAL_DMA_Abort(&DMA_Handle_dcmi);		
+			
+      HAL_DCMI_DeInit(&DCMI_Handle);
       break;
     }
   }
@@ -1532,12 +1532,12 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 		  cur_index = 1;
 			if (QR_Task)
 			{
+//				SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0,cam_mode.cam_out_width * cam_mode.cam_out_height *2);
 				cur_index = 0;
 		    HAL_DCMI_Suspend(&DCMI_Handle);
         __HAL_DCMI_DISABLE(hdcmi);
 				
         get_image((uint32_t)CamDialog.cam_buff0,cam_mode.cam_out_width , cam_mode.cam_out_height);//从缓存好的第一块内存中获取图像数据
-//				get_image((uint32_t)CamDialog.cam_buff0,cam_mode.cam_out_width,cam_mode.cam_out_height);
 				/*重新开始采集*/
 				 HAL_DCMI_Resume(&DCMI_Handle);
 //				 __HAL_DCMI_ENABLE(hdcmi);
@@ -1547,6 +1547,7 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 			}
 			else
 			{
+//				SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0,cam_mode.cam_out_width * cam_mode.cam_out_height *2);
 				cur_index = 1;
 				OV5640_DMA_Config((uint32_t)CamDialog.cam_buff1,
 													cam_mode.cam_out_height*cam_mode.cam_out_width/2);  
@@ -1554,6 +1555,7 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 		}
 	else//1--配置第一块内存，使用第二块内存
 		{      
+//			SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0,cam_mode.cam_out_width * cam_mode.cam_out_height *2);
 			cur_index = 0;
 			OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
 												cam_mode.cam_out_height*cam_mode.cam_out_width/2);       

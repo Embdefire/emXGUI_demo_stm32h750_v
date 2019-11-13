@@ -1570,7 +1570,7 @@ static LRESULT dlg_set_WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
       rc.w =200; 
       rc.h =50;
 
-      DrawText(hdc_bk,L"参数设置",-1,&rc,DT_CENTER|DT_VCENTER); 
+//      DrawText(hdc_bk,L"参数设置",-1,&rc,DT_CENTER|DT_VCENTER); 
       SetPenColor(hdc_bk, MapRGB(hdc_bk, 245,245,245));
       GetClientRect(hwnd, &rc);
       //间隔线
@@ -1719,7 +1719,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       HDC hdc;
       RECT rc;
       static int switch_res = 0;
-      static int old_fps = 0;
+//      static int old_fps = 0;
       WCHAR wbuf[128];
       hdc = BeginPaint(hwnd,&ps);
       GetClientRect(hwnd,&rc);
@@ -1743,14 +1743,14 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
           case 0:
           {
             
-            SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0, cam_mode.cam_out_height*cam_mode.cam_out_width/2);
+            SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff1, cam_mode.cam_out_height*cam_mode.cam_out_width / 2);
             pSurf =CreateSurface(SURF_RGB565,cam_mode.cam_out_width, cam_mode.cam_out_height, 0, (U16*)CamDialog.cam_buff1);     
             ptmp = CamDialog.cam_buff1;
             break;
           }
           case 1:
           {                       
-            SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0, cam_mode.cam_out_height*cam_mode.cam_out_width/2);
+            SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0, cam_mode.cam_out_height*cam_mode.cam_out_width / 2);
             pSurf =CreateSurface(SURF_RGB565,cam_mode.cam_out_width, cam_mode.cam_out_height, 0, (U16*)CamDialog.cam_buff0);  
             ptmp = CamDialog.cam_buff0;
             break;
@@ -1848,6 +1848,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
       if(id==eID_EXIT && code==BN_CLICKED)//退出窗口
       {
+			  OV5640_Capture_Control(DISABLE);
         PostCloseMessage(hwnd);
       }
       break;  
@@ -1865,7 +1866,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     case WM_DESTROY:
     {
-      OV5640_Capture_Control(DISABLE);
+
       CamDialog.Update_Thread = 0;
       cam_mode.cam_out_height = GUI_YSIZE;
       cam_mode.cam_out_width = GUI_XSIZE;
@@ -1883,8 +1884,10 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       CamDialog.cur_SpecialEffects = eID_RB16;
       CamDialog.focus_status = 1;
       state = 0;   //摄像头状态机
+			
       GUI_VMEM_Free(CamDialog.cam_buff1);
       GUI_VMEM_Free(CamDialog.cam_buff0);
+			GUI_msleep(1);
       return PostQuitMessage(hwnd);
     }  
       
@@ -1933,31 +1936,4 @@ void	GUI_Camera_DIALOG(void)
 		DispatchMessage(&msg);
   }
 }
-
-void GUI_Camera_DIALOGTest(void *param)
-{
-  static int thread = 0;
-  int app = 0;
-  
-  if(thread == 0)
-  {
-     GUI_Thread_Create(GUI_Camera_DIALOGTest,"Camera_DIALOG",5*1024,NULL,5,3);
-     thread = 1;
-     return;
-  }
-  if(thread == 1)
-  {
-		if(app==0)
-		{
-			app=1;
-			GUI_Camera_DIALOG();
-      
-      
-			app=0;
-			thread=0;
-      GUI_Thread_Delete(GUI_GetCurThreadHandle());
-		}    
-  }
-}
-
 

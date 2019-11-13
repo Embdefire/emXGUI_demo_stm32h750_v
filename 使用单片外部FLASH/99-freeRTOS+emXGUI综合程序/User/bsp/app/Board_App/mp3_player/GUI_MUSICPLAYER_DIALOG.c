@@ -59,7 +59,7 @@ extern const unsigned char gImage_0[];
 GUI_SEM *exit_sem = NULL;
 /*============================================================================*/
 static BITMAP bm_0;
-static HDC rotate_disk_hdc;
+//static HDC rotate_disk_hdc;
 
 static SURFACE *pSurf;
 static HDC hdc_mem11=NULL;

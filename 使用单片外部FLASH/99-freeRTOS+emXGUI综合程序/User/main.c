@@ -65,6 +65,7 @@
 *************************************************************************
 */
 static void GUI_Thread_Entry(void* pvParameters);/* Test_Task任务实现 */
+static void DEBUG_Thread_Entry(void* parameter);
 static void MPU_Config(void);
 
 void BSP_Init(void);/* 用于初始化板载相关资源 */
@@ -76,7 +77,7 @@ void BSP_Init(void);/* 用于初始化板载相关资源 */
   *********************************************************************/
 void BSP_Init(void)
 {
-	  SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
+//	SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
 
   /* 系统时钟初始化成400MHz */
 #if 0	
@@ -86,15 +87,15 @@ void BSP_Init(void)
 	Board_MPU_Config(1,MPU_Normal_WT,0x24000000,MPU_512KB);
 #endif
 	/* 设置SDRAM为Normal类型,禁用共享, 直写模式*/  
-	Board_MPU_Config(0,MPU_Normal_WT,0xD0000000,MPU_16MB);
+	Board_MPU_Config(0,MPU_Normal_WT,0xD0000000,MPU_32MB);
+//	Board_MPU_Config(1,MPU_Normal_WT,0xD1000000,MPU_8MB);
+//  Board_MPU_Config(2,MPU_Normal_WT,0xD1800000,MPU_8MB);	
+	
 	/* 设置AXI RAM为Normal类型,禁用共享, 直写模式*/ 
-	Board_MPU_Config(1,MPU_Normal_WT,0x20000000,MPU_128KB);
-  
-  Board_MPU_Config(2,MPU_Normal_WB,0xD1000000,MPU_16MB);
-  
-  Board_MPU_Config(3,MPU_Normal_WT,0x00000000,MPU_64KB);
-  Board_MPU_Config(4,MPU_Normal_WT,0x24000000,MPU_512KB);
-  Board_MPU_Config(5,MPU_Normal_WT,0x08000000,MPU_2MB);
+	Board_MPU_Config(3,MPU_Normal_WT,0x20000000,MPU_128KB);
+  Board_MPU_Config(4,MPU_Normal_WT,0x00000000,MPU_64KB);
+  Board_MPU_Config(5,MPU_Normal_WT,0x24000000,MPU_512KB);
+  Board_MPU_Config(6,MPU_Normal_WT,0x08000000,MPU_2MB);
 	
 	MPU_Config();	
 	
@@ -103,7 +104,6 @@ void BSP_Init(void)
   /* Enable D-Cache */
   SCB_EnableDCache();
 	
-	SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
 	
   /*
 	 * STM32中断优先级分组为4，即4bit都用来表示抢占优先级，范围为：0~15
@@ -205,11 +205,17 @@ int main(void)
    /* 创建AppTaskCreate任务 */
   xReturn = xTaskCreate((TaskFunction_t )GUI_Thread_Entry,  /* 任务入口函数 */
                         (const char*    )"gui",/* 任务名字 */
-                        (uint16_t       )2*1024,  /* 任务栈大小 */
+                        (uint16_t       )5*1024,  /* 任务栈大小 */
                         (void*          )NULL,/* 任务入口函数参数 */
                         (UBaseType_t    )10, /* 任务的优先级 */
                         (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
 
+//	           xTaskCreate((TaskFunction_t )DEBUG_Thread_Entry,  /* 任务入口函数 */
+//                        (const char*    )"DEBUG_Thread_Entry",/* 任务名字 */
+//                        (uint16_t       )2*1024,  /* 任务栈大小 */
+//                        (void*          )NULL,/* 任务入口函数参数 */
+//                        (UBaseType_t    )2, /* 任务的优先级 */
+//                        (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
   /* 启动任务调度 */           
   if(pdPASS == xReturn)
     vTaskStartScheduler();   /* 启动任务，开启调度 */
@@ -244,6 +250,52 @@ static void GUI_Thread_Entry(void* parameter)
     LED1_OFF;     
     printf("Test_Task Running,LED1_OFF\r\n");
     vTaskDelay(500);   /* 延时500个tick */
+  }
+}
+
+static void DEBUG_Thread_Entry(void* parameter)
+{	
+	char tasks_buf[512] = {0};
+	
+  while (1)
+  {
+
+    vTaskDelay(4000);   /* 延时500个tick */
+
+	
+{
+	memset(tasks_buf, 0, 512);
+
+	strcat((char *)tasks_buf, "任务名称    运行计数    使用率\r\n" );
+
+	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
+
+	/* displays the amount of time each task has spent in the Running state
+
+	* in both absolute and percentage terms. */
+
+	vTaskGetRunTimeStats((char *)(tasks_buf + strlen(tasks_buf)));
+
+	strcat((char *)tasks_buf, "\r\n");
+	printf("%s\r\n",tasks_buf);
+	
+}
+	memset(tasks_buf, 0, 512);
+
+	strcat((char *)tasks_buf, "任务名称    运行状态    优先级    剩余堆栈    任务序号\r\n" );
+
+	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
+
+
+{
+	vTaskList((char *)(tasks_buf + strlen(tasks_buf)));
+
+	strcat((char *)tasks_buf, "\r\n---------------------------------------------\r\n");
+
+
+	strcat((char *)tasks_buf, "B : 阻塞, R : 就绪, D : 删除, S : 暂停\r\n");
+	printf("%s\r\n",tasks_buf);
+}
   }
 }
 

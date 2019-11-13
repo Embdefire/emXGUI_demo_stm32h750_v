@@ -302,14 +302,14 @@ static void radiobox_owner_draw(DRAWITEM_HDR *ds) // 单选按钮外观
 
 static	LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-   static SURFACE *pSurfTop = NULL;
+//   static SURFACE *pSurfTop = NULL;
    
    RECT rc;
 	switch (msg)
 	{
       case WM_CREATE: 
       {
-         WCHAR wbuf[128];
+//         WCHAR wbuf[128];
          GetClientRect(hwnd, &rc);
          //pSurfTop = CreateSurface(SURF_ARGB4444, rc.w, rc.h, NULL, 0);
 
@@ -434,7 +434,7 @@ static	LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
          u32 pic_size;
          PNG_DEC *png_dec;
          BITMAP png_bm;
-         HDC hdc;
+//         HDC hdc;
          /* 创建 HDC */
          hdc_rgbled_checked = CreateMemoryDC((SURF_FORMAT)COLOR_FORMAT_ARGB8888, 66, 66);
          ClrDisplay(hdc_rgbled_checked, NULL, 0);

@@ -21,6 +21,7 @@ extern int cur_index;//内存切换标志位
 extern GUI_SEM *cam_sem;//更新图像同步信号量（二值型）
 uint8_t QR_Task = 0;
 TaskHandle_t QR_Task_Handle;
+TaskHandle_t Syn_Updata;
 //定义控件ID
 enum eID
 {
@@ -60,11 +61,12 @@ static void Update_Dialog(void *p)
     GUI_SemWait(cam_sem, 0xFFFFFFFF);
     InvalidateRect(CamDialog.Cam_Hwnd, &rc, FALSE);
 	}
-  GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
+//  GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
 }
 
 static void QR_decoder_Task(void *p)
 {
+	WCHAR wbuf_type[128];
 	while(QR_Task) //线程已创建了
 	{
     char  qr_type_len=0;
@@ -74,7 +76,9 @@ static void QR_decoder_Task(void *p)
     int addr=0;
     int i=0,j=0;
     int qr_num=0;
+
     qr_num = QR_decoder();
+
     if(qr_num)
     { 
       BEEP_ON;
@@ -96,14 +100,14 @@ static void QR_decoder_Task(void *p)
       
       qr_data_buf[j] = '\0';
 
-//      printf("类型：%s\n数据：%s\n", qr_type_buf, qr_data_buf);
+      printf("类型：%s\n数据：%s\n", qr_type_buf, qr_data_buf);
 
       addr =0;//清零
       
-      WCHAR wbuf_type[40];
-      WCHAR *wbuf_data = (WCHAR *)GUI_VMEM_Alloc(512 * sizeof(WCHAR));
+      
+      WCHAR *wbuf_data = (WCHAR *)GUI_VMEM_Alloc(1024 * sizeof(WCHAR));
       x_mbstowcs_cp936(wbuf_type, qr_type_buf, sizeof(wbuf_type));
-      x_mbstowcs_cp936(wbuf_data, qr_data_buf, 512 * sizeof(WCHAR));
+      x_mbstowcs_cp936(wbuf_data, qr_data_buf, 1024 * sizeof(WCHAR));
 
       PostAsyncMessage(CamDialog.Cam_Hwnd, eMSG_QRScan_OK, (WPARAM)wbuf_data, (LPARAM)wbuf_type);     // 识别完成，显示结果
       BEEP_OFF;
@@ -111,6 +115,7 @@ static void QR_decoder_Task(void *p)
       vTaskSuspend(QR_Task_Handle);    // 挂起自己 不在执行
 
       QR_decoder();     // 退出前识别一次，清除上一帧
+
       GUI_VMEM_Free(wbuf_data);
       qr_num = 0;
     }
@@ -451,16 +456,16 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       
       xTaskCreate((TaskFunction_t )Update_Dialog,   /* 任务入口函数 */
                             (const char*    )"Update_Dialog",       /* 任务名字 */
-                            (uint16_t       )512/4,                 /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+                            (uint16_t       )512,                 /* 任务栈大小FreeRTOS的任务栈以字为单位 */
                             (void*          )NULL,                  /* 任务入口函数参数 */
-                            (UBaseType_t    )5,                     /* 任务的优先级 */
-                            (TaskHandle_t  )NULL);                  /* 任务控制块指针 */
+                            (UBaseType_t    )7,                     /* 任务的优先级 */
+                            (TaskHandle_t  )&Syn_Updata);                  /* 任务控制块指针 */
                             
       xTaskCreate((TaskFunction_t )QR_decoder_Task,  /* 任务入口函数 */
                             (const char*    )"QR decoder Task",     /* 任务名字 */
-                            (uint16_t       )1024*5/4,              /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+                            (uint16_t       )1024*3,              /* 任务栈大小FreeRTOS的任务栈以字为单位 */
                             (void*          )NULL,                  /* 任务入口函数参数 */
-                            (UBaseType_t    )4,                     /* 任务的优先级 */
+                            (UBaseType_t    )6,                     /* 任务的优先级 */
                             (TaskHandle_t  )&QR_Task_Handle);        /* 任务控制块指针 */
 
       HDC hdc_mem_320;
@@ -564,7 +569,7 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       HDC hdc_mem;
       HDC hdc;
       RECT rc;
-      RECT rc_title = {100, 0, 600, 70};
+//      RECT rc_title = {100, 0, 600, 70};
 
       hdc = BeginPaint(hwnd,&ps);
       GetClientRect(hwnd,&rc);
@@ -657,6 +662,7 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         GUI_SemDelete(cam_sem);
       }
       QR_Task=0;
+			GUI_Thread_Delete(Syn_Updata);
       GUI_VMEM_Free(CamDialog.cam_buff1);
       GUI_VMEM_Free(CamDialog.cam_buff0);
       //复位摄像头配置参数

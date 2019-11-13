@@ -115,7 +115,7 @@ int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
 void eMPL_send_quat(long *quat)
 {
     char out[PACKET_LENGTH];
-    int i;
+//    int i;
     if (!quat)
         return;
     memset(out, 0, PACKET_LENGTH);

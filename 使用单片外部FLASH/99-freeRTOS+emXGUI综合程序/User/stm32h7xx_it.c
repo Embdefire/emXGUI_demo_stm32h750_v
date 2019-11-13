@@ -195,7 +195,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if(htim->Instance == TIM6)
       xPortGetFreeHeapSize(); 
-    //CPU_RunTime++;
+      CPU_RunTime++;
     if(htim->Instance == TIM3)
     {
         video_timeout = 1;

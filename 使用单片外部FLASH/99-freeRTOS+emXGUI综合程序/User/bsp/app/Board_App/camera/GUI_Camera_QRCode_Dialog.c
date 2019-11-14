@@ -67,15 +67,17 @@ static void Update_Dialog(void *p)
 static void QR_decoder_Task(void *p)
 {
 	WCHAR wbuf_type[128];
+	char  qr_type_len=0;
+	short qr_data_len=0;
+	char qr_type_buf[10];
+	char qr_data_buf[512];
+	int addr=0;
+	int i=0,j=0;
+	int qr_num=0;
+	
 	while(QR_Task) //线程已创建了
 	{
-    char  qr_type_len=0;
-    short qr_data_len=0;
-    char qr_type_buf[10];
-    char qr_data_buf[512];
-    int addr=0;
-    int i=0,j=0;
-    int qr_num=0;
+
 
     qr_num = QR_decoder();
 
@@ -463,7 +465,7 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                             
       xTaskCreate((TaskFunction_t )QR_decoder_Task,  /* 任务入口函数 */
                             (const char*    )"QR decoder Task",     /* 任务名字 */
-                            (uint16_t       )1024*3,              /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+                            (uint16_t       )1024/4*150,              /* 任务栈大小FreeRTOS的任务栈以字为单位 */
                             (void*          )NULL,                  /* 任务入口函数参数 */
                             (UBaseType_t    )6,                     /* 任务的优先级 */
                             (TaskHandle_t  )&QR_Task_Handle);        /* 任务控制块指针 */

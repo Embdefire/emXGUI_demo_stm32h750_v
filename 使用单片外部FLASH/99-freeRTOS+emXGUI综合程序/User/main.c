@@ -28,6 +28,7 @@
 #include "string.h"
 #include <cm_backtrace.h>
 #include "./bsp/mpu/bsp_mpu.h" 
+#include "diskio.h"
 //#include "Backend_RGBLED.h" 
 
 /* hardfault跟踪器需要的定义 */
@@ -168,8 +169,8 @@ void BSP_Init(void)
   * @brief  System Clock 配置
   *         system Clock 配置如下: 
 	*            System Clock source  = PLL (HSE)
-	*            SYSCLK(Hz)           = 400000000 (CPU Clock)
-	*            HCLK(Hz)             = 200000000 (AXI and AHBs Clock)
+	*            SYSCLK(Hz)           = 480000000 (CPU Clock)
+	*            HCLK(Hz)             = 240000000 (AXI and AHBs Clock)
 	*            AHB Prescaler        = 2
 	*            D1 APB3 Prescaler    = 2 (APB3 Clock  100MHz)
 	*            D2 APB1 Prescaler    = 2 (APB1 Clock  100MHz)
@@ -177,7 +178,7 @@ void BSP_Init(void)
 	*            D3 APB4 Prescaler    = 2 (APB4 Clock  100MHz)
 	*            HSE Frequency(Hz)    = 25000000
 	*            PLL_M                = 5
-	*            PLL_N                = 160
+	*            PLL_N                = 192
 	*            PLL_P                = 2
 	*             PLL_Q                = 4
 	*            PLL_R                = 2
@@ -260,42 +261,43 @@ static void DEBUG_Thread_Entry(void* parameter)
   while (1)
   {
 
-    vTaskDelay(4000);   /* 延时500个tick */
+    vTaskDelay(5000);   /* 延时500个tick */
+//	  uint16_t test_status = 0;
+//		test_status =  disk_status(0);
+//		printf("************************ test_status %d ************************\r\n",test_status);
+//{
+//	memset(tasks_buf, 0, 512);
 
-	
-{
-	memset(tasks_buf, 0, 512);
+//	strcat((char *)tasks_buf, "任务名称    运行计数    使用率\r\n" );
 
-	strcat((char *)tasks_buf, "任务名称    运行计数    使用率\r\n" );
+//	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
 
-	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
+//	/* displays the amount of time each task has spent in the Running state
 
-	/* displays the amount of time each task has spent in the Running state
+//	* in both absolute and percentage terms. */
 
-	* in both absolute and percentage terms. */
+//	vTaskGetRunTimeStats((char *)(tasks_buf + strlen(tasks_buf)));
 
-	vTaskGetRunTimeStats((char *)(tasks_buf + strlen(tasks_buf)));
+//	strcat((char *)tasks_buf, "\r\n");
+//	printf("%s\r\n",tasks_buf);
+//	
+//}
+//	memset(tasks_buf, 0, 512);
 
-	strcat((char *)tasks_buf, "\r\n");
-	printf("%s\r\n",tasks_buf);
-	
-}
-	memset(tasks_buf, 0, 512);
+//	strcat((char *)tasks_buf, "任务名称    运行状态    优先级    剩余堆栈    任务序号\r\n" );
 
-	strcat((char *)tasks_buf, "任务名称    运行状态    优先级    剩余堆栈    任务序号\r\n" );
-
-	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
-
-
-{
-	vTaskList((char *)(tasks_buf + strlen(tasks_buf)));
-
-	strcat((char *)tasks_buf, "\r\n---------------------------------------------\r\n");
+//	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
 
 
-	strcat((char *)tasks_buf, "B : 阻塞, R : 就绪, D : 删除, S : 暂停\r\n");
-	printf("%s\r\n",tasks_buf);
-}
+//{
+//	vTaskList((char *)(tasks_buf + strlen(tasks_buf)));
+
+//	strcat((char *)tasks_buf, "\r\n---------------------------------------------\r\n");
+
+
+//	strcat((char *)tasks_buf, "B : 阻塞, R : 就绪, D : 删除, S : 暂停\r\n");
+//	printf("%s\r\n",tasks_buf);
+//}
   }
 }
 

@@ -60,6 +60,9 @@ extern VIDEO_DIALOG_Typedef VideoDialog;
 extern char lcdlist[20][100];//显示lis
 extern SURFACE *pSurf1;
 extern icon_S avi_icon[13];
+
+extern GUI_SEM *Delete_VideoTask_Sem;//做任务同步,结束播放器前先关闭播放任务
+
 #endif
 
 

@@ -9,6 +9,10 @@
 #include "Backend_vidoplayer.h"
 #include "Backend_avifile.h"
 #include "./sai/bsp_sai.h" 
+
+GUI_SEM *Delete_VideoTask_Sem;//做任务同步,结束播放器前先关闭播放任务
+TaskHandle_t VideoTask_Handle;
+
 VIDEO_DIALOG_Typedef VideoDialog;
 static SCROLLINFO video_sif_time;/*设置进度条的参数*/
 char avi_playlist[20][100];//播放List
@@ -418,23 +422,19 @@ static void App_PlayVideo(void *param)
 {
 	int app=0;
 
-	if(thread_PlayVideo==0)
-	{
-    GUI_Thread_Create(App_PlayVideo,"App_PlayVideo",16*1024,NULL,5,5);
-    thread_PlayVideo =1;
-    return;
-	}
 	while(thread_PlayVideo) //线程已创建了
-	{     
+	{
 		if(app==0)
 		{
 			app=1;    
       AVI_play(avi_playlist[VideoDialog.playindex]);
       app = 0;
 		}
-   }
-   GUI_DEBUG("Delete");
-   GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
+  }
+	while(1)//任务结束,程序在这执行
+	{
+		vTaskDelay(200);
+	}
 }
 
 static LRESULT Dlg_VideoList_WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -508,7 +508,6 @@ static LRESULT Dlg_VideoList_WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             rc.w - 65, rc.h * 1 / 2, 70, 70, hwnd, ICON_VIEWER_ID_NEXT, NULL, NULL);
       SetWindowFont(wnd, ctrlFont48);
          
-     
       break;
     }
     case WM_DRAWITEM:
@@ -618,6 +617,8 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
   {
     case WM_CREATE:
     { 
+			 Delete_VideoTask_Sem = GUI_SemCreate(0, 1);
+			
 			 AVI_JPEG_MUTEX = GUI_MutexCreate();    // 创建一个互斥信号量
 
        //音量icon（切换静音模式），返回控件句柄值
@@ -705,7 +706,7 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
        
        CreateWindow(BUTTON, L"O",WS_OWNERDRAW|WS_VISIBLE|WS_TRANSPARENT,
                       720, 5, 80, 80, hwnd, eID_VIDEO_EXIT, NULL, NULL);            
-       
+			
        #endif
        u8 *jpeg_buf;
        u32 jpeg_size;
@@ -728,8 +729,27 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
        vbuf =GUI_GRAM_Alloc(800*480*2);
        pSurf1 =CreateSurface(SURF_SCREEN,800,480,800*2,vbuf);
 			 pSurf1->GL->FillArea(pSurf1,0,0,LCD_XSIZE,LCD_YSIZE,pSurf1->CC->MapRGB(0,0,0)); 
-       App_PlayVideo(NULL);
-       break;
+//       App_PlayVideo(NULL);
+			BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
+  
+			/* 创建视频播放任务 */
+			xReturn = xTaskCreate((TaskFunction_t )App_PlayVideo,  /* 任务入口函数 */
+														(const char*    )"App_PlayVideo",/* 任务名字 */
+														(uint16_t       )16*1024,  /* 任务栈大小 */
+														(void*          )NULL,/* 任务入口函数参数 */
+														(UBaseType_t    )5, /* 任务的优先级 */
+														(TaskHandle_t*  )&VideoTask_Handle);/* 任务控制块指针 */ 
+       
+			if(pdPASS != xReturn)
+			{
+				GUI_ERROR("VIDEOPLAYER Start Failed!Play Reset\r\n");
+				while(1);//停止工作
+			}else
+			{
+				thread_PlayVideo = 1;
+			}
+			
+      break;
     }
     case WM_NOTIFY:
     {
@@ -987,18 +1007,22 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_DESTROY:
     {
-      GUI_MutexLock(AVI_JPEG_MUTEX,0xFFFFFFFF);    // 获取互斥量确保一帧图像的内存使用后已释放	
-      thread_PlayVideo = 0;  //结束音乐播放线程
-			SAI_Play_Stop();
-      GUI_msleep(200);//等待1秒,线程结束
-      VideoDialog.SWITCH_STATE = 1;
+			SAI_Play_Stop();			
+			thread_PlayVideo = 0;  //结束音乐播放线程
+			VideoDialog.SWITCH_STATE = 1;//切换状态,退出循环播放
+      
+			GUI_SemWait(Delete_VideoTask_Sem,0xFFFFFFFF);//死等,同步结束播放线程
+
+			vTaskDelete(VideoTask_Handle);
+			
       VideoDialog.playindex = 0;
       DeleteDC(VideoDialog.hdc_bk);
-//			GUI_VMEM_Free(Frame_buf);//发现AVIplay中,至少有一次此Buf不被释放,每次任务结束主动释放
-//			Frame_buf = NULL;//指向NULL,防止重用
       GUI_GRAM_Free(vbuf);
       DeleteSurface(pSurf1);
-			GUI_MutexDelete(AVI_JPEG_MUTEX);
+			
+			GUI_MutexDelete(AVI_JPEG_MUTEX);//删除互斥量
+			GUI_SemDelete(Delete_VideoTask_Sem);//删除信号量
+			
       return PostQuitMessage(hwnd);	
     }  
     default:
@@ -1012,7 +1036,7 @@ void	GUI_VideoPlayer_DIALOG(void*param)
 {	
 	WNDCLASS	wcex;
 	MSG msg;
-
+	VideoDialog.avi_file_num = 0;
   scan_files(path);
 	if (wm8978_Init()==0)
 	{

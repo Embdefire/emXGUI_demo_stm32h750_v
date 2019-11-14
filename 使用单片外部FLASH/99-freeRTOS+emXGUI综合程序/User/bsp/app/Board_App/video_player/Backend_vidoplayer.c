@@ -18,7 +18,7 @@ UINT      BytesRD;
 uint8_t   *Frame_buf;
 
 static volatile uint8_t audiobufflag=0;
-__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(0xd1a32800)));
+__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(0xd1bc0000)));
 
 static uint8_t   *pbuffer;
 
@@ -34,6 +34,7 @@ extern avih_TypeDef* avihChunk;
 //extern HWND avi_wnd_time;
 //extern int avi_chl;
 void MUSIC_SAI_DMA_TX_Callback(void);
+
 extern GUI_MUTEX*	AVI_JPEG_MUTEX;    // 用于确保一帧图像用后被释放完在退出线程
 
 static volatile int frame=0;
@@ -50,6 +51,8 @@ u32 pos;//文件指针位置
 s32 time_sum = 0;
 void AVI_play(char *filename)
 {
+	GUI_SemWait(Delete_VideoTask_Sem,0);//清空一下信号量,确保信号量是由当前播放程序释放的,保证退出的信号量的准确性
+	
   FRESULT  res;
   uint32_t offset;
   uint16_t audiosize;
@@ -262,10 +265,10 @@ void AVI_play(char *filename)
 
 			}
 
-			while(bDrawVideo==TRUE)
-			{
-				GUI_msleep(5);
-			}
+//			while(bDrawVideo==TRUE)
+//			{
+//				GUI_msleep(5);
+//			}
 
       while(video_timeout==0)
       {   
@@ -408,6 +411,8 @@ void AVI_play(char *filename)
 	wm8978_Reset();	/* 复位WM8978到复位状态 */
   HAL_TIM_Base_Stop_IT(&TIM3_Handle); //允许定时器3更新中断
   f_close(&fileR);
+	GUI_SemPost(Delete_VideoTask_Sem);
+
 }
 
 void MUSIC_SAI_DMA_TX_Callback(void)

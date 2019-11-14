@@ -546,6 +546,7 @@ void mp3PlayerDemo(HWND hwnd,const char *mp3file, uint8_t vol,uint8_t vol_horn, 
   */
 void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 {
+
 	static uint8_t timecount;//记录时间
   WCHAR wbuf[128];
   char ooo = 0;
@@ -590,7 +591,7 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
       result = f_read(&file,(uint16_t *)buffer0,RECBUFFER_SIZE*2,&bw);
       result = f_read(&file,(uint16_t *)buffer1,RECBUFFER_SIZE*2,&bw);
       
-      Delay_ms(10);	/* 延迟一段时间，等待I2S中断结束 */			
+//      Delay_ms(10);	/* 延迟一段时间，等待I2S中断结束 */			
 			SAI_Play_Stop();
       wm8978_Reset();		/* 复位WM8978到复位状态 */	
       wm8978_CtrlGPIO1(1);
@@ -660,6 +661,7 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
                   //InvalidateRect(GetDlgItem(hwnd, ID_TB2), NULL, TRUE); 
 
                   lrc.curtime = curtime;  
+#if 0
                   if(lrc.flag == 1){
                      //+100是提前显示，显示需要消耗一点时间
                      if((lrc.oldtime <= lrc.curtime*100+100)&&(lrc.indexsize>7))
@@ -721,7 +723,8 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
                      SetWindowText(wnd_lrc2,L" ");
                      SetWindowText(wnd_lrc4,L" ");
                      SetWindowText(wnd_lrc5,L" ");
-                  }                  
+                  }  
+#endif									
                }   
                
                timecount=0;  
@@ -783,7 +786,6 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 	    SAI_Play_Stop();
       wm8978_Reset();	/* 复位WM8978到复位状态 */
 		
-	
 }
 
 /* DMA发送完成中断回调函数 */

@@ -62,6 +62,7 @@ void SAI_GPIO_Config(void)
   GPIO_InitStruct.Pin = SAI_MCLK_PIN;
   GPIO_InitStruct.Alternate = SAI_MCLK_GPIO_AF;
   HAL_GPIO_Init(SAI_MCLK_PORT, &GPIO_InitStruct);     
+	
 }
 
 void BSP_AUDIO_OUT_ClockConfig(uint32_t AudioFreq)
@@ -72,7 +73,9 @@ void BSP_AUDIO_OUT_ClockConfig(uint32_t AudioFreq)
   __HAL_RCC_PLL2CLKOUT_ENABLE(RCC_PLL2_DIVP);
    
 	RCC_ExCLKInitStruct.PeriphClockSelection=RCC_PERIPHCLK_SAI1;
-	RCC_ExCLKInitStruct.Sai1ClockSelection=RCC_SAI1CLKSOURCE_PLL2;  
+	RCC_ExCLKInitStruct.Sai1ClockSelection=RCC_SAI1CLKSOURCE_PLL2;  //时钟和SDRAM共用,使用时会闪一下
+//	RCC_ExCLKInitStruct.Sai1ClockSelection=RCC_SAI1CLKSOURCE_CLKP; //时钟频率不对,播放速率不对
+
   RCC_ExCLKInitStruct.PLL2.PLL2M=5;
   RCC_ExCLKInitStruct.PLL2.PLL2R=3;
   switch(AudioFreq)
@@ -123,7 +126,7 @@ void BSP_AUDIO_OUT_ClockConfig(uint32_t AudioFreq)
   */
 void SAIxA_Tx_Config(const uint16_t _usStandard, const uint16_t _usWordLen, const uint32_t _usAudioFreq)
 {
-  BSP_AUDIO_OUT_ClockConfig(_usAudioFreq);
+//  BSP_AUDIO_OUT_ClockConfig(_usAudioFreq);//放在SDRAM初始化中配置时钟,固定采样率,不再进行配置
   SAI_CLK_ENABLE();
   h_sai.Instance = SAI1_Block_A;
   

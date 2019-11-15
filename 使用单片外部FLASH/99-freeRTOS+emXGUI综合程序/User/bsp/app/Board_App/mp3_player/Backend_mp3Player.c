@@ -661,7 +661,6 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
                   //InvalidateRect(GetDlgItem(hwnd, ID_TB2), NULL, TRUE); 
 
                   lrc.curtime = curtime;  
-#if 0
                   if(lrc.flag == 1){
                      //+100是提前显示，显示需要消耗一点时间
                      if((lrc.oldtime <= lrc.curtime*100+100)&&(lrc.indexsize>7))
@@ -724,7 +723,6 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
                      SetWindowText(wnd_lrc4,L" ");
                      SetWindowText(wnd_lrc5,L" ");
                   }  
-#endif									
                }   
                
                timecount=0;  

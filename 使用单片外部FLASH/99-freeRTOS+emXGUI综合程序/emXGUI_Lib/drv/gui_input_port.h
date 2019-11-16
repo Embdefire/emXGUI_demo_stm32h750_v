@@ -11,7 +11,7 @@ extern "C" {
 
 #if defined(STM32F429_439xx)
 #include "stm32f4xx.h"
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 #include "stm32h7xx.h"
 #endif
 //extern GUI_SEM *Input_Sem;

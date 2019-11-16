@@ -15,7 +15,7 @@
 #include "ff_gen_drv.h"
 #if defined(STM32F429_439xx)
 #include "sdio/bsp_sdio_sd.h"
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 #include "./sd_card/bsp_sdio_sd.h"
 #endif  
 
@@ -55,7 +55,7 @@ BOOL FileSystem_Init(void)
   /* 禁用WiFi模块 */
 #if defined(STM32F429_439xx)
   BL8782_PDN_INIT();
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 //  WIFI_PDN_INIT();已在SD卡初始化中禁用
 #endif  
 	

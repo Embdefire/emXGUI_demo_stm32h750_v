@@ -3,7 +3,7 @@
 
 #if defined(STM32F429_439xx)
 #include "stm32f4xx.h"
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 #include "stm32h7xx.h"
   #if GUI_RES_DEV_EN
     #include "./flash/bsp_qspi_flash.h"

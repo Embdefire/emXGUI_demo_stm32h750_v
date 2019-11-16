@@ -37,7 +37,7 @@ void LCD_HardInit(u32 fb_addr)
     LCD_Init(fb_addr, 0, LTDC_Pixelformat_ARGB8888);
   #endif
   
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
   /* ≥ı ºªØ“∫æß∆¡ */  
   #if	(LCD_FORMAT == COLOR_FORMAT_RGB565)
     LCD_Init(fb_addr, 0, LTDC_PIXEL_FORMAT_RGB565);

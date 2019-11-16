@@ -29,7 +29,7 @@ extern HWND wnd_res_writer_info_textbox ;
 extern HWND wnd_res_writer_progbar;
 
 
-#if defined(STM32H743xx)
+#if defined(STM32H743xx) || defined(STM32H750xx)
 #define SPI_FLASH_BufferWrite BSP_QSPI_Write
 #define SPI_FLASH_BufferRead  BSP_QSPI_Read 
 enum
@@ -701,7 +701,7 @@ FRESULT BurnFile(void)
   /* 整片FLASH擦除 */
 #if defined(STM32F429_439xx)  
   SPI_FLASH_BulkErase_GUI();
-#elif defined(STM32H743xx)  
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 	#if defined(Fire_H7_InFlash)
 	//映射模式,不支持demo烧录
 	#else

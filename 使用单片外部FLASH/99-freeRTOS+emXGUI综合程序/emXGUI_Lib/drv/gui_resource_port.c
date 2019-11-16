@@ -41,7 +41,7 @@ BOOL RES_DevInit(void)
   {
     return TRUE;
   }
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 	
 	#if defined(Fire_H7_InFlash)
 	{
@@ -88,7 +88,7 @@ U32 RES_DevGetID(void)
 	GUI_MutexLock(mutex_lock,5000);
 #if defined(STM32F429_439xx)
 	id =SPI_FLASH_ReadID();
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 	#if defined(Fire_H7_InFlash)
 	//不读取
 	#else
@@ -113,7 +113,7 @@ BOOL RES_DevWrite(u8 *buf,u32 addr,u32 size)
 	
 #if defined(STM32F429_439xx)
 	SPI_FLASH_BufferWrite(buf,addr,size);
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
 	#if defined(Fire_H7_InFlash)
 	//映射模式无法进行写操作
 	#else
@@ -138,7 +138,7 @@ BOOL RES_DevRead(u8 *buf,u32 addr,u32 size)
 	
 #if defined(STM32F429_439xx)
 	SPI_FLASH_BufferRead(buf,addr,size);
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
   BSP_QSPI_Read(buf,addr,size);
 #elif defined(CPU_MIMXRT1052DVL6B)
   
@@ -183,7 +183,7 @@ int RES_DevEraseSector(u32 addr)
 	GUI_MutexLock(mutex_lock,5000);
 #if defined(STM32F429_439xx)  
 	SPI_FLASH_SectorErase(addr&0xFFFFF000);
-#elif defined(STM32H743xx)
+#elif defined(STM32H743xx) || defined(STM32H750xx)
   //BSP_QSPI_Erase_Block(addr&0xFFFFF000);
 #endif     
 	GUI_MutexUnlock(mutex_lock);

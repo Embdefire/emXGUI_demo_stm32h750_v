@@ -42,7 +42,7 @@ extern HWND Boot_progbar;
 extern int thread_ctrl;
 
 /*************************** 兼容H7系列老版本字库 ************************/
-#if defined(STM32H743xx)
+#if defined(STM32H743xx) || defined(STM32H750xx)
 
 	#if(GUI_ICON_LOGO_EN)
 	///* logo字体 */

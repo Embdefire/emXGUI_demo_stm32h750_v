@@ -1536,7 +1536,7 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 				cur_index = 0;
 		    HAL_DCMI_Suspend(&DCMI_Handle);
         __HAL_DCMI_DISABLE(hdcmi);
-				
+				SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0, cam_mode.cam_out_height*cam_mode.cam_out_width / 2);
         get_image((uint32_t)CamDialog.cam_buff0,cam_mode.cam_out_width , cam_mode.cam_out_height);//从缓存好的第一块内存中获取图像数据
 				/*重新开始采集*/
 				 HAL_DCMI_Resume(&DCMI_Handle);

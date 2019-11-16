@@ -6,7 +6,7 @@
   * @date    2018-xx-xx
   * @brief   emXGUI 桌面
   *********************************************************************
-  * 实验平台:野火 H750 STM32 开发板
+  * 实验平台:野火 H743 STM32 开发板
   * 官网    :www.embedfire.com
   * 论坛    :http://www.firebbs.cn
   * 淘宝    :https://fire-stm32.taobao.com
@@ -95,7 +95,7 @@ static	void	_EraseBackgnd(HDC hdc,const RECT *lprc,HWND hwnd)
 		
 		SetTextColor(hdc,MapRGB(hdc,255,255,255));
 		rc.y +=20;
-		DrawText(hdc,L"emXGUI@Embedfire STM32H750 ",-1,&rc,DT_CENTER);
+		DrawText(hdc,L"emXGUI@Embedfire STM32H743 ",-1,&rc,DT_CENTER);
 			
 		/* 背景 */
 		GetClientRect(hwnd,&rc);

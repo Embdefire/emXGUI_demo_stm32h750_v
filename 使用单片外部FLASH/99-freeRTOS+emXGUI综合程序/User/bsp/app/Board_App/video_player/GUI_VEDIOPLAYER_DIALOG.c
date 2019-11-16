@@ -379,7 +379,11 @@ static FRESULT scan_files (char* path)
     for (;;) 
     { 
       res = f_readdir(&dir, &fno); 										//读取目录下的内容
-     if (res != FR_OK || fno.fname[0] == 0) break; 	//为空时表示所有项目读取完毕，跳出
+     if (res != FR_OK || fno.fname[0] == 0)
+		 {
+			 f_closedir(&dir);
+			 break; 	//为空时表示所有项目读取完毕，跳出
+		 }
 #if _USE_LFN 
       fn = *fno.lfname ? fno.lfname : fno.fname; 
 #else 
@@ -392,7 +396,10 @@ static FRESULT scan_files (char* path)
         sprintf(&path[i], "/%s", fn); 							//合成完整目录??
         res = scan_files(path);											//递归遍历 
         if (res != FR_OK) 
+			{
+			    f_closedir(&dir);
 					break; 																		//打开失败，跳出循??
+			}
         path[i] = 0; 
       } 
       else 
@@ -429,6 +436,7 @@ static void App_PlayVideo(void *param)
 			app=1;    
       AVI_play(avi_playlist[VideoDialog.playindex]);
       app = 0;
+			vTaskDelay(1);
 		}
   }
 	while(1)//任务结束,程序在这执行

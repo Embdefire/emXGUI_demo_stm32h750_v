@@ -216,48 +216,6 @@ static void Cam_scrollbar_ownerdraw(DRAWITEM_HDR *ds)
 }
 static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 {
-#if 0
-	HWND hwnd;
-	HDC hdc;
-	RECT rc;
-	WCHAR wbuf[128];
-
-	hwnd = ds->hwnd; //button的窗口句柄.
-	hdc = ds->hDC;   //button的绘图上下文句柄.
-	rc = ds->rc;     //button的绘制矩形区.
-
-	SetBrushColor(hdc, MapRGB(hdc, COLOR_DESKTOP_BACK_GROUND));
-   
-   FillCircle(hdc, rc.x+rc.w, rc.y, rc.w);
-	//FillRect(hdc, &rc); //用矩形填充背景
-
-   if (ds->State & BST_PUSHED)
-	{ //按钮是按下状态
-//    GUI_DEBUG("ds->ID=%d,BST_PUSHED",ds->ID);
-//		SetBrushColor(hdc,MapRGB(hdc,150,200,250)); //设置填充色(BrushColor用于所有Fill类型的绘图函数)
-//		SetPenColor(hdc,MapRGB(hdc,250,0,0));        //设置绘制色(PenColor用于所有Draw类型的绘图函数)
-		SetTextColor(hdc, MapRGB(hdc, 105, 105, 105));      //设置文字色
-	}
-	else
-	{ //按钮是弹起状态
-//		SetBrushColor(hdc,MapRGB(hdc,255,255,255));
-//		SetPenColor(hdc,MapRGB(hdc,0,250,0));
-		SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
-	}
-
-	  /* 使用控制图标字体 */
-	SetFont(hdc, ctrlFont64);
-	//  SetTextColor(hdc,MapRGB(hdc,255,255,255));
-
-	GetWindowText(hwnd, wbuf, 128); //获得按钮控件的文字
-   rc.y = -10;
-   rc.x = 16;
-	DrawText(hdc, wbuf, -1, &rc, NULL);//绘制文字(居中对齐方式)
-
-
-  /* 恢复默认字体 */
-	SetFont(hdc, defaultFont);
-#endif
   HDC hdc;
   RECT rc, rc_tmp;
   HWND hwnd;
@@ -269,8 +227,6 @@ static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
   GetClientRect(hwnd, &rc_tmp);//得到控件的位置
   WindowToScreen(hwnd, (POINT *)&rc_tmp, 1);//坐标转换
 
-//  BitBlt(hdc, rc.x, rc.y, rc.w, rc.h, hdc_clock_bk, rc_tmp.x, rc_tmp.y, SRCCOPY);
-
   if (ds->State & BST_PUSHED)
 	{ //按钮是按下状态
 		SetPenColor(hdc, MapRGB(hdc, 120, 120, 120));      //设置文字色
@@ -280,9 +236,6 @@ static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
 		SetPenColor(hdc, MapRGB(hdc, 250, 250, 250));
 	}
-  
-  // SetBrushColor(hdc, MapRGB(hdc, 242, 242, 242));
-  // FillRect(hdc, &rc);
 
   SetPenSize(hdc, 2);
 
@@ -293,7 +246,6 @@ static void home_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
     HLine(hdc, rc.x, rc.y ,58);//rc.w
     rc.y += 9;
   }
-
 }
 
 static void camera_return_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
@@ -316,30 +268,14 @@ static void camera_return_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 	}
 	else if (ds->State & BST_PUSHED)
 	{ //按钮是按下状态
-//    GUI_DEBUG("ds->ID=%d,BST_PUSHED",ds->ID);
-//		SetBrushColor(hdc,MapRGB(hdc,150,200,250)); //设置填充色(BrushColor用于所有Fill类型的绘图函数)
-//		SetPenColor(hdc,MapRGB(hdc,250,0,0));        //设置绘制色(PenColor用于所有Draw类型的绘图函数)
 		SetTextColor(hdc, MapRGB(hdc, 105, 105, 105));      //设置文字色
 	}
 	else
 	{ //按钮是弹起状态
-//		SetBrushColor(hdc,MapRGB(hdc,255,255,255));
-//		SetPenColor(hdc,MapRGB(hdc,0,250,0));
 		SetTextColor(hdc, MapRGB(hdc, 255, 255, 255));
 	}
-
-
-	//	SetBrushColor(hdc,COLOR_BACK_GROUND);
-
-	//	FillRect(hdc,&rc); //用矩形填充背景
-	//	DrawRect(hdc,&rc); //画矩形外框
-	//  
-	//  FillCircle(hdc,rc.x+rc.w/2,rc.x+rc.w/2,rc.w/2); //用矩形填充背景FillCircle
-	//	DrawCircle(hdc,rc.x+rc.w/2,rc.x+rc.w/2,rc.w/2); //画矩形外框
-
 	  /* 使用控制图标字体 */
 	SetFont(hdc, ctrlFont48);
-	//  SetTextColor(hdc,MapRGB(hdc,255,255,255));
 
 	GetWindowText(ds->hwnd, wbuf, 128); //获得按钮控件的文字
 
@@ -434,6 +370,7 @@ static void Update_Dialog(void *param)
 			GUI_SemWait(cam_sem, 0xFFFFFFFF);
       InvalidateRect(CamDialog.Cam_Hwnd,NULL,FALSE);
 			app=0;
+			GUI_Yield();
 		}
 	}
   GUI_Thread_Delete(GUI_GetCurThreadHandle());
@@ -1639,7 +1576,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       //设置按键
       CreateWindow(BUTTON,L"参数设置",WS_OWNERDRAW|WS_TRANSPARENT,rc.w-135,419,120,40,hwnd,eID_SET,NULL,NULL);
 
-      GUI_Thread_Create(Update_Dialog,"Update_Dialog",5*1024,NULL,6,5);
+      GUI_Thread_Create(Update_Dialog,"Update_Dialog",512,NULL,6,5);
       
       
       //帧率
@@ -1884,7 +1821,7 @@ static LRESULT Cam_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       CamDialog.cur_SpecialEffects = eID_RB16;
       CamDialog.focus_status = 1;
       state = 0;   //摄像头状态机
-			
+			cur_index = 0;
       GUI_VMEM_Free(CamDialog.cam_buff1);
       GUI_VMEM_Free(CamDialog.cam_buff0);
 			GUI_msleep(1);

@@ -18,7 +18,8 @@ UINT      BytesRD;
 uint8_t   *Frame_buf;
 
 static volatile uint8_t audiobufflag=0;
-__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(0xd1bc0000)));
+//__align(4) uint8_t   Sound_buf[4][1024*5]	__attribute__((at(0xd1bc0000)));
+__align(4) uint8_t   Sound_buf[4][1024*5]	__EXRAM;
 
 static uint8_t   *pbuffer;
 
@@ -74,6 +75,7 @@ void AVI_play(char *filename)
   {
     GUI_VMEM_Free(Frame_buf);
     DeleteDC(hdc1);
+		GUI_SemPost(Delete_VideoTask_Sem);//文件打开失败,返回前释放程序可以关闭的信号量
     return;    
   }
 

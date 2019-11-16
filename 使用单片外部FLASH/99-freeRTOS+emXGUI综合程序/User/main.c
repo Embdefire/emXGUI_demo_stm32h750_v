@@ -68,6 +68,7 @@
 static void GUI_Thread_Entry(void* pvParameters);/* Test_Task任务实现 */
 static void DEBUG_Thread_Entry(void* parameter);
 static void MPU_Config(void);
+void vApplicationStackOverflowHook(TaskHandle_t xTask,char * pcTaskName);
 
 void BSP_Init(void);/* 用于初始化板载相关资源 */
 /***********************************************************************
@@ -198,7 +199,7 @@ void BSP_Init(void)
   ****************************************************************/
 int main(void)
 {	
-  BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
+  BaseType_t xReturn = pdPASS;/* 定义一个创建信息0返回值，默认为pdPASS */
   
   /* 开发板硬件初始化 */
   BSP_Init();  
@@ -265,39 +266,39 @@ static void DEBUG_Thread_Entry(void* parameter)
 //	  uint16_t test_status = 0;
 //		test_status =  disk_status(0);
 //		printf("************************ test_status %d ************************\r\n",test_status);
-//{
-//	memset(tasks_buf, 0, 512);
+{
+	memset(tasks_buf, 0, 512);
 
-//	strcat((char *)tasks_buf, "任务名称    运行计数    使用率\r\n" );
+	strcat((char *)tasks_buf, "任务名称    运行计数    使用率\r\n" );
 
-//	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
+	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
 
-//	/* displays the amount of time each task has spent in the Running state
+	/* displays the amount of time each task has spent in the Running state
 
-//	* in both absolute and percentage terms. */
+	* in both absolute and percentage terms. */
 
-//	vTaskGetRunTimeStats((char *)(tasks_buf + strlen(tasks_buf)));
+	vTaskGetRunTimeStats((char *)(tasks_buf + strlen(tasks_buf)));
 
-//	strcat((char *)tasks_buf, "\r\n");
-//	printf("%s\r\n",tasks_buf);
-//	
-//}
-//	memset(tasks_buf, 0, 512);
+	strcat((char *)tasks_buf, "\r\n");
+	printf("%s\r\n",tasks_buf);
+	
+}
+	memset(tasks_buf, 0, 512);
 
-//	strcat((char *)tasks_buf, "任务名称    运行状态    优先级    剩余堆栈    任务序号\r\n" );
+	strcat((char *)tasks_buf, "任务名称    运行状态    优先级    剩余堆栈    任务序号\r\n" );
 
-//	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
-
-
-//{
-//	vTaskList((char *)(tasks_buf + strlen(tasks_buf)));
-
-//	strcat((char *)tasks_buf, "\r\n---------------------------------------------\r\n");
+	strcat((char *)tasks_buf, "---------------------------------------------\r\n");
 
 
-//	strcat((char *)tasks_buf, "B : 阻塞, R : 就绪, D : 删除, S : 暂停\r\n");
-//	printf("%s\r\n",tasks_buf);
-//}
+{
+	vTaskList((char *)(tasks_buf + strlen(tasks_buf)));
+
+	strcat((char *)tasks_buf, "\r\n---------------------------------------------\r\n");
+
+
+	strcat((char *)tasks_buf, "B : 阻塞, R : 就绪, D : 删除, S : 暂停\r\n");
+	printf("%s\r\n",tasks_buf);
+}
   }
 }
 
@@ -343,4 +344,12 @@ static void MPU_Config(void)
   /* Enable the MPU */
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
 }
+
+void vApplicationStackOverflowHook(TaskHandle_t xTask,
+                                     char * pcTaskName)
+{
+	printf(" Heap Overflow! Cheak : %s \r\n",pcTaskName);
+	while(1);
+}
+
 /********************************END OF FILE****************************/

@@ -79,26 +79,17 @@ void BSP_Init(void);/* 用于初始化板载相关资源 */
   *********************************************************************/
 void BSP_Init(void)
 {
-//	SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
+	SCB->CACR|=1<<2;   //强制D-Cache透写,如不开启,实际使用中可能遇到各种问题	  
 
   /* 系统时钟初始化成400MHz */
-#if 0	
-  /* 设置SDRAM为Normal类型,禁用共享, 直写模式*/  
-	Board_MPU_Config(0,MPU_Normal_WT,0xD0000000,MPU_32MB);
-	/* 设置AXI RAM为Normal类型,禁用共享, 直写模式*/ 
-	Board_MPU_Config(1,MPU_Normal_WT,0x24000000,MPU_512KB);
-#endif
 	/* 设置SDRAM为Normal类型,禁用共享, 直写模式*/  
 	Board_MPU_Config(0,MPU_Normal_WT,0xD0000000,MPU_32MB);
-//	Board_MPU_Config(1,MPU_Normal_WT,0xD1000000,MPU_8MB);
-//  Board_MPU_Config(2,MPU_Normal_WT,0xD1800000,MPU_8MB);	
-	
 	/* 设置AXI RAM为Normal类型,禁用共享, 直写模式*/ 
-	Board_MPU_Config(3,MPU_Normal_WT,0x20000000,MPU_128KB);
-  Board_MPU_Config(4,MPU_Normal_WT,0x00000000,MPU_64KB);
-  Board_MPU_Config(5,MPU_Normal_WT,0x24000000,MPU_512KB);
-  Board_MPU_Config(6,MPU_Normal_WT,0x08000000,MPU_2MB);
-	
+	Board_MPU_Config(1,MPU_Normal_WT,0x20000000,MPU_128KB);
+  Board_MPU_Config(2,MPU_Normal_WT,0x00000000,MPU_64KB);
+  Board_MPU_Config(3,MPU_Normal_WT,0x24000000,MPU_512KB);
+  Board_MPU_Config(4,MPU_Normal_WT,0x08000000,MPU_2MB);
+	Board_MPU_Config(5,MPU_Normal_WT,0x90000000,MPU_16MB);
 	MPU_Config();	
 	
   /* Enable I-Cache */
@@ -216,7 +207,7 @@ int main(void)
 //                        (const char*    )"DEBUG_Thread_Entry",/* 任务名字 */
 //                        (uint16_t       )2*1024,  /* 任务栈大小 */
 //                        (void*          )NULL,/* 任务入口函数参数 */
-//                        (UBaseType_t    )2, /* 任务的优先级 */
+//                        (UBaseType_t    )15, /* 任务的优先级 */
 //                        (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
   /* 启动任务调度 */           
   if(pdPASS == xReturn)
@@ -262,7 +253,7 @@ static void DEBUG_Thread_Entry(void* parameter)
   while (1)
   {
 
-    vTaskDelay(5000);   /* 延时500个tick */
+    vTaskDelay(2000);   /* 延时500个tick */
 //	  uint16_t test_status = 0;
 //		test_status =  disk_status(0);
 //		printf("************************ test_status %d ************************\r\n",test_status);

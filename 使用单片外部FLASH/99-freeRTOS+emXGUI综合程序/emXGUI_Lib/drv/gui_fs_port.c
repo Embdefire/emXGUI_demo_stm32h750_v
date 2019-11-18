@@ -120,7 +120,7 @@ FIL fnew;													/* 文件对象 */
 UINT fnum;            					  /* 文件成功读写数量 */
 
 uint8_t WriteBuffer[] = "你好啊！野火";
-uint8_t ReadBuffer[128];
+uint8_t ReadBuffer[128] __EXRAM;
 
 /**
   * @brief  文件系统读写测试

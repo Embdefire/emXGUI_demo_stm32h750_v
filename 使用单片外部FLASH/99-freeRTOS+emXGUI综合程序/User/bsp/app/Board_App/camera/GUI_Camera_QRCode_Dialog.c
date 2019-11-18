@@ -78,10 +78,11 @@ static void QR_decoder_Task(void *p)
 	
 	while(QR_Task) //线程已创建了
 	{
-
-
-    qr_num = QR_decoder();
-
+		vTaskDelay(1);
+    TickType_t tick_record = xTaskGetTickCount();
+		qr_num = QR_decoder();
+		GUI_DEBUG("QR_decoder共耗时 %d\r\n", xTaskGetTickCount() - tick_record);
+		
     if(qr_num)
     { 
       BEEP_ON;
@@ -107,7 +108,6 @@ static void QR_decoder_Task(void *p)
 
       addr =0;//清零
       
-      
       WCHAR *wbuf_data = (WCHAR *)GUI_VMEM_Alloc(1024 * sizeof(WCHAR));
       x_mbstowcs_cp936(wbuf_type, qr_type_buf, sizeof(wbuf_type));
       x_mbstowcs_cp936(wbuf_data, qr_data_buf, 1024 * sizeof(WCHAR));
@@ -123,7 +123,7 @@ static void QR_decoder_Task(void *p)
       qr_num = 0;
     }
     
-    GUI_msleep(10);
+    GUI_msleep(1000);
 	}
   GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
 }
@@ -459,16 +459,16 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       
       xTaskCreate((TaskFunction_t )Update_Dialog,   /* 任务入口函数 */
                             (const char*    )"Update_Dialog",       /* 任务名字 */
-                            (uint16_t       )512,                 /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+                            (uint16_t       )256,                 /* 任务栈大小FreeRTOS的任务栈以字为单位 */
                             (void*          )NULL,                  /* 任务入口函数参数 */
                             (UBaseType_t    )7,                     /* 任务的优先级 */
                             (TaskHandle_t  )&Syn_Updata);                  /* 任务控制块指针 */
                             
       xTaskCreate((TaskFunction_t )QR_decoder_Task,  /* 任务入口函数 */
                             (const char*    )"QR decoder Task",     /* 任务名字 */
-                            (uint16_t       )1024/4*20,              /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+                            (uint16_t       )1024,              /* 任务栈大小FreeRTOS的任务栈以字为单位 */
                             (void*          )NULL,                  /* 任务入口函数参数 */
-                            (UBaseType_t    )6,                     /* 任务的优先级 */
+                            (UBaseType_t    )2,                     /* 任务的优先级 */
                             (TaskHandle_t  )&QR_Task_Handle);        /* 任务控制块指针 */
 
       HDC hdc_mem_320;
@@ -586,7 +586,6 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       }  
       else if (state==1)
       {   
-
         pSurf =CreateSurface(SURF_RGB565,cam_mode.cam_out_width, cam_mode.cam_out_height, 0, (U16*)CamDialog.cam_buff0);     
         
         hdc_mem =CreateDC(pSurf,NULL);
@@ -622,7 +621,6 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         cam_mode.cam_out_height*cam_mode.cam_out_width/2);			
 #endif
 
-      
       break;
     }
     

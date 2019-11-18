@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'Fire_H743' 
+ * Project: 'Fire_H750V' 
  * Target:  'Fire_H7_InFlash' 
  */
 

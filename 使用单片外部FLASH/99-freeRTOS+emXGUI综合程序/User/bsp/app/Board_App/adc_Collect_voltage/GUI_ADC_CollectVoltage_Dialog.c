@@ -383,8 +383,7 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       SCROLLINFO sif;/*设置滑动条的参数*/
       GetClientRect(hwnd, &rc);
       ADC_Init();    // 初始化 ADC
-//			GUI_msleep(500);
-//			SDRAM_Init();
+
       /*********************亮度调节滑动条******************/
       sif.cbSize = sizeof(sif);
       sif.fMask = SIF_ALL;
@@ -515,7 +514,6 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       x_wsprintf(Backlightwbuf, L"%d", 50);
       res_prep = 1;    // 标记资源加载完成
       SetTimer(hwnd, 4, 10, TMR_START | TMR_SINGLE, NULL);
-
       break;
     }
 
@@ -647,7 +645,6 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       DrawText(hdc, L"I", -1, &rc, NULL);//绘制文字(居中对齐方式)
 
       SetFont(hdc, defaultFont);   // 恢复默认字体
-
       return FALSE;
     }
   
@@ -1086,7 +1083,6 @@ static LRESULT	CollectVoltage_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 void GUI_ADC_CollectVoltage_Dialog(void)
 {
-	
 	WNDCLASS	wcex;
 	MSG msg;
 

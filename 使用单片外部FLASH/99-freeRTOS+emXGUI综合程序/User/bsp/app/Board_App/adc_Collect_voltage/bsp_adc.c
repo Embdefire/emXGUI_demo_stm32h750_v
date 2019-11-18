@@ -16,12 +16,10 @@
   ******************************************************************
   */
 #include "./bsp_adc.h" 
-
-extern double ADC_vol;
-
+#include "emXGUI.h"
 ADC_HandleTypeDef Init_ADC_Handle;
 DMA_HandleTypeDef hdma_adc;
-uint16_t ADC_ConvertedValue;
+uint16_t ADC_ConvertedValue __EXRAM;
 
 
 /**

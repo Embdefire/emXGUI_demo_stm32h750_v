@@ -118,6 +118,7 @@ uint8_t NUM = 0;
 static uint16_t curtime,alltime;//歌词的当前的时间以及总时间长度
 void mp3PlayerDemo(HWND hwnd,const char *mp3file, uint8_t vol,uint8_t vol_horn, HDC hdc)
 {
+	GUI_SemWait(exit_sem,1);//进如播放前先获取一次信号量,确保信号量是由本次播放结束退出时释放的																														
 	uint8_t *read_ptr=inputbuf;
 	uint32_t frames=0;//歌曲的帧数（26ms一帧）
 	
@@ -193,7 +194,7 @@ void mp3PlayerDemo(HWND hwnd,const char *mp3file, uint8_t vol,uint8_t vol_horn, 
 	/* 配置WM8978音频接口为飞利浦标准I2S接口，16bit */
 	wm8978_CfgAudioIF(SAI_I2S_STANDARD, 16);
 	
-	/*  初始化并配置I2S  */
+	/*  初始化并配置SAI */
 	SAI_Play_Stop();
 	SAI_GPIO_Config();
   SAI_DMA_TX_Callback = MusicPlayer_SAI_DMA_TX_Callback;
@@ -548,7 +549,7 @@ extern int wav_played;
 
 void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 {
-  wav_played = 1;
+	GUI_SemWait(exit_sem,1);//进如播放前先获取一次信号量,确保信号量是由本次播放结束退出时释放的
 	static uint8_t timecount;//记录时间
   WCHAR wbuf[128];
   char ooo = 0;

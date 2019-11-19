@@ -6,7 +6,7 @@
 #include "./mp3_player/Backend_mp3Player.h"
 #include "Backend_Recorder.h"
 #include "./sai/bsp_sai.h"
-
+uint16_t TaskGetState = 0;
 extern GUI_SEM * exit_sem;//创建一个信号量
 //图标管理数组
 recorder_icon_t record_icon[] = {
@@ -1193,13 +1193,17 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       case WM_DESTROY:
       {
 				time2exit = 1; //准备释放结束信号量
-				thread = 0;  //线程结束,不继续播放   
-				mp3player.ucStatus = STA_IDLE; //将已在播放的准备结束
-
-				if(wav_played == 1)//只要播放过音频,就死等,等待任务结束
+				
+				mp3player.ucStatus = STA_EXIT; //将已在播放的准备结束		
+		
+				TaskGetState = eTaskGetState(h_play_record);
+				if(TaskGetState == 3)//只要播放过音频,就死等,等待任务结束
 				{
-				 GUI_SemWait(exit_sem,0xFFFFFFFF);
+					vTaskResume(h_play_record);
 				}
+
+				GUI_SemWait(exit_sem,0xFFFFFFFF);
+				thread = 0;  //线程结束,不继续播放   	
         DeleteDC(hdc_bk);
 				
         vTaskDelete(h_record);

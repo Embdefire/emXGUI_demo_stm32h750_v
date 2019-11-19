@@ -57,6 +57,7 @@ static HWND wnd_horn;//音量滑动条窗口句柄
 static HWND wnd_power;//音量icon句柄
 extern const unsigned char gImage_0[]; 
 GUI_SEM *exit_sem = NULL;
+extern uint16_t TaskGetState;
 /*============================================================================*/
 static BITMAP bm_0;
 //static HDC rotate_disk_hdc;
@@ -410,6 +411,10 @@ static void App_PlayMusic(HWND hwnd)
          GUI_msleep(20);
 		}
    }   
+		while(1)
+	{
+		GUI_msleep(20);
+	}
 }
 /**
   * @brief  scan_files 递归扫描sd卡内的歌曲文件
@@ -1501,17 +1506,23 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
       case WM_DESTROY:
       {
 				time2exit = 1; //准备释放结束信号量
-        mp3player.ucStatus = STA_IDLE;		/* 待机状态 */
-
-        GUI_SemWait(exit_sem, 0xFFFFFFFF);
+        mp3player.ucStatus = STA_EXIT;		/* 退出状态 */
+        
+				TaskGetState = eTaskGetState(h_music);
+				if(TaskGetState == 3)//任务状态为挂起,恢复以释放资源
+				{
+					vTaskResume(h_music);
+				}
 				
+        GUI_SemWait(exit_sem, 0xFFFFFFFF);
+				thread = 0;
         vTaskDelete(h_music);//结束任务
 				
         GUI_SemDelete(exit_sem);
         DeleteSurface(pSurf);
         DeleteDC(hdc_bk);
 				
-        thread = 0;
+        
         play_index = 0;
         res = FALSE;
         tt = 0;

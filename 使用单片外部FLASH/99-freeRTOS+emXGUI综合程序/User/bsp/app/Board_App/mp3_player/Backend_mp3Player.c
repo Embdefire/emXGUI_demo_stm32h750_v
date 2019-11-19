@@ -135,7 +135,13 @@ void mp3PlayerDemo(HWND hwnd,const char *mp3file, uint8_t vol,uint8_t vol_horn, 
 	
 	//mp3player.ucFreq=SAI_AUDIOFREQ_DEFAULT;
 	mp3player.ucFreq    = SAI_AUDIOFREQ_DEFAULT;
-	mp3player.ucStatus  = STA_IDLE;
+	if(mp3player.ucStatus == STA_EXIT)
+	{
+		mp3player.ucStatus = STA_EXIT;    
+	}else
+	{
+		mp3player.ucStatus = STA_IDLE;  /* 开始设置为空闲状态  */
+	}
 	mp3player.ucVolume  = vol;//设置 WM8978的音量值
 	
   int ooo = 0;
@@ -195,7 +201,14 @@ void mp3PlayerDemo(HWND hwnd,const char *mp3file, uint8_t vol,uint8_t vol_horn, 
 	bufflag=0;
 	Isread=0;
 	
-	mp3player.ucStatus = STA_PLAYING;		/* 放音状态 */
+	if(mp3player.ucStatus == STA_EXIT)
+	{
+		mp3player.ucStatus = STA_EXIT;    
+	}else
+	{
+		mp3player.ucStatus = STA_PLAYING;		/* 放音状态 */
+	}
+	
   result=f_read(&file,inputbuf,	INPUTBUF_SIZE,&bw);
 	if(result!=FR_OK)
 	{
@@ -539,7 +552,13 @@ void wavplayer(const char *wavfile, uint8_t vol, HDC hdc, HWND hwnd)
 	static uint8_t timecount;//记录时间
   WCHAR wbuf[128];
   char ooo = 0;
-	mp3player.ucStatus=STA_IDLE;    /* 开始设置为空闲状态  */
+	if(mp3player.ucStatus == STA_EXIT)
+	{
+		mp3player.ucStatus = STA_EXIT;    
+	}else
+	{
+		mp3player.ucStatus = STA_IDLE;  /* 开始设置为空闲状态  */
+	}
 	//Recorder.ucFmtIdx=3;           /* 缺省飞利浦I2S标准，16bit数据长度，44K采样率  */
 	//Recorder.ucVolume=vol;          /* 缺省耳机音量  */
    

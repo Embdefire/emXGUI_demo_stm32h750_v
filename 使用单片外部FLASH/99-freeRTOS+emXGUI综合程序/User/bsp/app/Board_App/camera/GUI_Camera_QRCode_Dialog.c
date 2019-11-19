@@ -63,7 +63,7 @@ static void Update_Dialog(void *p)
 	{
 		if( GUI_SemWait(cam_sem, 1) == TRUE )
 		{
-//			OV5640_Capture_Control(DISABLE);
+			OV5640_Capture_Control(DISABLE);
 			SCB_InvalidateDCache_by_Addr((uint32_t *)CamDialog.cam_buff0, cam_mode.cam_out_height*cam_mode.cam_out_width / 2);
 			
 			InvalidateRect(CamDialog.Cam_Hwnd, &rc, FALSE);//先无效化矩形,使用完当前帧,再去读一下帧
@@ -72,11 +72,11 @@ static void Update_Dialog(void *p)
 			
 			GUI_SemPost(QR_decode);  
 			/*重新开始采集*/
-//			OV5640_Capture_Control(ENABLE);
+//			
 			
 			OV5640_DMA_Config((uint32_t)CamDialog.cam_buff0,
 														cam_mode.cam_out_height*cam_mode.cam_out_width/2); 
-			
+			GUI_msleep(100);
 			GUI_Yield();
 		}
 	}
@@ -145,7 +145,7 @@ static void QR_decoder_Task(void *p)
 						GUI_VMEM_Free(wbuf_data);
 						qr_num = 0;
 					}
-					GUI_msleep(10);
+					GUI_msleep(100);
 			 }
 	}
 	GUI_SemPost(QR_Exit);
@@ -267,6 +267,8 @@ static LRESULT ScanCompleteWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
       DrawText(hdc, pCaptionInt, -1, &rc_Text, DT_VCENTER|DT_CENTER);
       
       EndPaint(hwnd,&ps);
+			
+			OV5640_Capture_Control(ENABLE);
       break;
     }
     

@@ -704,7 +704,7 @@ static LRESULT video_win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
        video_sif_power.fMask = SIF_ALL;
        video_sif_power.nMin = 0;
        video_sif_power.nMax = 63;//音量最大值为63
-       video_sif_power.nValue = 20;//初始音量值
+       video_sif_power.nValue = 35;//初始音量值
        video_sif_power.TrackSize = 31;//滑块值
        video_sif_power.ArrowSize = 0;//两端宽度为0（水平滑动条）
        CreateWindow(SCROLLBAR, L"SCROLLBAR_R", WS_OWNERDRAW,

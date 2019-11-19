@@ -76,7 +76,7 @@ extern void	GUI_MusicList_DIALOG(HWND hwnd);
 
 static uint16_t getonelinelrc(uint8_t *buff,uint8_t *str,int16_t len)
 {
-	uint16_t i;
+	uint16_t i = 0;
 	for(i=0;i<len;i++)
 	{
 		*(str+i)=*(buff+i);
@@ -329,7 +329,7 @@ static void App_PlayMusic(HWND hwnd)
 	{     
 		if(app==0)
 		{
-			app=1;
+			   app=1;
          //hdc = GetDC(hwnd);   
          int i = 0;      
          //读取歌词文件
@@ -392,23 +392,24 @@ static void App_PlayMusic(HWND hwnd)
             printf("wav\r");
            wavplayer(music_name, power, hdc, hwnd);
          }
-         else
+         else if(strstr(music_name,".mp3")||strstr(music_name,".MP3"))
          {
            mp3PlayerDemo(hwnd, music_name, power, power_horn, hdc);  
          }
+				 else
+				 {
+					 vTaskSuspend(h_music);//没有找到音乐文件,挂起自己
+				 }
 			 
          printf("播放结束\n");
          
-			app=0;
+				 app=0;
          //使用 GETDC之后需要释放掉HDC
          //ReleaseDC(hwnd, hdc);
          //进行任务调度
          GUI_msleep(20);
 		}
-	   
-   }
-  GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
-   
+   }   
 }
 /**
   * @brief  scan_files 递归扫描sd卡内的歌曲文件
@@ -785,7 +786,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
          }
          /* 释放图片内容空间 */
          RES_Release_Content((char **)&jpeg_buf);    
-         exit_sem = GUI_SemCreate(0,1);//创建一个信号量        
+         exit_sem = GUI_SemCreate(0,1);//创建一个信号量
          //music_icon[0].rc.y = 440-music_icon[0].rc.h/2;//居中
          //音量icon（切换静音模式），返回控件句柄值
          wnd_power = CreateWindow(BUTTON,L"A",WS_OWNERDRAW |WS_VISIBLE,//按钮控件，属性为自绘制和可视
@@ -894,7 +895,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
          sif_power.fMask = SIF_ALL;
          sif_power.nMin = 0;
          sif_power.nMax = 63;//音量最大值为63
-         sif_power.nValue = 20;//初始音量值
+         sif_power.nValue = 35;//初始音量值
          sif_power.TrackSize = 30;//滑块值
          sif_power.ArrowSize = 0;//上下端宽度为0
          
@@ -908,7 +909,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
          sif_power_horn.fMask = SIF_ALL;
          sif_power_horn.nMin = 0;
          sif_power_horn.nMax = 63;//音量最大值为63
-         sif_power_horn.nValue = 20;//初始音量值
+         sif_power_horn.nValue = 35;//初始音量值
          sif_power_horn.TrackSize = 30;//滑块值
          sif_power_horn.ArrowSize = 0;//上下端宽度为0
          /* 喇叭音量调节 */
@@ -1498,25 +1499,19 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
     
       //关闭窗口消息处理case
       case WM_DESTROY:
-      {        
+      {
+				time2exit = 1; //准备释放结束信号量
         mp3player.ucStatus = STA_IDLE;		/* 待机状态 */
-        time2exit = 1;
-        //GUI_SemWait(exit_sem, 0xFFFFFFFF);
-        vTaskDelete(h_music);//暂时挂起
-//        if(IsCreateList == 1)
-//        {
-//          IsCreateList = 0;
-//          vTaskDelete(h1);
-//        }
+
+        GUI_SemWait(exit_sem, 0xFFFFFFFF);
+				
+        vTaskDelete(h_music);//结束任务
+				
         GUI_SemDelete(exit_sem);
         DeleteSurface(pSurf);
-        //DeleteDC(hdc_mem11);
         DeleteDC(hdc_bk);
-       // DeleteDC(rotate_disk_hdc);
+				
         thread = 0;
-//        DeleteFont(Music_Player_hFont48);
-//        DeleteFont(Music_Player_hFont64);
-//        DeleteFont(Music_Player_hFont72);
         play_index = 0;
         res = FALSE;
         tt = 0;

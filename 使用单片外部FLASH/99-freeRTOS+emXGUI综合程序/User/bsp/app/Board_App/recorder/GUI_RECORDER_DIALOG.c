@@ -7,6 +7,7 @@
 #include "Backend_Recorder.h"
 #include "./sai/bsp_sai.h"
 
+extern GUI_SEM * exit_sem;//创建一个信号量
 //图标管理数组
 recorder_icon_t record_icon[] = {
 
@@ -160,7 +161,6 @@ static void App_Record(void *p)
 		}
     GUI_Yield();
    }
-//  GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
 }
 
 /**
@@ -169,6 +169,7 @@ static void App_Record(void *p)
   * @retval 无
   */
 static int thread=0;
+int wav_played = 0;
 static void App_PlayRecord(HWND hwnd)
 {
   HDC hdc;
@@ -177,7 +178,7 @@ static void App_PlayRecord(HWND hwnd)
   vTaskSuspend(h_play_record);    // 挂起线程
   
 	while(thread) //线程已创建了
-	{     
+	{
     int i = 0;      
      
     i = 0;
@@ -195,7 +196,7 @@ static void App_PlayRecord(HWND hwnd)
 
     if(strstr(music_name,".wav")||strstr(music_name,".WAV"))
     {
-      wavplayer(music_name, power, hdc, hwnd);
+      wavplayer(music_name, power, hdc, hwnd);//播放完毕返回
     }
 
     printf("播放结束\n");
@@ -204,7 +205,11 @@ static void App_PlayRecord(HWND hwnd)
     GUI_msleep(20);
 	   
    }
-   GUI_Thread_Delete(GUI_GetCurThreadHandle()); 
+	
+	 while(1)
+	 {
+		GUI_msleep(20);//任务结束,等待任务回收
+	 }
 }
 
 static void exit_owner_draw(DRAWITEM_HDR *ds) //绘制一个按钮外观
@@ -601,7 +606,10 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
          u32 jpeg_size;
          JPG_DEC *dec;
          BOOL res = NULL;
-
+				
+				 wav_played = 0;//未播放过音频
+				 exit_sem = GUI_SemCreate(0,1);//创建播放线程结束信号量
+				
          res = RES_Load_Content(GUI_RECORDER_BACKGROUNG_PIC, (char**)&jpeg_buf, &jpeg_size);
          //res = FS_Load_Content(GUI_RECORDER_BACKGROUNG_PIC, (char**)&jpeg_buf, &jpeg_size);
          hdc_bk = CreateMemoryDC(SURF_SCREEN, GUI_XSIZE, GUI_YSIZE);
@@ -662,7 +670,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
          sif_power.fMask = SIF_ALL;
          sif_power.nMin = 0;
          sif_power.nMax = 63;//音量最大值为63
-         sif_power.nValue = 20;//初始音量值
+         sif_power.nValue = 35;//初始音量值
          sif_power.TrackSize = 30;//滑块值
          sif_power.ArrowSize = 0;//两端宽度为0（水平滑动条）
          
@@ -1183,13 +1191,25 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     
       //关闭窗口消息处理case
       case WM_DESTROY:
-      {        
-        BUGLE_STATE = 0;
+      {
+				time2exit = 1; //准备释放结束信号量
+				thread = 0;  //线程结束,不继续播放   
+				mp3player.ucStatus = STA_IDLE; //将已在播放的准备结束
+
+				if(wav_played == 1)//只要播放过音频,就死等,等待任务结束
+				{
+				 GUI_SemWait(exit_sem,0xFFFFFFFF);
+				}
         DeleteDC(hdc_bk);
+				
         vTaskDelete(h_record);
-        vTaskDelete(h_play_record);
+        vTaskDelete(h_play_record);//回收任务
+				
+				GUI_SemDelete(exit_sem);
+				
+				BUGLE_STATE = 0;
         music_file_num = 0;   // 复位文件记录
-        thread = 0;
+        
         SAI_Rec_Stop();		        /* 停止SAI录音和放音 */
 				SAI_Play_Stop();
         wm8978_Reset();	      /* 复位WM8978到复位状态 */ 

@@ -74,7 +74,7 @@ extern void GUI_Phone_Dialog(void);//电话
 extern void GUI_SMS_Dialog(void);//短信
 extern void GUI_Beeper_Dialog(void);//蜂鸣器
 extern void	GUI_LED_KEY_Dialog(void);//按键和灯
-//
+extern void	GUI_DEMO_Rotate(void);
 extern BOOL player_state;
 int thread_ctrl = 1;
 
@@ -172,6 +172,7 @@ struct __obj_list menu_list_1[] = {
       L"基础控件",	    NULL, 	L"D",   RGB_WHITE,				(void(*)(void *))GUI_DEMO_RadiaMenu,
       L"蜂鸣器",	      NULL, 	L"i",   RGB_WHITE,				(void(*)(void *))GUI_Beeper_Dialog,
 			L"LED&KEY",       NULL,	  L"j",   RGB_WHITE,		 	  (void(*)(void *))GUI_LED_KEY_Dialog,				
+			L"Rotate",        NULL,	  L"j",   RGB_WHITE,		 	  (void(*)(void *))GUI_DEMO_Rotate,	
 
 //        L"Radiobox",	NULL,   L"E", RGB_WHITE,				dummy,
 //        L"Textbox",	NULL,	  L"F", RGB_WHITE,				dummy,

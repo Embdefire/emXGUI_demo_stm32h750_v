@@ -2556,21 +2556,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>dddd</GroupName>
-          <Files>
-            <File>
-              <FileName>0.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>D:\0.c</FilePath>
-            </File>
-            <File>
-              <FileName>GUI_DEMO_Rotate.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>D:\GUI_DEMO_Rotate.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>

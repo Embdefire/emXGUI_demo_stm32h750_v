@@ -79,7 +79,6 @@ static void QR_decoder_Task(void *p)
 	while(QR_Task) //线程已创建了
 	{
 
-
     qr_num = QR_decoder();
 
     if(qr_num)

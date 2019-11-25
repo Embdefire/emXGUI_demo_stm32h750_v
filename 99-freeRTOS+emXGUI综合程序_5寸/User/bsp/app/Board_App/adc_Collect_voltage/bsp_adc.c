@@ -187,9 +187,11 @@ void ADC_Init(void)
   * @param  AdcHandle : ADC句柄
   * @retval 无
   */
+extern uint8_t ADCollect_Flag;
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle)
 {
   /* 获取结果 */
+  	ADCollect_Flag = 1;
     ADC_ConvertedValue = HAL_ADC_GetValue(AdcHandle); 
 }
 

@@ -682,6 +682,8 @@ static LRESULT WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			GUI_Thread_Delete(QR_Task_Handle);
 			
       GUI_SemDelete(cam_sem);
+			GUI_SemDelete(QR_decode);
+			GUI_SemDelete(QR_Exit);
 			
       GUI_VMEM_Free(CamDialog.cam_buff0);
       //复位摄像头配置参数

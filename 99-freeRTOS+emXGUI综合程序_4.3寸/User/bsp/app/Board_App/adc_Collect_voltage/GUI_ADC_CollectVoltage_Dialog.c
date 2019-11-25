@@ -10,6 +10,7 @@
 #include  "GUI_ADC_CollectVoltage_Dialog.h"
 #include "./pic_load/gui_pic_load.h"
 
+uint8_t ADCollect_Flag = 0;
 /* 图片资源 */
 //#define BMP    1    // 1：使用png 0：使用bmp
 
@@ -388,7 +389,7 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       HWND hwnd_scrolbar;
       SCROLLINFO sif;/*设置滑动条的参数*/
       GetClientRect(hwnd, &rc);
-      ADC_Init();    // 初始化 ADC
+//      ADC_Init();    // 初始化 ADC
 //			GUI_msleep(500);
 //			SDRAM_Init();
       /*********************亮度调节滑动条******************/
@@ -571,6 +572,11 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       }
       else if (tmr_id == 2)
       {
+				ADC_Init();
+				while(ADCollect_Flag == 0){}
+				ADCollect_Flag = 0;
+				Rheostat_DISABLE();
+				
         RECT rc;
         static double ADC_buff = 0.0;
         double vol_buff = 0.0;

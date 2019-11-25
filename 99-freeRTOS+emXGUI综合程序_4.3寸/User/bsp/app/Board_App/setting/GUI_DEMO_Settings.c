@@ -317,12 +317,12 @@ static LRESULT DetWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		
         OffsetRect(&rc,0,rc.h);
         DrawText(hdc, L"开发板型号", -1, &rc, DT_VCENTER|DT_LEFT);//绘制文字(居中对齐方式)
-        DrawText(hdc, L"野火-H743", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式) 
+        DrawText(hdc, L"野火-H750", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式) 
         HLine(hdc, rc.x, rc.y+rc.h, rc.x+470);
 
         OffsetRect(&rc,0,rc.h);
         DrawText(hdc, L"储存空间", -1, &rc, DT_VCENTER|DT_LEFT);//绘制文字(居中对齐方式)
-        DrawText(hdc, L"2MB+32MB", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式) 
+        DrawText(hdc, L"128KB+32MB", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式) 
         HLine(hdc, rc.x, rc.y+rc.h, rc.x+470);
 
         OffsetRect(&rc,0,rc.h);
@@ -342,7 +342,7 @@ static LRESULT DetWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         OffsetRect(&rc,0,rc.h);
         DrawText(hdc, L"处理器", -1, &rc, DT_VCENTER|DT_LEFT);//绘制文字(居中对齐方式)
-        DrawText(hdc, L"STM32H743", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式) 
+        DrawText(hdc, L"STM32H750", -1, &rc, DT_VCENTER|DT_RIGHT);//绘制文字(居中对齐方式) 
         HLine(hdc, rc.x, rc.y+rc.h, rc.x+470);
         
         

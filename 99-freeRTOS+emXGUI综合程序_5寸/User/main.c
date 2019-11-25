@@ -203,12 +203,12 @@ int main(void)
                         (UBaseType_t    )10, /* 任务的优先级 */
                         (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
 
-	           xTaskCreate((TaskFunction_t )DEBUG_Thread_Entry,  /* 任务入口函数 */
-                        (const char*    )"DEBUG_Thread_Entry",/* 任务名字 */
-                        (uint16_t       )2*1024,  /* 任务栈大小 */
-                        (void*          )NULL,/* 任务入口函数参数 */
-                        (UBaseType_t    )15, /* 任务的优先级 */
-                        (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
+//	           xTaskCreate((TaskFunction_t )DEBUG_Thread_Entry,  /* 任务入口函数 */
+//                        (const char*    )"DEBUG_Thread_Entry",/* 任务名字 */
+//                        (uint16_t       )2*1024,  /* 任务栈大小 */
+//                        (void*          )NULL,/* 任务入口函数参数 */
+//                        (UBaseType_t    )15, /* 任务的优先级 */
+//                        (TaskHandle_t*  )NULL);/* 任务控制块指针 */ 
   /* 启动任务调度 */           
   if(pdPASS == xReturn)
     vTaskStartScheduler();   /* 启动任务，开启调度 */

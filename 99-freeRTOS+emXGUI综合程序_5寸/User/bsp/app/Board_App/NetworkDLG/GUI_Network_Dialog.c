@@ -318,10 +318,15 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       rc.w = 80;
       CreateWindow(BUTTON,L"UDP",BS_RADIOBOX|WS_VISIBLE,
       rc.x,rc.y,rc.w,rc.h,hwnd,ID_RB3,NULL,NULL);
-      
-      CreateWindow(BUTTON, L"未连接", WS_TRANSPARENT | BS_NOTIFY|WS_VISIBLE|WS_OWNERDRAW|WS_DISABLED,
+      if(LWIP_Init_Start == 1)
+			{
+				CreateWindow(BUTTON, L"未连接", WS_TRANSPARENT | BS_NOTIFY|WS_VISIBLE|WS_OWNERDRAW|WS_DISABLED,
                   702, 218, 95, 30, hwnd, eID_LINK_STATE, NULL, NULL);
-      
+      }else
+			{
+				CreateWindow(BUTTON, L"未连接", WS_TRANSPARENT | BS_NOTIFY|WS_VISIBLE|WS_OWNERDRAW,
+                  702, 218, 95, 30, hwnd, eID_LINK_STATE, NULL, NULL);
+			}
       /* 数据发送文本窗口 */
       rc.w = 384;
       rc.h = 224;

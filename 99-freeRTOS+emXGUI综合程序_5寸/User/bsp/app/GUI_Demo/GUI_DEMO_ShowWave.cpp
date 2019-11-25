@@ -1062,7 +1062,7 @@ static	LRESULT	WaveWinProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 	{
 		// x_obj_del(button_item);
     // x_obj_del(text_item);
-
+ 
 		// DeleteDC(hdcTop);
 		// DeleteSurface(pSurfTop);
 		// DeleteFont(hFont20);
@@ -1688,7 +1688,6 @@ static	LRESULT	WinProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 	case WM_DESTROY:
 	{
 		x_obj_del(button_item);
-
 //		DeleteFont(hFont20);
 //		DeleteFont(hFont24);
     GUI_VMEM_Free(pt_wav);

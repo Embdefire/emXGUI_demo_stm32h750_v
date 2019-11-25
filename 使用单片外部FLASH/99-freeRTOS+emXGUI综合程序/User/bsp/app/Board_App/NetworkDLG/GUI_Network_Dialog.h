@@ -15,7 +15,8 @@ enum
   ID_TEXTBOX_RemoteIP3   ,//0x09     // 远端IP
   ID_TEXTBOX_RemoteIP4  ,//0x0A     // 远端IP
   ID_TEXTBOX_RemotePort  ,//0x0B     // 远端端口
-  
+  ID_TEXTBOX_Wait,       //提示等待初始化框控件ID
+	
   /* 按钮 ID */
   eID_Network_EXIT    ,//0x03
   eID_LINK_STATE      ,//0x04

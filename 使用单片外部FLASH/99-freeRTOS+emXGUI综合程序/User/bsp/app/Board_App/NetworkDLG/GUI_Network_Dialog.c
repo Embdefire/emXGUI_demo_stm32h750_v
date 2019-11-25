@@ -29,9 +29,11 @@ int8_t NetworkTypeSelection = 0;
 HWND Send_Handle;
 HWND Receive_Handle;
 HWND Network_Main_Handle;
-              
+HWND Message_Hwnd;
+							
 uint8_t network_start_flag=0;
-
+uint8_t LWIP_Init_Start = 0;
+uint8_t LWIP_Init_End = 0;
 //extern __IO uint8_t EthLinkStatus;
 __IO uint8_t EthLinkStatus;//用不到的变量
 __IO uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 10ms */
@@ -50,6 +52,7 @@ extern TIM_HandleTypeDef TIM3_Handle;
 /* LWIP协议栈初始化,初始化成功即删除任务,否则会阻塞在函数内。 */
 static void TCPIP_Init_Task(void *p)
 {
+	LWIP_Init_End = 1;
 	if(network_start_flag == 0)//如果成功过一次,重新打开程序,不会再初始化。
 	{
 		My_TCPIP_initialization(IP_ADDRESS);
@@ -72,7 +75,6 @@ void Network_Dispose_Task(void *p)
       bsp_result |=1;
       /* 初始化出错 */
       SetTimer(Network_Main_Handle, 10, 100, TMR_SINGLE|TMR_START, NULL);
-			GUI_Thread_Delete(TCPIP_Init_Task_Handle);//初始化失败,删除初始化任务
       vTaskSuspend(Network_Task_Handle);    // 挂起自己 不在执行 
     }
     else
@@ -81,6 +83,8 @@ void Network_Dispose_Task(void *p)
       bsp_result &=~ 1;  
     }
 	}
+	DestroyWindow(Message_Hwnd);
+	EnableWindow(GetDlgItem(Network_Main_Handle, eID_Network_EXIT), ENABLE);
 	EnableWindow(GetDlgItem(Network_Main_Handle, eID_LINK_STATE), ENABLE);
 	
 #if 1
@@ -120,13 +124,9 @@ void Network_Dispose_Task(void *p)
 //  TIM_SetCounter(TIM3,0);
 //  HAL_TIM_Base_Start_IT(&TIM3_Handle); 
   EthLinkStatus=0;
-	vTaskDelay(5000);
-	GUI_Thread_Delete(TCPIP_Init_Task_Handle);//初始化成功,删除初始化任务
-  while(1)
-  {
-		vTaskDelay(5000);
-		/* 由中断处理接受到的数据 ---> HAL_ETH_RxCpltCallback */
-	}
+	GUI_Thread_Delete(Network_Task_Handle);    // 删除网络处理任务
+	GUI_Thread_Delete(TCPIP_Init_Task_Handle); //删除初始化任务		
+	while(1){GUI_Yield();}
 }
 
 //退出按钮重绘制
@@ -262,31 +262,42 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       GetClientRect(hwnd, &rc); 
       HWND Temp_Handle;
 			
-			Wait_TCPIP_Init_Sem = xSemaphoreCreateBinary();
+			Wait_TCPIP_Init_Sem = GUI_SemCreate(0,1);
 			BaseType_t xReturn = pdPASS;
-      xReturn = xTaskCreate((TaskFunction_t )TCPIP_Init_Task,      /* 任务入口函数 */
-														(const char*    )"TCPIP Init Task",    /* 任务名字 */
-														(uint16_t       )2*1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
-														(void*          )NULL,                      /* 任务入口函数参数 */
-														(UBaseType_t    )6,                         /* 任务的优先级 */
-														(TaskHandle_t*  )&TCPIP_Init_Task_Handle);     /* 任务控制块指针 */
-														
-		 if(xReturn != pdPASS)  
+			if(LWIP_Init_End == 0)
 			{
-				GUI_ERROR("Fail to create Network_Dispose_Task!\r\n");
+				xReturn = xTaskCreate((TaskFunction_t )TCPIP_Init_Task,      /* 任务入口函数 */
+															(const char*    )"TCPIP Init Task",    /* 任务名字 */
+															(uint16_t       )1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+															(void*          )NULL,                      /* 任务入口函数参数 */
+															(UBaseType_t    )6,                         /* 任务的优先级 */
+															(TaskHandle_t*  )&TCPIP_Init_Task_Handle);     /* 任务控制块指针 */
+															
+			 if(xReturn != pdPASS)  
+				{
+					GUI_ERROR("Fail to create Network_Dispose_Task!\r\n");
+				}			
+				
+				xReturn = xTaskCreate((TaskFunction_t )Network_Dispose_Task,      /* 任务入口函数 */
+															(const char*    )"Network Dispose Task",    /* 任务名字 */
+															(uint16_t       )1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
+															(void*          )NULL,                      /* 任务入口函数参数 */
+															(UBaseType_t    )6,                         /* 任务的优先级 */
+															(TaskHandle_t*  )&Network_Task_Handle);     /* 任务控制块指针 */
+				if(xReturn != pdPASS)  
+				{
+					GUI_ERROR("Fail to create Network_Dispose_Task!\r\n");
+				}							
+			}
+			else
+			{
+				if(network_start_flag == 0)
+				{
+					SetTimer(Network_Main_Handle, 10, 50, TMR_SINGLE|TMR_START, NULL);
+					LWIP_Init_End = 2;
+				}
 			}			
 			
-      xReturn = xTaskCreate((TaskFunction_t )Network_Dispose_Task,      /* 任务入口函数 */
-														(const char*    )"Network Dispose Task",    /* 任务名字 */
-														(uint16_t       )2*1024,                  /* 任务栈大小FreeRTOS的任务栈以字为单位 */
-														(void*          )NULL,                      /* 任务入口函数参数 */
-														(UBaseType_t    )6,                         /* 任务的优先级 */
-														(TaskHandle_t*  )&Network_Task_Handle);     /* 任务控制块指针 */
-      if(xReturn != pdPASS)  
-			{
-				GUI_ERROR("Fail to create Network_Dispose_Task!\r\n");
-			}				
-														
       CreateWindow(BUTTON, L"O", WS_TRANSPARENT|BS_FLAT | BS_NOTIFY |WS_OWNERDRAW|WS_VISIBLE,
                   720, 5, 80, 80, hwnd, eID_Network_EXIT, NULL, NULL); 
 
@@ -316,7 +327,7 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       rc.h = 224;
       rc.x = 412;
       rc.y = 251;
-      Send_Handle = CreateWindow(TEXTBOX, L"你好！这里是野火开发板 ^_^", WS_TRANSPARENT | WS_VISIBLE|WS_OWNERDRAW, rc.x, rc.y, rc.w, rc.h, hwnd, ID_TEXTBOX_Send, NULL, NULL);
+      Send_Handle = CreateWindow(TEXTBOX, L"你好！这里是野火开发板 ^_^",  WS_VISIBLE|WS_OWNERDRAW, rc.x, rc.y, rc.w, rc.h, hwnd, ID_TEXTBOX_Send, NULL, NULL);
 
       /* 创建接收窗口 */
       rc.w = 400;
@@ -364,7 +375,18 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       Temp_Handle = CreateWindow(TEXTBOX, L"8080", WS_VISIBLE|WS_BORDER, rc.x, rc.y, rc.w-12, rc.h, hwnd, ID_TEXTBOX_RemotePort, NULL, NULL);//
       SendMessage(Temp_Handle, TBM_SET_TEXTFLAG, 0, DT_VCENTER | DT_CENTER | DT_BKGND);
 
-
+			if(LWIP_Init_Start == 0)
+			{
+				LWIP_Init_Start = 1;
+				RECT RC;
+				RC.w = 280;
+				RC.h = 170;
+				RC.x = (GUI_XSIZE - RC.w) >> 1;
+				RC.y = (GUI_YSIZE - RC.h) >> 1;
+				Message_Hwnd = CreateWindow(TEXTBOX, L"正在初始化\r\n\n请等待...", WS_VISIBLE|WS_BORDER|WS_OVERLAPPED, RC.x, RC.y-20, RC.w, RC.h, hwnd, ID_TEXTBOX_Wait, NULL, NULL);//
+				SendMessage(Message_Hwnd, TBM_SET_TEXTFLAG, 0, DT_VCENTER | DT_CENTER | DT_BKGND);
+				EnableWindow(GetDlgItem(hwnd, eID_Network_EXIT), DISABLE);
+			}
 
       break;
     } 
@@ -717,8 +739,11 @@ static LRESULT	win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_DESTROY:
     { 
-      GUI_Thread_Delete(Network_Task_Handle);    // 删除网络处理任务
       NetworkTypeSelection = 0;                  // 复位默认的选项
+      udp_echoclient_disconnect();
+			tcp_echoclient_disconnect();
+			tcp_echoserver_close();
+			GUI_SemDelete(Wait_TCPIP_Init_Sem);
 
       return PostQuitMessage(hwnd);	
     } 

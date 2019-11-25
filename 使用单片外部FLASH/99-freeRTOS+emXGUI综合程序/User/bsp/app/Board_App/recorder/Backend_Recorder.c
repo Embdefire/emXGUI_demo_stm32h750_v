@@ -32,8 +32,8 @@ WavHead rec_wav;            /* WAV设备  */
 uint8_t Isread=0;           /* DMA传输完成标志 */
 uint8_t bufflag=0;          /* 数据缓存区选择标志 */
 uint32_t wavsize=0;         /* wav音频数据大小 */
-__align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__EXRAM;//__attribute__((at(0x24008000)));   /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 BUF不放在外部会有不能读取SD卡的BUG*/
-__align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__EXRAM;//__attribute__((at(0x24004000)));   /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
+__align(4) uint16_t record_buffer0[RECBUFFER_SIZE]	__attribute__((at(0x24008000)));//__EXRAM;   /* 数据缓存区1 ，实际占用字节数：RECBUFFER_SIZE*2 BUF不放在外部会有不能读取SD卡的BUG*/
+__align(4) uint16_t record_buffer1[RECBUFFER_SIZE]	__attribute__((at(0x24004000)));//__EXRAM;   /* 数据缓存区2 ，实际占用字节数：RECBUFFER_SIZE*2 */
 
 FIL record_file	__EXRAM;			/* file objects */
 extern FRESULT result; 

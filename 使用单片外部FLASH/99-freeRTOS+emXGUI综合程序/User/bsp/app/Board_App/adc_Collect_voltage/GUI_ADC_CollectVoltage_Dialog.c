@@ -567,8 +567,8 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         static double ADC_buff = 0.0;
         double vol_buff = 0.0;
         static uint8_t xC = 0;
-        static double ADC_Vol_Old;
-
+        static double ADC_Vol_Old=0;
+				SCB_InvalidateDCache_by_Addr((uint32_t *)ADC_ConvertedValue,sizeof(ADC_ConvertedValue));
         vol_buff =(double) ADC_ConvertedValue/65536*(double)3.3; // 读取转换的AD值
 //        GUI_DEBUG("电压值前为：%f", ADC_Vol);
         #if 1
@@ -608,6 +608,7 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         Update_Circle_Flag = TRUE;
 
         InvalidateRect(hwnd, &rc, TRUE);
+
       }
       else if (tmr_id == 4)
       {

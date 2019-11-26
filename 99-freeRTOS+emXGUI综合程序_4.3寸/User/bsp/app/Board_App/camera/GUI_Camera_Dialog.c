@@ -287,7 +287,6 @@ static void camera_return_ownerdraw(DRAWITEM_HDR *ds) //绘制一个按钮外观
 
 	DrawText(hdc, wbuf, -1, &rc, DT_VCENTER);//绘制文字(居中对齐方式)
    rc.x = 35; 
-   rc.y+=3;
   /* 恢复默认字体 */
 	SetFont(hdc, defaultFont);
   DrawText(hdc, L"返回", -1, &rc, DT_VCENTER);

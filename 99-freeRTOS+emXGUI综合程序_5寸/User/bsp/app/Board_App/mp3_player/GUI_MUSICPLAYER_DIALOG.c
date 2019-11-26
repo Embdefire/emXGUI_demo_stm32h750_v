@@ -22,9 +22,9 @@ icon_S music_icon[] = {
    {"geci",             {728,404,72,72},      FALSE},//歌词栏
    {"NULL",             {0,0,0,0},            FALSE},//无
    {"NULL",             {0,0,0,0},            FALSE},//无
-   {"shangyishou",      {9, 410, 64, 64},   FALSE},//上一首
+   {"shangyishou",      {9, 410, 60, 60},   FALSE},//上一首
    {"zanting/bofang",   {68, 406, 72, 72},   FALSE},//播放
-   {"xiayishou",        {140, 410, 64, 64},   FALSE},//下一首
+   {"xiayishou",        {140, 410, 60, 60},   FALSE},//下一首
    {"Q",                {620, 415,48, 48},   FALSE},     // 8. 喇叭按钮
 };
 extern HWND music_list_hwnd;
@@ -1169,7 +1169,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                                 
                   x_mbstowcs_cp936(wbuf, music_lcdlist[play_index], FILE_NAME_LEN);
                   SetWindowText(GetDlgItem(hwnd, ID_TB5), wbuf);
-                                 
+                  RedrawWindow(music_list_hwnd, NULL, RDW_ALLCHILDREN|RDW_INVALIDATE);//重绘播放列表               
                   SendMessage(music_wnd_time, SBM_SETVALUE, TRUE, 0); //设置进度值
                   SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB1), L"00:00"); 
                   SetWindowText(GetDlgItem(MusicPlayer_hwnd, ID_TB2), L"00:00"); 
@@ -1187,6 +1187,7 @@ static LRESULT win_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
                   if(play_index > music_file_num) play_index = 0;
                   if(play_index < 0) play_index = music_file_num - 1;
                   mp3player.ucStatus = STA_SWITCH;   
+								  RedrawWindow(music_list_hwnd, NULL, RDW_ALLCHILDREN|RDW_INVALIDATE);//重绘播放列表
                   hdc = GetDC(hwnd);
                   ReleaseDC(hwnd, hdc);            
                   break;

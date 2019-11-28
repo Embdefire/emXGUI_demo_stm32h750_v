@@ -16,6 +16,7 @@
   */
 #include "./bsp_gsm_usart.h"
 #include <stdarg.h>
+#include "emXGUI_Arch.h"
 
  UART_HandleTypeDef GSM_UartHandle;
 /*
@@ -143,13 +144,15 @@ static char *itoa(int value, char *string, int radix)
 
 } /* NCL_Itoa */
 
+/* 声明外部变量 */
+extern GUI_SEM *Call_Sem;
 
 #if 1
 //中断缓存串口数据
 #define UART_BUFF_SIZE      255
 volatile    uint8_t uart_p = 0;
 uint8_t     uart_buff[UART_BUFF_SIZE];
-
+uint8_t  clearbuf[1];
 void GSM_USART_IRQHandler(void)
 {
     if(uart_p<UART_BUFF_SIZE)
@@ -160,6 +163,14 @@ void GSM_USART_IRQHandler(void)
             uart_p++;
         }
     }
+		
+		if(__HAL_UART_GET_IT(&GSM_UartHandle, USART_IT_IDLE) != RESET)
+		{
+			GUI_SemPostISR(Call_Sem);
+			HAL_UART_Receive(&GSM_UartHandle, clearbuf , 1, 1);
+			__HAL_UART_CLEAR_IDLEFLAG(&GSM_UartHandle);
+		}
+		
 		HAL_UART_IRQHandler(&GSM_UartHandle);	
 }
 

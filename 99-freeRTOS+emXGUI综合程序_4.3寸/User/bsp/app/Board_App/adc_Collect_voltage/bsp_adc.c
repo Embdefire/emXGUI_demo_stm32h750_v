@@ -199,6 +199,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle)
 
 void Rheostat_DISABLE(void)
 {
+	ADC_ConversionStop(&Init_ADC_Handle,ADC_REGULAR_GROUP);
 	// Ê¹ÄÜADC DMA
 	HAL_ADC_Stop(&Init_ADC_Handle);
 	

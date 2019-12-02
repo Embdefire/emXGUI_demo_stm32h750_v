@@ -19,7 +19,7 @@
 #include "emXGUI.h"
 ADC_HandleTypeDef Init_ADC_Handle;
 DMA_HandleTypeDef hdma_adc;
-uint16_t ADC_ConvertedValue __attribute__((at(0x24020000)));;
+uint16_t ADC_ConvertedValue __attribute__((at(0x24020000)));
 
 
 /**
@@ -161,7 +161,7 @@ static void ADC_Mode_Config(void)
   */  
 void Rheostat_ADC_NVIC_Config(void)
 {
-    HAL_NVIC_SetPriority(Rheostat_ADC1_DMA_IRQ, 1, 0);
+    HAL_NVIC_SetPriority(Rheostat_ADC1_DMA_IRQ, 7, 0);
     HAL_NVIC_EnableIRQ(Rheostat_ADC1_DMA_IRQ);
 }
 
@@ -197,6 +197,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle)
 
 void Rheostat_DISABLE(void)
 {
+	ADC_ConversionStop(&Init_ADC_Handle,ADC_REGULAR_GROUP);
 	// Ê¹ÄÜADC DMA
 	HAL_ADC_Stop(&Init_ADC_Handle);
 	

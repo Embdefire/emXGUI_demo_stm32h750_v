@@ -572,8 +572,13 @@ static LRESULT	ADCWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
       }
       else if (tmr_id == 2)
       {
+				uint32_t waittimeout = 0;
 				ADC_Init();
-				while(ADCollect_Flag == 0){}
+				while(ADCollect_Flag == 0)
+				{
+						waittimeout++;
+						if(waittimeout > 0x5ffff){waittimeout = 0; break;}
+				}
 				ADCollect_Flag = 0;
 				Rheostat_DISABLE();
 				

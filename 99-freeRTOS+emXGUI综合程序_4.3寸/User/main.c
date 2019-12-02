@@ -346,7 +346,7 @@ static void MPU_Config(void)
 void vApplicationStackOverflowHook(TaskHandle_t xTask,
                                      char * pcTaskName)
 {
-	printf(" Heap Overflow! Cheak : %s \r\n",pcTaskName);
+	printf(" Stack Overflow! Check Task: %s \r\n",pcTaskName);
 	while(1);
 }
 

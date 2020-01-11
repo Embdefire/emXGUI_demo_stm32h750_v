@@ -3400,7 +3400,7 @@
 
   <Group>
     <GroupName>tutorial/adc</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3408,7 +3408,7 @@
       <GroupNumber>29</GroupNumber>
       <FileNumber>246</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\bsp\app\Board_App\adc_Collect_voltage\bsp_adc.c</PathWithFileName>
@@ -4511,20 +4511,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\Jepg.c</PathWithFileName>
-      <FilenameWithoutPath>Jepg.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>45</GroupNumber>
-      <FileNumber>328</FileNumber>
-      <FileType>5</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\Jepg.h</PathWithFileName>
-      <FilenameWithoutPath>Jepg.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\User\bsp\JPEG\Jpeg.c</PathWithFileName>
+      <FilenameWithoutPath>Jpeg.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
